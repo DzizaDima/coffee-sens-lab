@@ -132,11 +132,31 @@
     font-display: swap;  
   }
   @font-face {
-    font-family: 'Clash Display SemiBold';
-    src:url('{{ 'ClashDisplay-SemiBold.ttf' | asset_url }}') format('ttf'),
-    url('{{ 'ClashDisplay-SemiBold.woff' | asset_url }}') format('woff'),
-    url('{{ 'ClashDisplay-SemiBold.woff2' | asset_url }}') format('woff2');
+    font-family: 'Clash Display Medium';
+    src: url('{{ 'ClashDisplay-Medium.woff2' | asset_url }}') format('woff2'),
+    url('{{ 'ClashDisplay-Medium.woff' | asset_url }}') format('woff'),
+    url('{{ 'ClashDisplay-Medium.ttf' | asset_url }}') format('ttf');
     font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Clash Display SemiBold';
+    src: url('{{ 'ClashDisplay-SemiBold.woff2' | asset_url }}') format('woff2'),
+    url('{{ 'ClashDisplay-SemiBold.woff' | asset_url }}') format('woff'),
+    url('{{ 'ClashDisplay-SemiBold.ttf' | asset_url }}') format('ttf');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Clash Display Bold';
+    src: url('{{ 'ClashDisplay-Bold.woff2' | asset_url }}') format('woff2'),
+    url('{{ 'ClashDisplay-Bold.woff' | asset_url }}') format('woff'),
+    url('{{ 'ClashDisplay-Bold.ttf' | asset_url }}') format('ttf');
+    font-weight: 800;
     font-style: normal;
     font-display: swap;
   }
@@ -179,7 +199,7 @@
     --font-subheading--family: {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
     --font-subheading--style: {{ settings.type_subheading_font.style }};
     --font-subheading--weight: {{ settings.type_subheading_font.weight }};
-    --font-heading--family: 'Clash Display SemiBold', {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading--family: 'Clash Display Bold', {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
     --font-heading--style: {{ settings.type_heading_font.style }};
     --font-heading--weight: {{ settings.type_heading_font.weight }};
     --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
