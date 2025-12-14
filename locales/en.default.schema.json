@@ -156,6 +156,9 @@
         "logo_width": {
           "label": "Width"
         },
+        "logo_width_mobile": {
+          "label": "Mobile width"
+        },
         "favicon": {
           "label": "Favicon",
           "info": "Displayed at 32 x 32px"
@@ -394,8 +397,11 @@
       },
       "padding": {
         "section_padding_heading": "Padding",
+        "section_mobile_padding_heading": "Mobile padding",
         "padding_top": "Top",
-        "padding_bottom": "Bottom"
+        "padding_bottom": "Bottom",
+        "padding_top_mobile": "Mobile padding top",
+        "padding_bottom_mobile": "Mobile padding bottom"
       },
       "spacing": "Spacing",
       "colors": {
