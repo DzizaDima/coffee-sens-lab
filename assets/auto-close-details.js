@@ -1,15 +1,1 @@
-(function autoCloseDetails() {
-  document.addEventListener('click', function (event) {
-    const detailsToClose = [...document.querySelectorAll('details[data-auto-close-details][open]')].filter(
-      (element) => {
-        const closingOn = window.innerWidth < 750 ? 'mobile' : 'desktop';
-        return (
-          element.getAttribute('data-auto-close-details')?.includes(closingOn) &&
-          !(event.target instanceof Node && element.contains(event.target))
-        );
-      }
-    );
-
-    for (const detailsElement of detailsToClose) detailsElement.removeAttribute('open');
-  });
-})();
+(function(){document.addEventListener("click",function(e){const o=[...document.querySelectorAll("details[data-auto-close-details][open]")].filter(t=>{const n=window.innerWidth<750?"mobile":"desktop";return t.getAttribute("data-auto-close-details")?.includes(n)&&!(e.target instanceof Node&&t.contains(e.target))});for(const t of o)t.removeAttribute("open")})})();

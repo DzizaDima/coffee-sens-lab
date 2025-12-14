@@ -1,10 +1,1 @@
-import PaginatedList from '@theme/paginated-list';
-
-/**
- * A custom element that renders a paginated blog posts list
- */
-export default class BlogPostsList extends PaginatedList {}
-
-if (!customElements.get('blog-posts-list')) {
-  customElements.define('blog-posts-list', BlogPostsList);
-}
+import{P as t}from"./paginated-list.js";import"./component.js";import"./utilities.js";import"./section-renderer.js";import"./morph.js";import"./events.js";import"./paginated-list-aspect-ratio.js";class s extends t{}customElements.get("blog-posts-list")||customElements.define("blog-posts-list",s);
