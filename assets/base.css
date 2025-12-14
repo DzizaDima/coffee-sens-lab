@@ -240,7 +240,7 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
 
 .text-body {
   font-size: 1.5rem;
-  letter-spacing: 0.06rem;
+  letter-spacing: 0;
   line-height: calc(1 + 0.8 / var(--font-body-scale));
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
@@ -2971,6 +2971,47 @@ details-disclosure>details {
   border-color: rgba(var(--color-badge-border), var(--alpha-badge-border));
   color: rgb(var(--color-badge-foreground));
   word-break: break-word;
+}
+
+.card__custom-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 4px;
+  height: fit-content;
+}
+
+.flavor-badge {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  width: fit-content;
+  padding: 5px;
+  height: fit-content;
+}
+
+.flavor-badge .flavor-badge__image {
+  margin-top: -4px;
+  position: relative;
+  z-index: 1;
+}
+
+.flavor-badge .flavor-badge__border {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: contain;
+  z-index: 0;
+}
+
+.flavor-badge .flavor-badge__text {
+  font-size: 12px;
+  letter-spacing: normal;
+  text-transform: uppercase;
 }
 
 .gradient {
