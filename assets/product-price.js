@@ -1,1 +1,59 @@
-var l=Object.defineProperty;var u=(r,t,e)=>t in r?l(r,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):r[t]=e;var a=(r,t,e)=>u(r,typeof t!="symbol"?t+"":t,e);import{T as d}from"./events.js";class p extends HTMLElement{constructor(){super(...arguments);a(this,"updatePrice",e=>{if(e.detail.data.newProduct)this.dataset.productId=e.detail.data.newProduct.id;else if(e.target instanceof HTMLElement&&e.target.dataset.productId!==this.dataset.productId)return;const c=e.detail.data.html.querySelector(`product-price[data-block-id="${this.dataset.blockId}"]`);if(!c)return;const n=c.querySelector('[ref="priceContainer"]'),s=this.querySelector('[ref="priceContainer"]');n&&s&&s.replaceWith(n);const i=this.querySelector(".volume-pricing-note"),o=c.querySelector(".volume-pricing-note");o?i?i.replaceWith(o):this.querySelector('[ref="priceContainer"]')?.insertAdjacentElement("afterend",o.cloneNode(!0)):i?.remove()})}connectedCallback(){const e=this.closest(".shopify-section, dialog");e&&e.addEventListener(d.variantUpdate,this.updatePrice)}disconnectedCallback(){const e=this.closest(".shopify-section, dialog");e&&e.removeEventListener(d.variantUpdate,this.updatePrice)}}customElements.get("product-price")||customElements.define("product-price",p);
+import { ThemeEvents, VariantUpdateEvent } from '@theme/events';
+
+/**
+ * A custom element that displays a product price.
+ * This component listens for variant update events and updates the price display accordingly.
+ * It handles price updates from two different sources:
+ * 1. Variant picker (in quick add modal or product page)
+ * 2. Swatches variant picker (in product cards)
+ */
+class ProductPrice extends HTMLElement {
+  connectedCallback() {
+    const closestSection = this.closest('.shopify-section, dialog');
+    if (!closestSection) return;
+    closestSection.addEventListener(ThemeEvents.variantUpdate, this.updatePrice);
+  }
+
+  disconnectedCallback() {
+    const closestSection = this.closest('.shopify-section, dialog');
+    if (!closestSection) return;
+    closestSection.removeEventListener(ThemeEvents.variantUpdate, this.updatePrice);
+  }
+
+  /**
+   * Updates the price and volume pricing note.
+   * @param {VariantUpdateEvent} event - The variant update event.
+   */
+  updatePrice = (event) => {
+    if (event.detail.data.newProduct) {
+      this.dataset.productId = event.detail.data.newProduct.id;
+    } else if (event.target instanceof HTMLElement && event.target.dataset.productId !== this.dataset.productId) {
+      return;
+    }
+
+    // Find the new product-price element in the updated HTML
+    const newProductPrice = event.detail.data.html.querySelector(`product-price[data-block-id="${this.dataset.blockId}"]`);
+    if (!newProductPrice) return;
+
+    // Update price container
+    const newPrice = newProductPrice.querySelector('[ref="priceContainer"]');
+    const currentPrice = this.querySelector('[ref="priceContainer"]');
+    if (newPrice && currentPrice) currentPrice.replaceWith(newPrice);
+
+    // Update volume pricing note
+    const currentNote = this.querySelector('.volume-pricing-note');
+    const newNote = newProductPrice.querySelector('.volume-pricing-note');
+
+    if (!newNote) {
+      currentNote?.remove();
+    } else if (!currentNote) {
+      this.querySelector('[ref="priceContainer"]')?.insertAdjacentElement('afterend', /** @type {Element} */ (newNote.cloneNode(true)));
+    } else {
+      currentNote.replaceWith(newNote);
+    }
+  };
+}
+
+if (!customElements.get('product-price')) {
+  customElements.define('product-price', ProductPrice);
+}

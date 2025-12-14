@@ -1,1 +1,78 @@
-var m=e=>{throw TypeError(e)};var p=(e,i,t)=>i.has(e)||m("Cannot "+t);var n=(e,i,t)=>(p(e,i,"read from private field"),t?t.call(e):i.get(e)),o=(e,i,t)=>i.has(e)?m("Cannot add the same private member more than once"):i instanceof WeakSet?i.add(e):i.set(e,t);var c=(e,i,t)=>(p(e,i,"access private method"),t);import{m as u,s as g,r as f}from"./utilities.js";import{P as y}from"./paginated-list.js";import"./component.js";import"./section-renderer.js";import"./morph.js";import"./events.js";import"./paginated-list-aspect-ratio.js";var d,r,l,a;class L extends y{constructor(){super(...arguments);o(this,r);o(this,d,async t=>{const{grid:s}=this.refs;s&&(await g(()=>c(this,r,l).call(this,t),["product-grid"]),f(()=>{const h=u.matches?"desktop":"mobile";sessionStorage.setItem(`product-grid-view-${h}`,t)}))});o(this,a,t=>{const s=t.matches?this.querySelector('[data-grid-layout="desktop-default-option"]'):this.querySelector('[data-grid-layout="mobile-option"]');s instanceof HTMLInputElement&&(s.checked=!0,c(this,r,l).call(this,"default"))})}connectedCallback(){super.connectedCallback(),u.addEventListener("change",n(this,a)),this.setAttribute("initialized","")}disconnectedCallback(){u.removeEventListener("change",n(this,a))}updateLayout({target:t}){t instanceof HTMLInputElement&&n(this,d).call(this,t.value)}}d=new WeakMap,r=new WeakSet,l=function(t){const{grid:s}=this.refs;s&&s.setAttribute("product-grid-view",t)},a=new WeakMap;customElements.get("results-list")||customElements.define("results-list",L);
+import { mediaQueryLarge, requestIdleCallback, startViewTransition } from '@theme/utilities';
+import PaginatedList from '@theme/paginated-list';
+
+/**
+ * A custom element that renders a pagniated results list
+ */
+export default class ResultsList extends PaginatedList {
+  connectedCallback() {
+    super.connectedCallback();
+
+    mediaQueryLarge.addEventListener('change', this.#handleMediaQueryChange);
+    this.setAttribute('initialized', '');
+  }
+
+  disconnectedCallback() {
+    mediaQueryLarge.removeEventListener('change', this.#handleMediaQueryChange);
+  }
+
+  /**
+   * Updates the layout.
+   *
+   * @param {Event} event
+   */
+  updateLayout({ target }) {
+    if (!(target instanceof HTMLInputElement)) return;
+
+    this.#animateLayoutChange(target.value);
+  }
+
+  /**
+   * Sets the layout.
+   *
+   * @param {string} value
+   */
+  #animateLayoutChange = async (value) => {
+    const { grid } = this.refs;
+
+    if (!grid) return;
+
+    await startViewTransition(() => this.#setLayout(value), ['product-grid']);
+
+    requestIdleCallback(() => {
+      const viewport = mediaQueryLarge.matches ? 'desktop' : 'mobile';
+      sessionStorage.setItem(`product-grid-view-${viewport}`, value);
+    });
+  };
+
+  /**
+   * Animates the layout change.
+   *
+   * @param {string} value
+   */
+  #setLayout(value) {
+    const { grid } = this.refs;
+    if (!grid) return;
+    grid.setAttribute('product-grid-view', value);
+  }
+
+  /**
+   * Handles the media query change event.
+   *
+   * @param {MediaQueryListEvent} event
+   */
+  #handleMediaQueryChange = (event) => {
+    const targetElement = event.matches
+      ? this.querySelector('[data-grid-layout="desktop-default-option"]')
+      : this.querySelector('[data-grid-layout="mobile-option"]');
+
+    if (!(targetElement instanceof HTMLInputElement)) return;
+
+    targetElement.checked = true;
+    this.#setLayout('default');
+  };
+}
+
+if (!customElements.get('results-list')) {
+  customElements.define('results-list', ResultsList);
+}

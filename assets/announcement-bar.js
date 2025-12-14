@@ -1,1 +1,130 @@
-var l=t=>{throw TypeError(t)};var o=(t,s,e)=>s.has(t)||l("Cannot "+e);var r=(t,s,e)=>(o(t,s,"read from private field"),e?e.call(t):s.get(t)),u=(t,s,e)=>s.has(t)?l("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(t):s.set(t,e),h=(t,s,e,n)=>(o(t,s,"write to private field"),n?n.call(t,e):s.set(t,e),e);import{C as m}from"./component.js";import"./utilities.js";var a,i,d;class f extends m{constructor(){super(...arguments);u(this,a,0);u(this,i);u(this,d,()=>document.hidden?this.pause():this.resume())}connectedCallback(){super.connectedCallback(),this.addEventListener("mouseenter",this.suspend),this.addEventListener("mouseleave",this.resume),document.addEventListener("visibilitychange",r(this,d)),this.play()}next(){this.current+=1}previous(){this.current-=1}play(e=this.autoplayInterval){this.autoplay&&(this.paused=!1,h(this,i,setInterval(()=>{this.matches(":hover")||document.hidden||this.next()},e)))}pause(){this.paused=!0,this.suspend()}get paused(){return this.hasAttribute("paused")}set paused(e){this.toggleAttribute("paused",e)}suspend(){clearInterval(r(this,i)),h(this,i,void 0)}resume(){!this.autoplay||this.paused||(this.pause(),this.play())}get autoplay(){return!!this.autoplayInterval}get autoplayInterval(){const e=this.getAttribute("autoplay"),n=parseInt(`${e}`,10);if(!Number.isNaN(n))return n*1e3}get current(){return r(this,a)}set current(e){h(this,a,e);let n=e%(this.refs.slides??[]).length;n<0&&(n+=(this.refs.slides??[]).length),this.refs.slides?.forEach((p,c)=>{p.setAttribute("aria-hidden",`${c!==n}`)})}}a=new WeakMap,i=new WeakMap,d=new WeakMap;customElements.get("announcement-bar-component")||customElements.define("announcement-bar-component",f);
+import { Component } from '@theme/component';
+
+/**
+ * Announcement banner custom element that allows fading between content.
+ * Based on the Slideshow component.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLElement} slideshowContainer
+ * @property {HTMLElement[]} [slides]
+ * @property {HTMLButtonElement} [previous]
+ * @property {HTMLButtonElement} [next]
+ *
+ * @extends {Component<Refs>}
+ */
+export class AnnouncementBar extends Component {
+  #current = 0;
+
+  /**
+   * The interval ID for automatic playback.
+   * @type {number|undefined}
+   */
+  #interval = undefined;
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.addEventListener('mouseenter', this.suspend);
+    this.addEventListener('mouseleave', this.resume);
+    document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+
+    this.play();
+  }
+
+  next() {
+    this.current += 1;
+  }
+
+  previous() {
+    this.current -= 1;
+  }
+
+  /**
+   * Starts automatic slide playback.
+   * @param {number} [interval] - The time interval in seconds between slides.
+   */
+  play(interval = this.autoplayInterval) {
+    if (!this.autoplay) return;
+
+    this.paused = false;
+
+    this.#interval = setInterval(() => {
+      if (this.matches(':hover') || document.hidden) return;
+
+      this.next();
+    }, interval);
+  }
+
+  /**
+   * Pauses automatic slide playback.
+   */
+  pause() {
+    this.paused = true;
+    this.suspend();
+  }
+
+  get paused() {
+    return this.hasAttribute('paused');
+  }
+
+  set paused(paused) {
+    this.toggleAttribute('paused', paused);
+  }
+
+  /**
+   * Suspends automatic slide playback.
+   */
+  suspend() {
+    clearInterval(this.#interval);
+    this.#interval = undefined;
+  }
+
+  /**
+   * Resumes automatic slide playback if autoplay is enabled.
+   */
+  resume() {
+    if (!this.autoplay || this.paused) return;
+
+    this.pause();
+    this.play();
+  }
+
+  get autoplay() {
+    return Boolean(this.autoplayInterval);
+  }
+
+  get autoplayInterval() {
+    const interval = this.getAttribute('autoplay');
+    const value = parseInt(`${interval}`, 10);
+
+    if (Number.isNaN(value)) return undefined;
+
+    return value * 1000;
+  }
+
+  get current() {
+    return this.#current;
+  }
+
+  set current(current) {
+    this.#current = current;
+
+    let relativeIndex = current % (this.refs.slides ?? []).length;
+    if (relativeIndex < 0) {
+      relativeIndex += (this.refs.slides ?? []).length;
+    }
+
+    this.refs.slides?.forEach((slide, index) => {
+      slide.setAttribute('aria-hidden', `${index !== relativeIndex}`);
+    });
+  }
+
+  /**
+   * Pause the slideshow when the page is hidden.
+   */
+  #handleVisibilityChange = () => (document.hidden ? this.pause() : this.resume());
+}
+
+if (!customElements.get('announcement-bar-component')) {
+  customElements.define('announcement-bar-component', AnnouncementBar);
+}

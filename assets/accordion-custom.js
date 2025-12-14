@@ -1,1 +1,106 @@
-var g=Object.defineProperty;var h=t=>{throw TypeError(t)};var D=(t,s,e)=>s in t?g(t,s,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[s]=e;var u=(t,s,e)=>D(t,typeof s!="symbol"?s+"":s,e),m=(t,s,e)=>s.has(t)||h("Cannot "+e);var n=(t,s,e)=>(m(t,s,"read from private field"),e?e.call(t):s.get(t)),o=(t,s,e)=>s.has(t)?h("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(t):s.set(t,e);var r=(t,s,e)=>(m(t,s,"access private method"),e);import{m as M,i as b}from"./utilities.js";var i,f,p,y,a,l,c,E;class w extends HTMLElement{constructor(){super(...arguments);o(this,i);o(this,a,new AbortController);u(this,"handleClick",e=>{const d=b(),k=!d;if(d&&n(this,i,f)||k&&n(this,i,p)){e.preventDefault();return}});o(this,l,()=>{r(this,i,c).call(this)})}get details(){const e=this.querySelector("details");if(!(e instanceof HTMLDetailsElement))throw new Error("Details element not found");return e}get summary(){const e=this.details.querySelector("summary");if(!(e instanceof HTMLElement))throw new Error("Summary element not found");return e}connectedCallback(){const{signal:e}=n(this,a);r(this,i,c).call(this),this.addEventListener("keydown",r(this,i,E),{signal:e}),this.summary.addEventListener("click",this.handleClick,{signal:e}),M.addEventListener("change",n(this,l),{signal:e})}disconnectedCallback(){n(this,a).abort()}}i=new WeakSet,f=function(){return this.dataset.disableOnMobile==="true"},p=function(){return this.dataset.disableOnDesktop==="true"},y=function(){return this.dataset.closeWithEscape==="true"},a=new WeakMap,l=new WeakMap,c=function(){const e=b();this.details.open=e&&this.hasAttribute("open-by-default-on-mobile")||!e&&this.hasAttribute("open-by-default-on-desktop")},E=function(e){e.key==="Escape"&&n(this,i,y)&&(e.preventDefault(),this.details.open=!1,this.summary.focus())};customElements.get("accordion-custom")||customElements.define("accordion-custom",w);
+import { mediaQueryLarge, isMobileBreakpoint } from '@theme/utilities';
+
+// Accordion
+class AccordionCustom extends HTMLElement {
+  /** @type {HTMLDetailsElement} */
+  get details() {
+    const details = this.querySelector('details');
+
+    if (!(details instanceof HTMLDetailsElement)) throw new Error('Details element not found');
+
+    return details;
+  }
+
+  /** @type {HTMLElement} */
+  get summary() {
+    const summary = this.details.querySelector('summary');
+
+    if (!(summary instanceof HTMLElement)) throw new Error('Summary element not found');
+
+    return summary;
+  }
+
+  get #disableOnMobile() {
+    return this.dataset.disableOnMobile === 'true';
+  }
+
+  get #disableOnDesktop() {
+    return this.dataset.disableOnDesktop === 'true';
+  }
+
+  get #closeWithEscape() {
+    return this.dataset.closeWithEscape === 'true';
+  }
+
+  #controller = new AbortController();
+
+  connectedCallback() {
+    const { signal } = this.#controller;
+
+    this.#setDefaultOpenState();
+
+    this.addEventListener('keydown', this.#handleKeyDown, { signal });
+    this.summary.addEventListener('click', this.handleClick, { signal });
+    mediaQueryLarge.addEventListener('change', this.#handleMediaQueryChange, { signal });
+  }
+
+  /**
+   * Handles the disconnect event.
+   */
+  disconnectedCallback() {
+    // Disconnect all the event listeners
+    this.#controller.abort();
+  }
+
+  /**
+   * Handles the click event.
+   * @param {Event} event - The event.
+   */
+  handleClick = (event) => {
+    const isMobile = isMobileBreakpoint();
+    const isDesktop = !isMobile;
+
+    // Stop default behaviour from the browser
+    if ((isMobile && this.#disableOnMobile) || (isDesktop && this.#disableOnDesktop)) {
+      event.preventDefault();
+      return;
+    }
+  };
+
+  /**
+   * Handles the media query change event.
+   */
+  #handleMediaQueryChange = () => {
+    this.#setDefaultOpenState();
+  };
+
+  /**
+   * Sets the default open state of the accordion based on the `open-by-default-on-mobile` and `open-by-default-on-desktop` attributes.
+   */
+  #setDefaultOpenState() {
+    const isMobile = isMobileBreakpoint();
+
+    this.details.open =
+      (isMobile && this.hasAttribute('open-by-default-on-mobile')) ||
+      (!isMobile && this.hasAttribute('open-by-default-on-desktop'));
+  }
+
+  /**
+   * Handles keydown events for the accordion
+   *
+   * @param {KeyboardEvent} event - The keyboard event.
+   */
+  #handleKeyDown(event) {
+    // Close the accordion when used as a menu
+    if (event.key === 'Escape' && this.#closeWithEscape) {
+      event.preventDefault();
+
+      this.details.open = false;
+      this.summary.focus();
+    }
+  }
+}
+
+if (!customElements.get('accordion-custom')) {
+  customElements.define('accordion-custom', AccordionCustom);
+}

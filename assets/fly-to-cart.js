@@ -1,1 +1,50 @@
-var d=Object.defineProperty;var l=t=>{throw TypeError(t)};var p=(t,e,s)=>e in t?d(t,e,{enumerable:!0,configurable:!0,writable:!0,value:s}):t[e]=s;var n=(t,e,s)=>p(t,typeof e!="symbol"?e+"":e,s),x=(t,e,s)=>e.has(t)||l("Cannot "+s);var a=(t,e,s)=>(x(t,e,"read from private field"),s?s.call(t):e.get(t)),y=(t,e,s)=>e.has(t)?l("Cannot add the same private member more than once"):e instanceof WeakSet?e.add(t):e.set(t,s);var r;class u extends HTMLElement{constructor(){super(...arguments);n(this,"source");n(this,"useSourceSize",!1);n(this,"destination");y(this,r,async()=>{const s=this.source.getBoundingClientRect(),i=this.destination.getBoundingClientRect(),o={x:s.left+s.width/2,y:s.top+s.height/2},h={x:i.left+i.width/2,y:i.top+i.height/2};this.useSourceSize&&(this.style.setProperty("--width",`${s.width}px`),this.style.setProperty("--height",`${s.height}px`)),this.style.setProperty("--start-x",`${o.x}px`),this.style.setProperty("--start-y",`${o.y}px`),this.style.setProperty("--travel-x",`${h.x-o.x}px`),this.style.setProperty("--travel-y",`${h.y-o.y}px`),await Promise.allSettled(this.getAnimations().map(c=>c.finished)),this.remove()})}connectedCallback(){a(this,r).call(this)}}r=new WeakMap;customElements.get("fly-to-cart")||customElements.define("fly-to-cart",u);
+/**
+ * FlyToCart custom element for animating product images to cart
+ * This component creates a visual effect of a product "flying" to the cart when added
+ */
+class FlyToCart extends HTMLElement {
+  /** @type {Element} */
+  source;
+
+  /** @type {boolean} */
+  useSourceSize = false;
+
+  /** @type {Element} */
+  destination;
+
+  connectedCallback() {
+    this.#animate();
+  }
+
+  #animate = async () => {
+    const sourceRect = this.source.getBoundingClientRect();
+    const destinationRect = this.destination.getBoundingClientRect();
+
+    //Define bezier curve points
+    const startPoint = {
+      x: sourceRect.left + sourceRect.width / 2,
+      y: sourceRect.top + sourceRect.height / 2,
+    };
+
+    const endPoint = {
+      x: destinationRect.left + destinationRect.width / 2,
+      y: destinationRect.top + destinationRect.height / 2,
+    };
+
+    // Position the flying thingy back to the start point
+    if (this.useSourceSize) {
+      this.style.setProperty('--width', `${sourceRect.width}px`);
+      this.style.setProperty('--height', `${sourceRect.height}px`);
+    }
+    this.style.setProperty('--start-x', `${startPoint.x}px`);
+    this.style.setProperty('--start-y', `${startPoint.y}px`);
+    this.style.setProperty('--travel-x', `${endPoint.x - startPoint.x}px`);
+    this.style.setProperty('--travel-y', `${endPoint.y - startPoint.y}px`);
+    await Promise.allSettled(this.getAnimations().map((a) => a.finished));
+    this.remove();
+  };
+}
+
+if (!customElements.get('fly-to-cart')) {
+  customElements.define('fly-to-cart', FlyToCart);
+}

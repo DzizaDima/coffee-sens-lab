@@ -1,1 +1,313 @@
-var V=Object.defineProperty;var I=n=>{throw TypeError(n)};var x=(n,o,t)=>o in n?V(n,o,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[o]=t;var w=(n,o,t)=>x(n,typeof o!="symbol"?o+"":o,t),q=(n,o,t)=>o.has(n)||I("Cannot "+t);var i=(n,o,t)=>(q(n,o,"read from private field"),t?t.call(n):o.get(n)),c=(n,o,t)=>o.has(n)?I("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(n):o.set(n,t),L=(n,o,t,e)=>(q(n,o,"write to private field"),e?e.call(n,t):o.set(n,t),t),u=(n,o,t)=>(q(n,o,"access private method"),t);import{m as B}from"./morph.js";import{C as F}from"./component.js";import{T as p}from"./events.js";import{a as S,D as H}from"./dialog.js";import{m as T,i as N,D as O}from"./utilities.js";var l,h,m,s,A,v,M,b,f,P,Q;class R extends F{constructor(){super(...arguments);c(this,s);c(this,l,null);c(this,h,new Map);c(this,m,new AbortController);c(this,v,()=>{i(this,h).clear()});w(this,"handleClick",async t=>{t.preventDefault();const e=this.productPageUrl;let a=i(this,h).get(e);if(!a){const r=await this.fetchProductPage(e);if(r){const d=r.querySelector("[data-product-grid-content]");d&&(a=d.cloneNode(!0),i(this,h).set(e,a))}}if(a){const r=a.cloneNode(!0);await this.updateQuickAddModal(r)}i(this,b).call(this)});c(this,b,()=>{const t=document.getElementById("quick-add-dialog");t instanceof D&&(u(this,s,M).call(this,t),t.showDialog())});c(this,f,()=>{const t=document.getElementById("quick-add-dialog");t instanceof D&&t.closeDialog()})}get productPageUrl(){const t=this.closest("product-card"),e=this.closest("product-hotspot-component"),a=t?.getProductCardLink()||e?.getHotspotProductLink();if(!a?.href)return"";const r=new URL(a.href);if(r.searchParams.has("variant"))return r.toString();const d=u(this,s,A).call(this);return d&&r.searchParams.set("variant",d),r.toString()}connectedCallback(){super.connectedCallback(),T.addEventListener("change",i(this,f)),document.addEventListener(p.cartUpdate,i(this,v),{signal:i(this,m).signal}),document.addEventListener(p.variantSelected,u(this,s,P).bind(this))}disconnectedCallback(){super.disconnectedCallback(),T.removeEventListener("change",i(this,f)),i(this,l)?.abort(),i(this,m).abort(),document.removeEventListener(p.variantSelected,u(this,s,P).bind(this))}async fetchProductPage(t){if(!t)return null;i(this,l)?.abort(),L(this,l,new AbortController);try{const e=await fetch(t,{signal:i(this,l).signal});if(!e.ok)throw new Error(`Failed to fetch product page: HTTP error ${e.status}`);const a=await e.text();return new DOMParser().parseFromString(a,"text/html")}catch(e){if(e.name==="AbortError")return null;throw e}finally{L(this,l,null)}}async updateQuickAddModal(t){const e=document.getElementById("quick-add-modal-content");if(!(!t||!e)){if(N()){const a=t.querySelector(".product-details"),r=t.querySelector("product-form-component"),d=t.querySelector("variant-picker"),U=t.querySelector("product-price"),y=document.createElement("a");y.textContent=this.dataset.productTitle||"",y.href=this.productPageUrl;const k=document.createElement("div");k.classList.add("product-header"),k.appendChild(y),U&&k.appendChild(U),t.appendChild(k),d&&t.appendChild(d),r&&t.appendChild(r),a?.remove()}B(e,t),u(this,s,Q).call(this,e)}}}l=new WeakMap,h=new WeakMap,m=new WeakMap,s=new WeakSet,A=function(){return this.closest("product-card")?.getSelectedVariantId()||null},v=new WeakMap,M=function(t){this.toggleAttribute("stay-visible",!0),t.addEventListener(S.eventName,()=>this.toggleAttribute("stay-visible",!1),{once:!0})},b=new WeakMap,f=new WeakMap,P=function(t){if(!(t.target instanceof HTMLElement)||t.target.closest("product-card")!==this.closest("product-card"))return;const a=this.dataset.productOptionsCount==="1"?"add":"choose";this.setAttribute("data-quick-add-button",a)},Q=function(t){const e=u(this,s,A).call(this);if(!e)return;const a=t.querySelectorAll('input[type="radio"][data-variant-id]');for(const r of a)if(r instanceof HTMLInputElement&&r.dataset.variantId===e&&!r.checked){r.checked=!0,r.dispatchEvent(new Event("change",{bubbles:!0}));break}};customElements.get("quick-add-component")||customElements.define("quick-add-component",R);var g,E,C;class D extends H{constructor(){super(...arguments);c(this,g,new AbortController);w(this,"handleCartUpdate",t=>{t.detail.data.didError||this.closeDialog()});c(this,E,t=>{const e=t.detail.data.html?.querySelector(".view-product-title a"),a=this.querySelector(".view-product-title a"),r=this.querySelector(".product-header a");e&&(a&&(a.href=e.href),r&&(r.href=e.href))});c(this,C,()=>{const t=O();!t||t.major>=17||t.major===16&&t.minor>=4||requestAnimationFrame(()=>{const e=document.querySelector("#ResultsList [product-grid-view]");if(e){const a=e.getBoundingClientRect().width;e.style.width=`${a-1}px`,requestAnimationFrame(()=>{e.style.width=""})}})})}connectedCallback(){super.connectedCallback(),this.addEventListener(p.cartUpdate,this.handleCartUpdate,{signal:i(this,g).signal}),this.addEventListener(p.variantUpdate,i(this,E)),this.addEventListener(S.eventName,i(this,C))}disconnectedCallback(){super.disconnectedCallback(),i(this,g).abort(),this.removeEventListener(S.eventName,i(this,C))}}g=new WeakMap,E=new WeakMap,C=new WeakMap;customElements.get("quick-add-dialog")||customElements.define("quick-add-dialog",D);
+import { morph } from '@theme/morph';
+import { Component } from '@theme/component';
+import { CartUpdateEvent, ThemeEvents, VariantSelectedEvent } from '@theme/events';
+import { DialogComponent, DialogCloseEvent } from '@theme/dialog';
+import { mediaQueryLarge, isMobileBreakpoint, getIOSVersion } from '@theme/utilities';
+
+export class QuickAddComponent extends Component {
+  /** @type {AbortController | null} */
+  #abortController = null;
+  /** @type {Map<string, Element>} */
+  #cachedContent = new Map();
+  /** @type {AbortController} */
+  #cartUpdateAbortController = new AbortController();
+
+  get productPageUrl() {
+    const productCard = /** @type {import('./product-card').ProductCard | null} */ (this.closest('product-card'));
+    const hotspotProduct = /** @type {import('./product-hotspot').ProductHotspotComponent | null} */ (
+      this.closest('product-hotspot-component')
+    );
+    const productLink = productCard?.getProductCardLink() || hotspotProduct?.getHotspotProductLink();
+
+    if (!productLink?.href) return '';
+
+    const url = new URL(productLink.href);
+
+    if (url.searchParams.has('variant')) {
+      return url.toString();
+    }
+
+    const selectedVariantId = this.#getSelectedVariantId();
+    if (selectedVariantId) {
+      url.searchParams.set('variant', selectedVariantId);
+    }
+
+    return url.toString();
+  }
+
+  /**
+   * Gets the currently selected variant ID from the product card
+   * @returns {string | null} The variant ID or null
+   */
+  #getSelectedVariantId() {
+    const productCard = /** @type {import('./product-card').ProductCard | null} */ (this.closest('product-card'));
+    return productCard?.getSelectedVariantId() || null;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    mediaQueryLarge.addEventListener('change', this.#closeQuickAddModal);
+    document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartUpdate, {
+      signal: this.#cartUpdateAbortController.signal,
+    });
+    document.addEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    mediaQueryLarge.removeEventListener('change', this.#closeQuickAddModal);
+    this.#abortController?.abort();
+    this.#cartUpdateAbortController.abort();
+    document.removeEventListener(ThemeEvents.variantSelected, this.#updateQuickAddButtonState.bind(this));
+  }
+
+  /**
+   * Clears the cached content when cart is updated
+   */
+  #handleCartUpdate = () => {
+    this.#cachedContent.clear();
+  };
+
+  /**
+   * Handles quick add button click
+   * @param {Event} event - The click event
+   */
+  handleClick = async (event) => {
+    event.preventDefault();
+
+    const currentUrl = this.productPageUrl;
+
+    // Check if we have cached content for this URL
+    let productGrid = this.#cachedContent.get(currentUrl);
+
+    if (!productGrid) {
+      // Fetch and cache the content
+      const html = await this.fetchProductPage(currentUrl);
+      if (html) {
+        const gridElement = html.querySelector('[data-product-grid-content]');
+        if (gridElement) {
+          // Cache the cloned element to avoid modifying the original
+          productGrid = /** @type {Element} */ (gridElement.cloneNode(true));
+          this.#cachedContent.set(currentUrl, productGrid);
+        }
+      }
+    }
+
+    if (productGrid) {
+      // Use a fresh clone from the cache
+      const freshContent = /** @type {Element} */ (productGrid.cloneNode(true));
+      await this.updateQuickAddModal(freshContent);
+    }
+
+    this.#openQuickAddModal();
+  };
+
+  /** @param {QuickAddDialog} dialogComponent */
+  #stayVisibleUntilDialogCloses(dialogComponent) {
+    this.toggleAttribute('stay-visible', true);
+
+    dialogComponent.addEventListener(DialogCloseEvent.eventName, () => this.toggleAttribute('stay-visible', false), {
+      once: true,
+    });
+  }
+
+  #openQuickAddModal = () => {
+    const dialogComponent = document.getElementById('quick-add-dialog');
+    if (!(dialogComponent instanceof QuickAddDialog)) return;
+
+    this.#stayVisibleUntilDialogCloses(dialogComponent);
+
+    dialogComponent.showDialog();
+  };
+
+  #closeQuickAddModal = () => {
+    const dialogComponent = document.getElementById('quick-add-dialog');
+    if (!(dialogComponent instanceof QuickAddDialog)) return;
+
+    dialogComponent.closeDialog();
+  };
+
+  /**
+   * Fetches the product page content
+   * @param {string} productPageUrl - The URL of the product page to fetch
+   * @returns {Promise<Document | null>}
+   */
+  async fetchProductPage(productPageUrl) {
+    if (!productPageUrl) return null;
+
+    // We use this to abort the previous fetch request if it's still pending.
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    try {
+      const response = await fetch(productPageUrl, {
+        signal: this.#abortController.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch product page: HTTP error ${response.status}`);
+      }
+
+      const responseText = await response.text();
+      const html = new DOMParser().parseFromString(responseText, 'text/html');
+
+      return html;
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        return null;
+      } else {
+        throw error;
+      }
+    } finally {
+      this.#abortController = null;
+    }
+  }
+
+  /**
+   * Re-renders the variant picker.
+   * @param {Element} productGrid - The product grid element
+   */
+  async updateQuickAddModal(productGrid) {
+    const modalContent = document.getElementById('quick-add-modal-content');
+
+    if (!productGrid || !modalContent) return;
+
+    if (isMobileBreakpoint()) {
+      const productDetails = productGrid.querySelector('.product-details');
+      const productFormComponent = productGrid.querySelector('product-form-component');
+      const variantPicker = productGrid.querySelector('variant-picker');
+      const productPrice = productGrid.querySelector('product-price');
+      const productTitle = document.createElement('a');
+      productTitle.textContent = this.dataset.productTitle || '';
+
+      // Make product title as a link to the product page
+      productTitle.href = this.productPageUrl;
+
+      const productHeader = document.createElement('div');
+      productHeader.classList.add('product-header');
+
+      productHeader.appendChild(productTitle);
+      if (productPrice) {
+        productHeader.appendChild(productPrice);
+      }
+      productGrid.appendChild(productHeader);
+
+      if (variantPicker) {
+        productGrid.appendChild(variantPicker);
+      }
+      if (productFormComponent) {
+        productGrid.appendChild(productFormComponent);
+      }
+
+      productDetails?.remove();
+    }
+
+    morph(modalContent, productGrid);
+
+    this.#syncVariantSelection(modalContent);
+  }
+
+  /**
+   * Updates the quick-add button state based on whether a swatch is selected
+   * @param {VariantSelectedEvent} event - The variant selected event
+   */
+  #updateQuickAddButtonState(event) {
+    if (!(event.target instanceof HTMLElement)) return;
+    if (event.target.closest('product-card') !== this.closest('product-card')) return;
+    const productOptionsCount = this.dataset.productOptionsCount;
+    const quickAddButton = productOptionsCount === '1' ? 'add' : 'choose';
+    this.setAttribute('data-quick-add-button', quickAddButton);
+  }
+
+  /**
+   * Syncs the variant selection from the product card to the modal
+   * @param {Element} modalContent - The modal content element
+   */
+  #syncVariantSelection(modalContent) {
+    const selectedVariantId = this.#getSelectedVariantId();
+    if (!selectedVariantId) return;
+
+    // Find and check the corresponding input in the modal
+    const modalInputs = modalContent.querySelectorAll('input[type="radio"][data-variant-id]');
+    for (const input of modalInputs) {
+      if (input instanceof HTMLInputElement && input.dataset.variantId === selectedVariantId && !input.checked) {
+        input.checked = true;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        break;
+      }
+    }
+  }
+}
+
+if (!customElements.get('quick-add-component')) {
+  customElements.define('quick-add-component', QuickAddComponent);
+}
+
+class QuickAddDialog extends DialogComponent {
+  #abortController = new AbortController();
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.addEventListener(ThemeEvents.cartUpdate, this.handleCartUpdate, { signal: this.#abortController.signal });
+    this.addEventListener(ThemeEvents.variantUpdate, this.#updateProductTitleLink);
+
+    this.addEventListener(DialogCloseEvent.eventName, this.#handleDialogClose);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.#abortController.abort();
+    this.removeEventListener(DialogCloseEvent.eventName, this.#handleDialogClose);
+  }
+
+  /**
+   * Closes the dialog
+   * @param {CartUpdateEvent} event - The cart update event
+   */
+  handleCartUpdate = (event) => {
+    if (event.detail.data.didError) return;
+    this.closeDialog();
+  };
+
+  #updateProductTitleLink = (/** @type {CustomEvent} */ event) => {
+    const anchorElement = /** @type {HTMLAnchorElement} */ (
+      event.detail.data.html?.querySelector('.view-product-title a')
+    );
+    const viewMoreDetailsLink = /** @type {HTMLAnchorElement} */ (this.querySelector('.view-product-title a'));
+    const mobileProductTitle = /** @type {HTMLAnchorElement} */ (this.querySelector('.product-header a'));
+
+    if (!anchorElement) return;
+
+    if (viewMoreDetailsLink) viewMoreDetailsLink.href = anchorElement.href;
+    if (mobileProductTitle) mobileProductTitle.href = anchorElement.href;
+  };
+
+  #handleDialogClose = () => {
+    const iosVersion = getIOSVersion();
+    /**
+     * This is a patch to solve an issue with the UI freezing when the dialog is closed.
+     * To reproduce it, use iOS 16.0.
+     */
+    if (!iosVersion || iosVersion.major >= 17 || (iosVersion.major === 16 && iosVersion.minor >= 4)) return;
+
+    requestAnimationFrame(() => {
+      /** @type {HTMLElement | null} */
+      const grid = document.querySelector('#ResultsList [product-grid-view]');
+      if (grid) {
+        const currentWidth = grid.getBoundingClientRect().width;
+        grid.style.width = `${currentWidth - 1}px`;
+        requestAnimationFrame(() => {
+          grid.style.width = '';
+        });
+      }
+    });
+  };
+}
+
+if (!customElements.get('quick-add-dialog')) {
+  customElements.define('quick-add-dialog', QuickAddDialog);
+}

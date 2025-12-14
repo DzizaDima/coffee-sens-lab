@@ -1,1 +1,26 @@
-var o=e=>{throw TypeError(e)};var d=(e,t,r)=>t.has(e)||o("Cannot "+r);var c=(e,t,r)=>t.has(e)?o("Cannot add the same private member more than once"):t instanceof WeakSet?t.add(e):t.set(e,r);var l=(e,t,r)=>(d(e,t,"access private method"),r);var a,m;class i extends HTMLElement{constructor(){super(...arguments);c(this,a)}connectedCallback(){this.querySelectorAll("table").forEach(l(this,a,m))}}a=new WeakSet,m=function(r){const n=document.createElement("div");n.classList.add("rte-table-wrapper");const s=r.parentNode;s&&(s.insertBefore(n,r),n.appendChild(r))};customElements.get("rte-formatter")||customElements.define("rte-formatter",i);
+/**
+ * A custom element that formats rte content for easier styling
+ */
+class RTEFormatter extends HTMLElement {
+  connectedCallback() {
+    this.querySelectorAll('table').forEach(this.#formatTable);
+  }
+
+  /**
+   * Formats a table for easier styling
+   * @param {HTMLTableElement} table
+   */
+  #formatTable(table) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('rte-table-wrapper');
+    const parent = table.parentNode;
+    if (parent) {
+      parent.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  }
+}
+
+if (!customElements.get('rte-formatter')) {
+  customElements.define('rte-formatter', RTEFormatter);
+}

@@ -1,1 +1,33 @@
-var c=t=>{throw TypeError(t)};var i=(t,e,n)=>e.has(t)||c("Cannot "+n);var p=(t,e,n)=>e.has(t)?c("Cannot add the same private member more than once"):e instanceof WeakSet?e.add(t):e.set(t,n);var s=(t,e,n)=>(i(t,e,"access private method"),n);import{C as l}from"./component.js";import"./utilities.js";var r,u;class g extends l{constructor(){super(...arguments);p(this,r)}handleInput(){s(this,r,u).call(this)}}r=new WeakSet,u=function(){const{characterCount:n,textInput:o}=this.refs,m=o.value.length,d=o.maxLength,a=n.getAttribute("data-template");if(!a)return;const h=a.replace("[current]",m.toString()).replace("[max]",d.toString());n.textContent=h};customElements.define("product-custom-property-component",g);
+// assets/product-custom-property.js
+import { Component } from '@theme/component';
+
+/**
+ * @typedef {object} ProductCustomPropertyRefs
+ * @property {HTMLInputElement | HTMLTextAreaElement} textInput - The text input.
+ * @property {HTMLElement} characterCount - The character count element.
+ */
+
+/**
+ * A custom element that manages product custom properties
+ * @extends Component<ProductCustomPropertyRefs>
+ */
+class ProductCustomProperty extends Component {
+  handleInput() {
+    this.#updateCharacterCount();
+  }
+
+  #updateCharacterCount() {
+    const { characterCount, textInput } = this.refs;
+    const currentLength = textInput.value.length;
+    const maxLength = textInput.maxLength;
+
+    const template = characterCount.getAttribute('data-template');
+    if (!template) return;
+
+    const updatedText = template.replace('[current]', currentLength.toString()).replace('[max]', maxLength.toString());
+
+    characterCount.textContent = updatedText;
+  }
+}
+
+customElements.define('product-custom-property-component', ProductCustomProperty);

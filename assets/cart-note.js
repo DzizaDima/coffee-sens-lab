@@ -1,1 +1,46 @@
-var h=Object.defineProperty;var l=t=>{throw TypeError(t)};var d=(t,e,o)=>e in t?h(t,e,{enumerable:!0,configurable:!0,writable:!0,value:o}):t[e]=o;var f=(t,e,o)=>d(t,typeof e!="symbol"?e+"":e,o),m=(t,e,o)=>e.has(t)||l("Cannot "+o);var n=(t,e,o)=>(m(t,e,"read from private field"),o?o.call(t):e.get(t)),u=(t,e,o)=>e.has(t)?l("Cannot add the same private member more than once"):e instanceof WeakSet?e.add(t):e.set(t,o),s=(t,e,o,a)=>(m(t,e,"write to private field"),a?a.call(t,o):e.set(t,o),o);import{C as g}from"./component.js";import{d as p,f as C}from"./utilities.js";import{c as b}from"./performance.js";var r;class y extends g{constructor(){super(...arguments);u(this,r,null);f(this,"updateCartNote",p(async o=>{if(!(o.target instanceof HTMLTextAreaElement))return;const a=o.target.value;n(this,r)&&n(this,r).abort();const c=new AbortController;s(this,r,c);try{const i=C("json",{body:JSON.stringify({note:a})});await fetch(Theme.routes.cart_update_url,{...i,signal:c.signal})}catch{}finally{s(this,r,null),b.measureFromEvent("note-update:user-action",o)}},200))}}r=new WeakMap;customElements.get("cart-note")||customElements.define("cart-note",y);
+import { Component } from '@theme/component';
+import { debounce, fetchConfig } from '@theme/utilities';
+import { cartPerformance } from '@theme/performance';
+
+/**
+ * A custom element that displays a cart note.
+ */
+class CartNote extends Component {
+  /** @type {AbortController | null} */
+  #activeFetch = null;
+
+  /**
+   * Handles updates to the cart note.
+   * @param {InputEvent} event - The input event in our text-area.
+   */
+  updateCartNote = debounce(async (event) => {
+    if (!(event.target instanceof HTMLTextAreaElement)) return;
+
+    const note = event.target.value;
+    if (this.#activeFetch) {
+      this.#activeFetch.abort();
+    }
+
+    const abortController = new AbortController();
+    this.#activeFetch = abortController;
+
+    try {
+      const config = fetchConfig('json', {
+        body: JSON.stringify({ note }),
+      });
+
+      await fetch(Theme.routes.cart_update_url, {
+        ...config,
+        signal: abortController.signal,
+      });
+    } catch (error) {
+    } finally {
+      this.#activeFetch = null;
+      cartPerformance.measureFromEvent('note-update:user-action', event);
+    }
+  }, 200);
+}
+
+if (!customElements.get('cart-note')) {
+  customElements.define('cart-note', CartNote);
+}

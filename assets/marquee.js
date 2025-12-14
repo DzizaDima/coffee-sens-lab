@@ -1,1 +1,261 @@
-var S=Object.defineProperty;var O=n=>{throw TypeError(n)};var U=(n,s,e)=>s in n?S(n,s,{enumerable:!0,configurable:!0,writable:!0,value:e}):n[s]=e;var R=(n,s,e)=>U(n,typeof s!="symbol"?s+"":s,e),C=(n,s,e)=>s.has(n)||O("Cannot "+e);var u=(n,s,e)=>(C(n,s,"read from private field"),e?e.call(n):s.get(n)),h=(n,s,e)=>s.has(n)?O("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(n):s.set(n,e),p=(n,s,e,t)=>(C(n,s,"write to private field"),t?t.call(n,e):s.set(n,e),e),o=(n,s,e)=>(C(n,s,"access private method"),e);import{C as V}from"./component.js";import{d as k}from"./utilities.js";const b={duration:500};var m,l,r,v,q,g,A,f,L,y,I,M;class W extends V{constructor(){super(...arguments);h(this,r);R(this,"requiredRefs",["wrapper","content","marqueeItems"]);h(this,m,null);h(this,l,k(()=>{if(u(this,m))return;const e=this.refs.wrapper.getAnimations()[0];e&&p(this,m,T({...b,from:1,to:0,onUpdate:t=>e.updatePlaybackRate(t),onComplete:()=>{p(this,m,null)}}))},b.duration));h(this,f,k(async()=>{const{marqueeItems:e}=this.refs,t=await o(this,r,g).call(this),i=e.length,c=o(this,r,A).call(this,t);t>i?o(this,r,I).call(this,t-i):t<i&&o(this,r,M).call(this,i-t),o(this,r,y).call(this),o(this,r,q).call(this,c),o(this,r,L).call(this)},250))}async connectedCallback(){super.connectedCallback();const{marqueeItems:e}=this.refs;if(e.length===0)return;const t=await o(this,r,g).call(this),i=o(this,r,A).call(this,t);o(this,r,I).call(this,t),o(this,r,y).call(this),o(this,r,q).call(this,i),window.addEventListener("resize",u(this,f)),this.addEventListener("pointerenter",u(this,l)),this.addEventListener("pointerleave",o(this,r,v))}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("resize",u(this,f)),this.removeEventListener("pointerenter",u(this,l)),this.removeEventListener("pointerleave",o(this,r,v))}get clonedContent(){const{content:e,wrapper:t}=this.refs,i=t.lastElementChild;return e!==i?i:null}}m=new WeakMap,l=new WeakMap,r=new WeakSet,v=function(){u(this,l).cancel();const e=this.refs.wrapper.getAnimations()[0];if(!e||e.playbackRate===1)return;const t=u(this,m)?.current??0;u(this,m)?.cancel(),p(this,m,T({...b,from:t,to:1,onUpdate:i=>e.updatePlaybackRate(i),onComplete:()=>{p(this,m,null)}}))},q=function(e){this.style.setProperty("--marquee-speed",`${e}s`)},g=async function(){const{marqueeItems:e}=this.refs;return new Promise(t=>{if(!e[0])return setTimeout(()=>t(1),0);const i=new IntersectionObserver(c=>{const a=c[0];if(!a)return;i.disconnect();const{width:w}=a.rootBounds??{width:0},{width:d}=a.boundingClientRect;setTimeout(()=>{t(d===0?1:Math.ceil(w/d))},0)},{root:this});i.observe(e[0])})},A=function(e){const t=Number(this.getAttribute("data-speed-factor"));return Math.sqrt(e)*t},f=new WeakMap,L=function(){const e=this.refs.wrapper.getAnimations();requestAnimationFrame(()=>{for(const t of e)t.currentTime=0})},y=function(){this.clonedContent?.remove();const e=this.refs.content.cloneNode(!0);e.setAttribute("aria-hidden","true"),e.removeAttribute("ref"),this.refs.wrapper.appendChild(e)},I=function(e){const{content:t,marqueeItems:i}=this.refs;if(i[0])for(let c=0;c<e-1;c++){const a=i[0].cloneNode(!0);t.appendChild(a)}},M=function(e){const{content:t}=this.refs,i=Array.from(t.children),c=Math.min(e,i.length-1);for(let a=0;a<c;a++)t.lastElementChild?.remove()};function T({from:n,to:s,duration:e,onUpdate:t,easing:i=a=>a*a*(3-2*a),onComplete:c}){const a=performance.now();let w=!1,d=n;function E(P){if(w)return;const F=P-a,N=Math.min(F/e,1),z=i(N);d=n+(s-n)*z,t(d),N<1?requestAnimationFrame(E):typeof c=="function"&&c()}return requestAnimationFrame(E),{get current(){return d},cancel(){w=!0}}}customElements.get("marquee-component")||customElements.define("marquee-component",W);
+import { Component } from '@theme/component';
+import { debounce } from '@theme/utilities';
+
+const ANIMATION_OPTIONS = {
+  duration: 500,
+};
+
+/**
+ * A custom element that displays a marquee.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLElement} wrapper - The wrapper element.
+ * @property {HTMLElement} content - The content element.
+ * @property {HTMLElement[]} marqueeItems - The marquee items collection.
+ *
+ * @extends Component<Refs>
+ */
+class MarqueeComponent extends Component {
+  requiredRefs = ['wrapper', 'content', 'marqueeItems'];
+
+  async connectedCallback() {
+    super.connectedCallback();
+
+    const { marqueeItems } = this.refs;
+    if (marqueeItems.length === 0) return;
+
+    const numberOfCopies = await this.#queryNumberOfCopies();
+    const speed = this.#calculateSpeed(numberOfCopies);
+
+    this.#addRepeatedItems(numberOfCopies);
+    this.#duplicateContent();
+
+    this.#setSpeed(speed);
+
+    window.addEventListener('resize', this.#handleResize);
+    this.addEventListener('pointerenter', this.#slowDown);
+    this.addEventListener('pointerleave', this.#speedUp);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this.#handleResize);
+    this.removeEventListener('pointerenter', this.#slowDown);
+    this.removeEventListener('pointerleave', this.#speedUp);
+  }
+
+  /**
+   * @type {{ cancel: () => void, current: number } | null}
+   */
+  #animation = null;
+
+  #slowDown = debounce(() => {
+    if (this.#animation) return;
+
+    const animation = this.refs.wrapper.getAnimations()[0];
+
+    if (!animation) return;
+
+    this.#animation = animateValue({
+      ...ANIMATION_OPTIONS,
+      from: 1,
+      to: 0,
+      onUpdate: (value) => animation.updatePlaybackRate(value),
+      onComplete: () => {
+        this.#animation = null;
+      },
+    });
+  }, ANIMATION_OPTIONS.duration);
+
+  #speedUp() {
+    this.#slowDown.cancel();
+
+    const animation = this.refs.wrapper.getAnimations()[0];
+
+    if (!animation || animation.playbackRate === 1) return;
+
+    const from = this.#animation?.current ?? 0;
+    this.#animation?.cancel();
+
+    this.#animation = animateValue({
+      ...ANIMATION_OPTIONS,
+      from,
+      to: 1,
+      onUpdate: (value) => animation.updatePlaybackRate(value),
+      onComplete: () => {
+        this.#animation = null;
+      },
+    });
+  }
+
+  get clonedContent() {
+    const { content, wrapper } = this.refs;
+    const lastChild = wrapper.lastElementChild;
+
+    return content !== lastChild ? lastChild : null;
+  }
+
+  /**
+   * @param {number} value
+   */
+  #setSpeed(value) {
+    this.style.setProperty('--marquee-speed', `${value}s`);
+  }
+
+  async #queryNumberOfCopies() {
+    const { marqueeItems } = this.refs;
+
+    return new Promise((resolve) => {
+      if (!marqueeItems[0]) {
+        // Wrapping the resolve in a setTimeout here and below splits each marquee reflow into a separate task.
+        return setTimeout(() => resolve(1), 0);
+      }
+
+      const intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const firstEntry = entries[0];
+          if (!firstEntry) return;
+
+          intersectionObserver.disconnect();
+
+          const { width: marqueeWidth } = firstEntry.rootBounds ?? { width: 0 };
+          const { width: marqueeItemsWidth } = firstEntry.boundingClientRect;
+
+          setTimeout(() => {
+            resolve(marqueeItemsWidth === 0 ? 1 : Math.ceil(marqueeWidth / marqueeItemsWidth));
+          }, 0);
+        },
+        { root: this }
+      );
+      intersectionObserver.observe(marqueeItems[0]);
+    });
+  }
+
+  /**
+   * @param {number} numberOfCopies
+   */
+  #calculateSpeed(numberOfCopies) {
+    const speedFactor = Number(this.getAttribute('data-speed-factor'));
+    const speed = Math.sqrt(numberOfCopies) * speedFactor;
+
+    return speed;
+  }
+
+  #handleResize = debounce(async () => {
+    const { marqueeItems } = this.refs;
+    const newNumberOfCopies = await this.#queryNumberOfCopies();
+    const currentNumberOfCopies = marqueeItems.length;
+    const speed = this.#calculateSpeed(newNumberOfCopies);
+
+    if (newNumberOfCopies > currentNumberOfCopies) {
+      this.#addRepeatedItems(newNumberOfCopies - currentNumberOfCopies);
+    } else if (newNumberOfCopies < currentNumberOfCopies) {
+      this.#removeRepeatedItems(currentNumberOfCopies - newNumberOfCopies);
+    }
+
+    this.#duplicateContent();
+    this.#setSpeed(speed);
+    this.#restartAnimation();
+  }, 250);
+
+  #restartAnimation() {
+    const animations = this.refs.wrapper.getAnimations();
+
+    requestAnimationFrame(() => {
+      for (const animation of animations) {
+        animation.currentTime = 0;
+      }
+    });
+  }
+
+  #duplicateContent() {
+    this.clonedContent?.remove();
+
+    const clone = /** @type {HTMLElement} */ (this.refs.content.cloneNode(true));
+
+    clone.setAttribute('aria-hidden', 'true');
+    clone.removeAttribute('ref');
+
+    this.refs.wrapper.appendChild(clone);
+  }
+
+  /**
+   * @param {number} numberOfCopies
+   */
+  #addRepeatedItems(numberOfCopies) {
+    const { content, marqueeItems } = this.refs;
+
+    if (!marqueeItems[0]) return;
+
+    for (let i = 0; i < numberOfCopies - 1; i++) {
+      const clone = marqueeItems[0].cloneNode(true);
+      content.appendChild(clone);
+    }
+  }
+
+  /**
+   * @param {number} numberOfCopies
+   */
+  #removeRepeatedItems(numberOfCopies) {
+    const { content } = this.refs;
+    const children = Array.from(content.children);
+
+    const itemsToRemove = Math.min(numberOfCopies, children.length - 1);
+
+    for (let i = 0; i < itemsToRemove; i++) {
+      content.lastElementChild?.remove();
+    }
+  }
+}
+
+// Define the animateValue function
+/**
+ * Animate a numeric property smoothly.
+ * @param {Object} params - The parameters for the animation.
+ * @param {number} params.from - The starting value.
+ * @param {number} params.to - The ending value.
+ * @param {number} params.duration - The duration of the animation in milliseconds.
+ * @param {function(number): void} params.onUpdate - The function to call on each update.
+ * @param {function(number): number} [params.easing] - The easing function.
+ * @param {function(): void} [params.onComplete] - The function to call when the animation completes.
+ */
+function animateValue({ from, to, duration, onUpdate, easing = (t) => t * t * (3 - 2 * t), onComplete }) {
+  const startTime = performance.now();
+  let cancelled = false;
+  let currentValue = from;
+
+  /**
+   * @param {number} currentTime - The current time in milliseconds.
+   */
+  function animate(currentTime) {
+    if (cancelled) return;
+
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easedProgress = easing(progress);
+    currentValue = from + (to - from) * easedProgress;
+
+    onUpdate(currentValue);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else if (typeof onComplete === 'function') {
+      onComplete();
+    }
+  }
+
+  requestAnimationFrame(animate);
+
+  return {
+    get current() {
+      return currentValue;
+    },
+    cancel() {
+      cancelled = true;
+    },
+  };
+}
+
+if (!customElements.get('marquee-component')) {
+  customElements.define('marquee-component', MarqueeComponent);
+}

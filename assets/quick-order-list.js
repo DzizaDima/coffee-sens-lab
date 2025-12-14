@@ -1,1 +1,536 @@
-var G=Object.defineProperty;var O=r=>{throw TypeError(r)};var W=(r,a,t)=>a in r?G(r,a,{enumerable:!0,configurable:!0,writable:!0,value:t}):r[a]=t;var H=(r,a,t)=>W(r,typeof a!="symbol"?a+"":a,t),R=(r,a,t)=>a.has(r)||O("Cannot "+t);var d=(r,a,t)=>(R(r,a,"read from private field"),t?t.call(r):a.get(r)),m=(r,a,t)=>a.has(r)?O("Cannot add the same private member more than once"):a instanceof WeakSet?a.add(r):a.set(r,t),p=(r,a,t,s)=>(R(r,a,"write to private field"),s?s.call(r,t):a.set(r,t),t),n=(r,a,t)=>(R(r,a,"access private method"),t);import{C as X}from"./component.js";import{T as S,Q,C as D}from"./events.js";import{d as Z,h as b,f as j}from"./utilities.js";import{s as x,m as $}from"./section-renderer.js";import"./morph.js";var h,w,y,e,P,L,C,J,V,K,B,_,E,U,T,F,A,N,Y,k,M;class tt extends X{constructor(){super(...arguments);m(this,e);H(this,"requiredRefs",["variantRows","confirmationPanel","totalInfo","errorContainer","errorText","successContainer","successText"]);m(this,h,null);m(this,w);m(this,y);m(this,L,t=>{if(t.key!=="Enter"||!n(this,e,P).call(this,t.target))return;t.preventDefault();const s=Array.from(this.querySelectorAll('input[type="number"][data-cart-quantity]')).filter(g=>g instanceof HTMLElement&&g.offsetParent!==null);if(s.length<=1)return;const i=s.indexOf(t.target);if(i===-1)return;const o=t.shiftKey?-1:1,c=(i+o+s.length)%s.length,l=s[c];t.target.blur(),l instanceof HTMLInputElement&&l.select()});m(this,C,t=>{(t.key==="Tab"||t.key==="Enter")&&n(this,e,P).call(this,t.target)&&n(this,e,J).call(this,t.target)})}get currentPage(){if(this.refs.paginationNav&&this.refs.paginationNav.dataset.current_page){const t=parseInt(this.refs.paginationNav.dataset.current_page,10);if(!isNaN(t))return t}return 1}get cartVariantIds(){const t=this.dataset.cartVariantIds;return t?JSON.parse(t):[]}connectedCallback(){super.connectedCallback(),p(this,w,Z(n(this,e,V).bind(this),300)),p(this,y,n(this,e,K).bind(this)),this.addEventListener(S.quantitySelectorUpdate,d(this,w)),document.addEventListener(S.cartUpdate,d(this,y)),this.addEventListener("keydown",d(this,L),!0),this.addEventListener("keyup",d(this,C),!0)}disconnectedCallback(){super.disconnectedCallback(),this.removeEventListener(S.quantitySelectorUpdate,d(this,w)),document.removeEventListener(S.cartUpdate,d(this,y)),this.removeEventListener("keydown",d(this,L),!0),this.removeEventListener("keyup",d(this,C),!0),d(this,h)?.abort()}async onPaginationControlClick(t,s){s.preventDefault();const i=this.dataset.sectionId;if(!this.dataset.url||!i)return;d(this,h)?.abort(),p(this,h,new AbortController);const o=new URL(this.dataset.url,window.location.origin);for(const[c,l]of Object.entries(t))o.searchParams.set(c,l);await x.renderSection(i,{url:o}),n(this,e,Y).call(this)}async onLineItemRemove(t,s){s.preventDefault();const i=this.refs.variantRows.find(c=>c.dataset.variantId===String(t));if(!(i instanceof HTMLElement))return;const o=i.querySelector('input[type="number"]');o instanceof HTMLInputElement&&(o.value="0",o.dispatchEvent(new Q(0,Number(o.dataset.cartLine))))}async onRemoveAll(t){t.preventDefault();const s=this.cartVariantIds;n(this,e,A).call(this),n(this,e,T).call(this),n(this,e,N).call(this,s),d(this,h)?.abort(),p(this,h,new AbortController);try{const i={};if(s.length>0)for(const q of s)i[String(q)]=0;if(Object.keys(i).length===0){b(this);return}const o=n(this,e,M).call(this),c=new URL(window.location.pathname,window.location.origin);c.searchParams.set("page",this.currentPage.toString());const l=JSON.stringify({updates:i,sections:o.join(","),sections_url:c.pathname+c.search}),u=await(await fetch(Theme.routes.cart_update_url,{...j("json",{body:l}),signal:d(this,h).signal})).text(),f=JSON.parse(u);b(this),f.errors?n(this,e,U).call(this,f.errors):(n(this,e,k).call(this,f),n(this,e,E).call(this,!1),document.dispatchEvent(new D(f,this.id,{source:"quick-order-remove-all",sections:f.sections})))}catch(i){if(i.name!=="AbortError")throw b(this),i}}showRemoveAllConfirmation(t){t.preventDefault(),n(this,e,E).call(this,!0)}hideRemoveAllConfirmation(t){t.preventDefault(),n(this,e,E).call(this,!1)}}h=new WeakMap,w=new WeakMap,y=new WeakMap,e=new WeakSet,P=function(t){return t instanceof HTMLInputElement&&t.matches('input[type="number"][data-cart-quantity]')},L=new WeakMap,C=new WeakMap,J=function(t){t.scrollIntoView({block:"center",behavior:"smooth"})},V=async function(t){if(!(t instanceof Q)||!(t.target instanceof Node)||!this.contains(t.target))return;const{quantity:s}=t.detail,i=t.target;if(!(i instanceof HTMLElement))return;const o=this.refs.variantRows.find(u=>u.contains(i));if(!o)return;const c=o.dataset.variantId;if(!c)return;const l=o.querySelector("input[data-cart-quantity]"),g=l&&parseInt(l.dataset.cartQuantity||"0")||0;if(n(this,e,A).call(this),n(this,e,T).call(this),g!==s){n(this,e,N).call(this,[c]),n(this,e,B).call(this),d(this,h)?.abort(),p(this,h,new AbortController);try{const u={};u[c]=s;const f=new URL(window.location.pathname,window.location.origin);f.searchParams.set("page",this.currentPage.toString());const q=JSON.stringify({updates:u,sections:n(this,e,M).call(this).join(","),sections_url:f.pathname+f.search}),z=await(await fetch(Theme.routes.cart_update_url,{...j("json",{body:q}),signal:d(this,h).signal})).text(),I=JSON.parse(z);if(b(this),I.errors){if(n(this,e,U).call(this,I.errors),this.dataset.sectionId){const v=new URL(window.location.href);v.searchParams.set("page",this.currentPage.toString()),await x.renderSection(this.dataset.sectionId,{cache:!1,url:v})}}else{n(this,e,k).call(this,I);const v=s-g;v>0&&n(this,e,F).call(this,v),document.dispatchEvent(new D(I,this.id,{source:"quick-order-quantity",variantId:c,sections:I.sections}))}}catch(u){if(u.name!=="AbortError")throw n(this,e,_).call(this),b(this),u}}},K=async function(t){if(!(t.detail?.source==="quick-order-quantity"&&t.detail?.sourceId===this.id)&&(n(this,e,_).call(this),d(this,h)?.abort(),p(this,h,new AbortController),!(t.detail?.data?.sections&&this.dataset.sectionId&&(n(this,e,k).call(this,t.detail.data),t.detail.data.sections[this.dataset.sectionId]))&&this.dataset.sectionId)){const s=new URL(window.location.href);s.searchParams.set("page",this.currentPage.toString()),await x.renderSection(this.dataset.sectionId,{cache:!1,url:s})}},B=function(){this.classList.add("quick-order-list-disabled")},_=function(){this.classList.remove("quick-order-list-disabled")},E=function(t){this.refs.confirmationPanel.classList.toggle("hidden",!t),this.refs.totalInfo.classList.toggle("confirmation-visible",t)},U=function(t){this.refs.errorText.textContent=t,this.refs.errorContainer.classList.remove("hidden")},T=function(){this.refs.errorContainer.classList.add("hidden")},F=function(t){n(this,e,T).call(this);const s=Theme?.translations?.items_added_to_cart_one||"1 item added to cart",i=Theme?.translations?.items_added_to_cart_other||"{{ count }} items added to cart",o=t===1?s:i.replace("{{ count }}",t.toString());this.refs.successText.textContent=o,this.refs.successContainer.classList.remove("hidden")},A=function(){this.refs.successContainer.classList.add("hidden")},N=function(t){for(const i of t){const o=this.refs.variantRows.find(c=>c.dataset.variantId===String(i));o&&o.querySelector(".variant-item__total-price")?.shimmer()}this.querySelector('text-component[ref="totalPrice"]')?.shimmer()},Y=function(){requestAnimationFrame(()=>{const t=this.getBoundingClientRect().top;window.scrollTo({top:t+window.scrollY,behavior:"smooth"})})},k=function(t){if(t.sections&&this.dataset.sectionId){const s=t.sections[this.dataset.sectionId];s&&$(this.dataset.sectionId,s)}},M=function(){const t=[];this.dataset.sectionId&&t.push(this.dataset.sectionId);const s=document.querySelectorAll("cart-items-component");for(const i of s)i instanceof HTMLElement&&i.dataset.sectionId&&!t.includes(i.dataset.sectionId)&&t.push(i.dataset.sectionId);return t};customElements.get("quick-order-list-component")||customElements.define("quick-order-list-component",tt);
+import { Component } from '@theme/component';
+import { CartAddEvent, QuantitySelectorUpdateEvent, ThemeEvents } from '@theme/events';
+import { debounce, fetchConfig, resetShimmer } from '@theme/utilities';
+import { morphSection, sectionRenderer } from '@theme/section-renderer';
+
+/**
+ * A custom element that manages the quick order list section.
+ *
+ * @typedef {object} QuickOrderListComponentRefs
+ * @property {HTMLTableRowElement[]} variantRows - The variant row elements
+ * @property {HTMLElement} confirmationPanel - The remove all confirmation dialog
+ * @property {HTMLElement} totalInfo - The total info section element
+ * @property {HTMLElement} errorContainer - The error message container
+ * @property {HTMLElement} errorText - The error message text element
+ * @property {HTMLElement} successContainer - The success message container
+ * @property {HTMLElement} successText - The success message text element
+ * @property {HTMLElement} [paginationNav] - The pagination navigation element
+ *
+ * @extends Component<QuickOrderListComponentRefs>
+ */
+class QuickOrderListComponent extends Component {
+  requiredRefs = [
+    'variantRows',
+    'confirmationPanel',
+    'totalInfo',
+    'errorContainer',
+    'errorText',
+    'successContainer',
+    'successText',
+  ];
+
+  /** @type {AbortController|null} */
+  #abortController = null;
+
+  /** @type {(event: Event) => void} */
+  #debouncedHandleQuantityUpdate;
+
+  /** @type {(event: Event) => void} */
+  #boundHandleCartUpdate;
+
+  /**
+   * Gets the current page number from pagination controls
+   * @returns {number}
+   */
+  get currentPage() {
+    if (this.refs.paginationNav && this.refs.paginationNav.dataset.current_page) {
+      const pageNum = parseInt(this.refs.paginationNav.dataset.current_page, 10);
+      if (!isNaN(pageNum)) {
+        return pageNum;
+      }
+    }
+    return 1;
+  }
+
+  /**
+   * Gets all cart variant IDs for the product from the data attribute
+   * @returns {number[]}
+   */
+  get cartVariantIds() {
+    const data = this.dataset.cartVariantIds;
+    if (!data) return [];
+
+    return JSON.parse(data);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#debouncedHandleQuantityUpdate = debounce(this.#handleQuantityUpdate.bind(this), 300);
+    this.#boundHandleCartUpdate = this.#handleCartUpdate.bind(this);
+
+    this.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedHandleQuantityUpdate);
+    document.addEventListener(ThemeEvents.cartUpdate, this.#boundHandleCartUpdate);
+    this.addEventListener('keydown', this.#handleKeyDown, true);
+    this.addEventListener('keyup', this.#handleKeyup, true);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.removeEventListener(ThemeEvents.quantitySelectorUpdate, this.#debouncedHandleQuantityUpdate);
+    document.removeEventListener(ThemeEvents.cartUpdate, this.#boundHandleCartUpdate);
+    this.removeEventListener('keydown', this.#handleKeyDown, true);
+    this.removeEventListener('keyup', this.#handleKeyup, true);
+
+    this.#abortController?.abort();
+  }
+
+  /**
+   * @param {EventTarget | null} target
+   * @returns {target is HTMLInputElement}
+   */
+  #isQuantityInput(target) {
+    return target instanceof HTMLInputElement && target.matches('input[type="number"][data-cart-quantity]');
+  }
+
+  /**
+   * Keyboard navigation:
+   * Enter key selects next quantity input
+   * Shift+Enter selects previous quantity input
+   * @param {KeyboardEvent} event
+   */
+  #handleKeyDown = (event) => {
+    if (event.key !== 'Enter' || !this.#isQuantityInput(event.target)) {
+      return;
+    }
+    event.preventDefault();
+
+    // Get all VISIBLE quantity inputs (exclude hidden mobile/desktop variants)
+    const allQuantityInputs = Array.from(this.querySelectorAll('input[type="number"][data-cart-quantity]')).filter(
+      (input) => {
+        return input instanceof HTMLElement && input.offsetParent !== null;
+      }
+    );
+
+    if (allQuantityInputs.length <= 1) {
+      return;
+    }
+
+    const currentIndex = allQuantityInputs.indexOf(event.target);
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const offset = event.shiftKey ? -1 : 1;
+    const nextIndex = (currentIndex + offset + allQuantityInputs.length) % allQuantityInputs.length;
+    const nextInput = allQuantityInputs[nextIndex];
+
+    event.target.blur();
+    if (nextInput instanceof HTMLInputElement) {
+      nextInput.select();
+    }
+  };
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+  #handleKeyup = (event) => {
+    if ((event.key === 'Tab' || event.key === 'Enter') && this.#isQuantityInput(event.target)) {
+      this.#scrollToCenter(event.target);
+    }
+  };
+
+  /**
+   * @param {HTMLElement} element
+   */
+  #scrollToCenter(element) {
+    element.scrollIntoView({
+      block: 'center',
+      behavior: 'smooth',
+    });
+  }
+
+  /**
+   * Handles pagination events
+   * @param {Object<string, string>} data - URL search params
+   * @param {Event} event - The click event
+   */
+  async onPaginationControlClick(data, event) {
+    event.preventDefault();
+    const sectionId = this.dataset.sectionId;
+
+    if (!this.dataset.url || !sectionId) return;
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    const newURL = new URL(this.dataset.url, window.location.origin);
+    for (const [key, value] of Object.entries(data)) {
+      newURL.searchParams.set(key, value);
+    }
+
+    await sectionRenderer.renderSection(sectionId, {
+      url: newURL,
+    });
+    this.#scrollToTopOfSection();
+  }
+
+  /**
+   * Handles removing a single variant item (sets quantity to 0)
+   * @param {string} variantId - The variant ID to remove
+   * @param {Event} event - The click event
+   */
+  async onLineItemRemove(variantId, event) {
+    event.preventDefault();
+
+    const targetRow = this.refs.variantRows.find((row) => row.dataset.variantId === String(variantId));
+    if (!(targetRow instanceof HTMLElement)) return;
+
+    const quantityInput = targetRow.querySelector('input[type="number"]');
+    if (quantityInput instanceof HTMLInputElement) {
+      quantityInput.value = '0';
+      quantityInput.dispatchEvent(new QuantitySelectorUpdateEvent(0, Number(quantityInput.dataset.cartLine)));
+    }
+  }
+
+  /**
+   * Handles removing all items from the cart
+   * @param {Event} event - The click event
+   */
+  async onRemoveAll(event) {
+    event.preventDefault();
+    const idsToRemove = this.cartVariantIds;
+
+    this.#clearSuccessMessage();
+    this.#clearErrorMessage();
+    this.#applyShimmerEffects(idsToRemove);
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    try {
+      /** @type {Record<string, number>} */
+      const updates = {};
+
+      if (idsToRemove.length > 0) {
+        for (const variantId of idsToRemove) {
+          updates[String(variantId)] = 0;
+        }
+      }
+
+      if (Object.keys(updates).length === 0) {
+        resetShimmer(this);
+        return;
+      }
+
+      const sectionIds = this.#getSectionIds();
+      const sectionsUrl = new URL(window.location.pathname, window.location.origin);
+      sectionsUrl.searchParams.set('page', this.currentPage.toString());
+
+      const body = JSON.stringify({
+        updates: updates,
+        sections: sectionIds.join(','),
+        sections_url: sectionsUrl.pathname + sectionsUrl.search,
+      });
+
+      const response = await fetch(Theme.routes.cart_update_url, {
+        ...fetchConfig('json', { body }),
+        signal: this.#abortController.signal,
+      });
+
+      const responseText = await response.text();
+      const data = JSON.parse(responseText);
+
+      resetShimmer(this);
+
+      if (data.errors) {
+        this.#showErrorMessage(data.errors);
+      } else {
+        this.#updateSectionHTML(data);
+        this.#toggleConfirmationPanel(false);
+
+        document.dispatchEvent(
+          new CartAddEvent(data, this.id, {
+            source: 'quick-order-remove-all',
+            sections: data.sections,
+          })
+        );
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        resetShimmer(this);
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Handles quantity selector updates
+   * @param {CustomEvent} event - The quantity update event
+   */
+  async #handleQuantityUpdate(event) {
+    if (!(event instanceof QuantitySelectorUpdateEvent)) return;
+
+    // Only handle events from our own quantity selectors
+    if (!(event.target instanceof Node) || !this.contains(event.target)) return;
+
+    const { quantity } = event.detail;
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const variantRow = this.refs.variantRows.find((row) => {
+      return row.contains(target);
+    });
+
+    if (!variantRow) return;
+
+    const variantId = variantRow.dataset.variantId;
+    if (!variantId) return;
+
+    const quantityInput = /** @type {HTMLInputElement|null} */ (variantRow.querySelector('input[data-cart-quantity]'));
+    const currentCartQuantity = quantityInput ? parseInt(quantityInput.dataset.cartQuantity || '0') || 0 : 0;
+
+    this.#clearSuccessMessage();
+    this.#clearErrorMessage();
+
+    if (currentCartQuantity === quantity) {
+      return;
+    }
+
+    this.#applyShimmerEffects([variantId]);
+
+    this.#disableQuickOrderListItems();
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    try {
+      /** @type {Record<string, number>} */
+      const updates = {};
+      updates[variantId] = quantity;
+
+      // Include page parameter in sections URL to maintain pagination state
+      const sectionsUrl = new URL(window.location.pathname, window.location.origin);
+      sectionsUrl.searchParams.set('page', this.currentPage.toString());
+
+      const body = JSON.stringify({
+        updates: updates,
+        sections: this.#getSectionIds().join(','),
+        sections_url: sectionsUrl.pathname + sectionsUrl.search,
+      });
+
+      const response = await fetch(Theme.routes.cart_update_url, {
+        ...fetchConfig('json', { body }),
+        signal: this.#abortController.signal,
+      });
+
+      const responseText = await response.text();
+      const data = JSON.parse(responseText);
+
+      resetShimmer(this);
+
+      if (data.errors) {
+        this.#showErrorMessage(data.errors);
+        if (this.dataset.sectionId) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('page', this.currentPage.toString());
+          await sectionRenderer.renderSection(this.dataset.sectionId, { cache: false, url });
+        }
+      } else {
+        this.#updateSectionHTML(data);
+
+        const quantityAdded = quantity - currentCartQuantity;
+        if (quantityAdded > 0) {
+          this.#showSuccessMessage(quantityAdded);
+        }
+
+        document.dispatchEvent(
+          new CartAddEvent(data, this.id, {
+            source: 'quick-order-quantity',
+            variantId: variantId,
+            sections: data.sections,
+          })
+        );
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        this.#enableQuickOrderListItems();
+        resetShimmer(this);
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Handles cart update events from other components
+   * @param {CustomEvent} event - The cart update event
+   */
+  async #handleCartUpdate(event) {
+    // Don't process our own events to avoid double updates
+    // Check if this event came from our own quantity update
+    if (event.detail?.source === 'quick-order-quantity' && event.detail?.sourceId === this.id) {
+      return;
+    }
+
+    this.#enableQuickOrderListItems();
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    if (event.detail?.data?.sections && this.dataset.sectionId) {
+      this.#updateSectionHTML(event.detail.data);
+      if (event.detail.data.sections[this.dataset.sectionId]) {
+        return;
+      }
+    }
+
+    if (this.dataset.sectionId) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('page', this.currentPage.toString());
+
+      await sectionRenderer.renderSection(this.dataset.sectionId, {
+        cache: false,
+        url,
+      });
+    }
+  }
+
+  #disableQuickOrderListItems() {
+    this.classList.add('quick-order-list-disabled');
+  }
+
+  #enableQuickOrderListItems() {
+    this.classList.remove('quick-order-list-disabled');
+  }
+
+  /**
+   * Shows the remove all confirmation dialog
+   * @param {Event} event - The click event
+   */
+  showRemoveAllConfirmation(event) {
+    event.preventDefault();
+    this.#toggleConfirmationPanel(true);
+  }
+
+  /**
+   * Hides the remove all confirmation
+   * @param {Event} event - The click event
+   */
+  hideRemoveAllConfirmation(event) {
+    event.preventDefault();
+    this.#toggleConfirmationPanel(false);
+  }
+
+  /**
+   * Toggles the confirmation panel visibility
+   * @param {boolean} show
+   */
+  #toggleConfirmationPanel(show) {
+    this.refs.confirmationPanel.classList.toggle('hidden', !show);
+    this.refs.totalInfo.classList.toggle('confirmation-visible', show);
+  }
+
+  /**
+   * Shows an error message in the error container
+   * @param {string} message - The error message to display
+   */
+  #showErrorMessage(message) {
+    this.refs.errorText.textContent = message;
+    this.refs.errorContainer.classList.remove('hidden');
+  }
+
+  /**
+   * Hides the error messages
+   */
+  #clearErrorMessage() {
+    this.refs.errorContainer.classList.add('hidden');
+  }
+
+  /**
+   * Shows success message in the success container
+   * @param {number} quantityAdded - The number of items added
+   */
+  #showSuccessMessage(quantityAdded) {
+    this.#clearErrorMessage();
+
+    const oneItemText = Theme?.translations?.items_added_to_cart_one || '1 item added to cart';
+    const itemsText = Theme?.translations?.items_added_to_cart_other || '{{ count }} items added to cart';
+
+    const message = quantityAdded === 1 ? oneItemText : itemsText.replace('{{ count }}', quantityAdded.toString());
+
+    this.refs.successText.textContent = message;
+    this.refs.successContainer.classList.remove('hidden');
+  }
+
+  #clearSuccessMessage() {
+    this.refs.successContainer.classList.add('hidden');
+  }
+
+  /**
+   * Applies shimmer effects to price elements
+   * @param {Array<string|number>} variantIds - Array of variant IDs to apply shimmer to
+   */
+  #applyShimmerEffects(variantIds) {
+    for (const variantId of variantIds) {
+      const variantRow = this.refs.variantRows.find((row) => row.dataset.variantId === String(variantId));
+      if (variantRow) {
+        const variantTotal = /** @type {import('./utilities').TextComponent|null} */ (
+          variantRow.querySelector('.variant-item__total-price')
+        );
+        variantTotal?.shimmer();
+      }
+    }
+
+    const totalPrice = /** @type {import('./utilities').TextComponent|null} */ (
+      this.querySelector('text-component[ref="totalPrice"]')
+    );
+    totalPrice?.shimmer();
+  }
+
+  #scrollToTopOfSection() {
+    // Defer layout read until scroll action to batch with other layout work
+    requestAnimationFrame(() => {
+      const top = this.getBoundingClientRect().top;
+      window.scrollTo({ top: top + window.scrollY, behavior: 'smooth' });
+    });
+  }
+
+  /**
+   * Updates section HTML using morphSection
+   * @param {{ sections?: Record<string, string> }} data - Response data containing sections
+   */
+  #updateSectionHTML(data) {
+    if (data.sections && this.dataset.sectionId) {
+      const sectionHtml = data.sections[this.dataset.sectionId];
+      if (sectionHtml) {
+        morphSection(this.dataset.sectionId, sectionHtml);
+      }
+    }
+  }
+
+  /**
+   * Gets the section IDs for updating
+   * @returns {string[]} Array of section IDs
+   */
+  #getSectionIds() {
+    const sectionIds = [];
+
+    if (this.dataset.sectionId) {
+      sectionIds.push(this.dataset.sectionId);
+    }
+
+    // Also include all cart-items-component sections (like cart drawer) for smooth updates
+    const cartItemsComponents = document.querySelectorAll('cart-items-component');
+    for (const component of cartItemsComponents) {
+      if (!(component instanceof HTMLElement)) continue;
+      if (component.dataset.sectionId && !sectionIds.includes(component.dataset.sectionId)) {
+        sectionIds.push(component.dataset.sectionId);
+      }
+    }
+
+    return sectionIds;
+  }
+}
+
+if (!customElements.get('quick-order-list-component')) {
+  customElements.define('quick-order-list-component', QuickOrderListComponent);
+}

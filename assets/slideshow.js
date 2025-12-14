@@ -1,1 +1,797 @@
-var nt=Object.defineProperty;var K=r=>{throw TypeError(r)};var rt=(r,o,t)=>o in r?nt(r,o,{enumerable:!0,configurable:!0,writable:!0,value:t}):r[o]=t;var X=(r,o,t)=>rt(r,typeof o!="symbol"?o+"":o,t),F=(r,o,t)=>o.has(r)||K("Cannot "+t);var i=(r,o,t)=>(F(r,o,"read from private field"),t?t.call(r):o.get(r)),c=(r,o,t)=>o.has(r)?K("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(r):o.set(r,t),p=(r,o,t,e)=>(F(r,o,"write to private field"),e?e.call(r,t):o.set(r,t),t),v=(r,o,t)=>(F(r,o,"access private method"),t);import{C as ot}from"./component.js";import{v as H,c as Z,p as lt,g as dt,m as at,E as tt,a as et,b as ht,k as ut}from"./utilities.js";import{S as ct,s as ft}from"./scrolling.js";import{S as Q}from"./events.js";const mt=.7;var D,k,C,d,L,h,it,st,B,$,W,N,y,P,q,O,Y,G,R;const J=class J extends ot{constructor(){super(...arguments);c(this,h);X(this,"requiredRefs",["scroller"]);c(this,D,0);c(this,k,!1);c(this,C);c(this,d);c(this,L);c(this,B,()=>{const t=i(this,D),e=i(this,N).call(this);if(e===t)return;const s=this.slides?.[e];s&&this.dispatchEvent(new Q({index:e,previousIndex:t,userInitiated:!0,trigger:"scroll",slide:s,id:s.getAttribute("slide-id")}))});c(this,$,()=>{this.setAttribute("transitioning","")});c(this,W,()=>{v(this,h,R).call(this),this.removeAttribute("transitioning")});c(this,N,()=>{const{slides:t}=this;if(!t)return this.current=0;if(!i(this,d))return this.current=0;const e=this.visibleSlides;if(!e.length)return this.current;const{axis:s}=i(this,d),{scroller:a}=this.refs,n=e.map(b=>et(b,s)),u=e.length>1?a.getBoundingClientRect()[s]:et(a,s),f=ht(n,u),S=e[n.indexOf(f)];if(!S)return this.current=0;const E=t.indexOf(S);return this.current=E});c(this,y,!1);c(this,P,t=>{const{slides:e}=this;if(!e||e.length<=1||!(t.target instanceof Element)||this.disabled||i(this,y)||t.target.closest("model-viewer"))return;t.preventDefault();const{axis:s}=i(this,d),a=t[s],n=new AbortController,{signal:u}=n,f=performance.now();let S=a,E=0,b=!1,g=0;p(this,y,!0);const z=A=>{const m=A[s],I=a-m;if(!I)return;if(!b){b=!0,this.setPointerCapture(A.pointerId),document.addEventListener("click",ut,{once:!0,signal:u});const V=I<0,_=I>0,w=this.parentElement?.closest("slideshow-component"),T=w instanceof J&&w!==this,j=V&&this.atStart||_&&this.atEnd;if(T&&j){n.abort();return}this.pause(),this.setAttribute("dragging","")}A.stopImmediatePropagation();const l=S-m,x=performance.now()-f;E=Math.round(l/x*1e3),S=m,g+=Math.abs(l),i(this,d).by(l,{instant:!0})},M=async A=>{n.abort();const{current:m,slides:I}=this,{scroller:l}=this.refs;if(p(this,y,!1),!I?.length||!l)return;const x=Math.sign(E),V=i(this,N).call(this),_=m!==V||Math.abs(E)<10||g<10?0:x,w=Z(V+_,0,I.length-1),T=I[w],j=this.current;if(!T)throw new Error(`Slide not found at index ${w}`);i(this,d).to(T),this.removeAttribute("dragging"),this.releasePointerCapture(A.pointerId),v(this,h,G).call(this,w),this.dispatchEvent(new Q({index:w,previousIndex:j,userInitiated:!0,trigger:"drag",slide:T,id:T.getAttribute("slide-id")})),this.current=w,await i(this,d).finished,!i(this,y)&&(i(this,d).snap=!0,this.resume())};i(this,d).snap=!1,document.addEventListener("pointermove",z,{signal:u}),document.addEventListener("pointerup",M,{signal:u}),document.addEventListener("pointerdown",M,{signal:u}),document.addEventListener("pointercancel",M,{signal:u}),document.addEventListener("pointercapturelost",M,{signal:u})});c(this,q,()=>{this.setAttribute("actioned","")});c(this,O,()=>document.hidden?this.pause():this.resume())}static get observedAttributes(){return["initial-slide"]}attributeChangedCallback(t,e,s){t==="initial-slide"&&e!==s&&queueMicrotask(()=>{if(!this.isConnected||!i(this,d)||!this.refs.slides)return;const a=parseInt(s,10)||0,n=this.refs.slides[a]?.getAttribute("slide-id");n&&this.select({id:n},void 0,{animate:!1})})}async connectedCallback(){if(super.connectedCallback(),H.current&&(await H.current,!this.isConnected))return;(this.slides?.length||0)<=1?v(this,h,it).call(this):v(this,h,st).call(this)}disconnectedCallback(){if(super.disconnectedCallback(),i(this,d)){const{scroller:e}=this.refs;e.removeEventListener("mousedown",i(this,P)),i(this,d).destroy()}(this.slides?.length||0)>1&&(this.removeEventListener("mouseenter",this.suspend),this.removeEventListener("mouseleave",this.resume),this.removeEventListener("pointerenter",i(this,q)),document.removeEventListener("visibilitychange",i(this,O))),i(this,L)&&i(this,L).disconnect()}get isNested(){return this.parentElement?.closest("slideshow-component")!==null}get initialSlide(){return this.refs.slides?.[this.initialSlideIndex]}async select(t,e,s={}){if(i(this,k)||!this.refs.slides?.length||!i(this,d))return;const a=this.slides?.[this.current];for(const l of this.refs.slides)l.hasAttribute("reveal")&&(l.removeAttribute("reveal"),l.setAttribute("aria-hidden","true"));let n=(()=>{if(typeof t=="number")return t;if(typeof t=="string")return parseInt(t,10);if("id"in t){const l=this.refs.slides.find(x=>x.getAttribute("slide-id")==t.id);return!l||!this.slides?void 0:(l.hasAttribute("hidden")&&(l.setAttribute("reveal",""),l.setAttribute("aria-hidden","false")),this.slides.indexOf(l))}})();const{current:u}=this,{slides:f}=this;if(!f?.length||n===void 0||isNaN(n))return;const S=f?.[n];if(a===S)return;this.infinite||(n=Z(n,0,f.length-1)),e?.preventDefault();const{animate:E=!0}=s,b=f.length-1;let g=n;n<0?g=b:n>b&&(g=0);const z=Math.abs(g-u)<=1&&n>=0&&n<=b,{visibleSlides:M}=this,A=lt()||!E;if(!A&&!z&&M.length===1){p(this,k,!0),await i(this,d).finished;const l=f[g];if(!l||!a)return;const x=document.createElement("slideshow-slide");l.before(x),n<u?a.before(l):a.after(l),u===0&&i(this,d).to(a,{instant:!0}),queueMicrotask(async()=>{await i(this,d).finished,p(this,k,!1),x.replaceWith(l),i(this,d).to(l,{instant:!0})})}const m=f[g];if(!m)return;const I=this.current;m.setAttribute("aria-hidden","false"),i(this,d)&&i(this,d).to(m,{instant:A}),this.current=this.slides?.indexOf(m)||0,v(this,h,G).call(this,g,A?"instant":"smooth"),this.dispatchEvent(new Q({index:g,previousIndex:I,userInitiated:e!=null,trigger:"select",slide:m,id:m.getAttribute("slide-id")}))}next(t,e){t?.preventDefault(),this.select(this.nextIndex,t,e)}previous(t,e){t?.preventDefault(),this.select(this.previousIndex,t,e)}play(t=this.autoplayInterval){i(this,C)||(this.paused=!1,p(this,C,setInterval(()=>{this.matches(":hover")||document.hidden||this.next()},t)))}pause(){this.paused=!0,this.suspend()}get paused(){return this.hasAttribute("paused")}set paused(t){t?this.setAttribute("paused",""):this.removeAttribute("paused")}suspend(){clearInterval(i(this,C)),p(this,C,void 0)}resume(){!this.autoplay||this.paused||(this.pause(),this.play())}get autoplay(){return!!this.autoplayInterval}get autoplayInterval(){const t=this.getAttribute("autoplay"),e=parseInt(`${t}`,10);if(!Number.isNaN(e))return e*1e3}get current(){return i(this,D)}set current(t){const{current:e,thumbnails:s,dots:a,slides:n,previous:u,next:f}=this.refs;p(this,D,t),e&&(e.textContent=`${t+1}`);for(const S of[s,a])S?.forEach((E,b)=>E.setAttribute("aria-selected",`${b===t}`));u&&(u.disabled=!this.infinite&&t===0),f&&(f.disabled=!!(!this.infinite&&n&&this.nextIndex>=n.length))}get infinite(){return this.getAttribute("infinite")!=null}get visibleSlides(){return dt(this.refs.scroller,this.slides,mt,"x")}get previousIndex(){const{current:t,visibleSlides:e}=this,s=e.length>1?e.length:1;return t-s}get nextIndex(){const{current:t,visibleSlides:e}=this,s=e.length>1?e.length:1;return t+s}get atStart(){const{current:t,slides:e}=this;return e?.length?t===0:!1}get atEnd(){const{current:t,slides:e}=this;return e?.length?t===e.length-1:!1}set disabled(t){this.setAttribute("disabled",String(t))}get disabled(){return this.getAttribute("disabled")==="true"||this.hasAttribute("mobile-disabled")&&!at.matches}get slides(){return this.refs.slides?.filter(t=>!t.hasAttribute("hidden")||t.hasAttribute("reveal"))}get initialSlideIndex(){const t=this.getAttribute("initial-slide");return t==null?0:parseInt(t,10)}};D=new WeakMap,k=new WeakMap,C=new WeakMap,d=new WeakMap,L=new WeakMap,h=new WeakSet,it=function(){if(this.current=0,this.hasAttribute("auto-hide-controls")){const{slideshowControls:t}=this.refs;t instanceof HTMLElement&&(t.hidden=!0)}this.refs.slides?.[0]&&this.refs.slides[0].setAttribute("aria-hidden","false")},st=function(){const{scroller:t}=this.refs;p(this,d,new ct(t,{onScroll:i(this,B),onScrollStart:i(this,$),onScrollEnd:i(this,W)})),t.addEventListener("mousedown",i(this,P)),this.addEventListener("mouseenter",this.suspend),this.addEventListener("mouseleave",this.resume),this.addEventListener("pointerenter",i(this,q)),document.addEventListener("visibilitychange",i(this,O)),v(this,h,Y).call(this),this.disabled=this.isNested||this.disabled,this.resume(),this.current=this.initialSlideIndex,tt.schedule(()=>{let e=0;const s=this.initialSlide?.getAttribute("slide-id");requestAnimationFrame(()=>{this.initialSlideIndex!==0&&s?(this.select({id:s},void 0,{animate:!1}),e=1):(e=v(this,h,R).call(this),e===0&&(this.select(0,void 0,{animate:!1}),e=1))}),p(this,L,new ResizeObserver(async()=>{H.current&&await H.current,e>1&&v(this,h,R).call(this),this.hasAttribute("auto-hide-controls")&&v(this,h,Y).call(this)})),i(this,L).observe(this.refs.slideshowContainer)})},B=new WeakMap,$=new WeakMap,W=new WeakMap,N=new WeakMap,y=new WeakMap,P=new WeakMap,q=new WeakMap,O=new WeakMap,Y=function(){if(!this.hasAttribute("auto-hide-controls"))return;const{scroller:t,slideshowControls:e}=this.refs;e instanceof HTMLElement&&(e.hidden=t.scrollWidth<=t.offsetWidth)},G=function(t,e="smooth"){const s=this.refs.thumbnails?.[t];if(!s)return;const{thumbnailsContainer:a}=this.refs;if(!a||!(a instanceof HTMLElement))return;const{slideshowControls:n}=this.refs;!n||!(n instanceof HTMLElement)||ft(s,{ancestor:a,behavior:e,block:"center",inline:"center"})},R=function(){const{slides:t}=this;if(!t||!t.length)return 0;const e=this.visibleSlides;return tt.schedule(()=>{t.forEach(s=>{const a=e.includes(s);s.setAttribute("aria-hidden",`${!a}`)})}),e.length};let U=J;customElements.get("slideshow-component")||customElements.define("slideshow-component",U);
+import { Component } from '@theme/component';
+import {
+  center,
+  closest,
+  clamp,
+  getVisibleElements,
+  mediaQueryLarge,
+  prefersReducedMotion,
+  preventDefault,
+  viewTransition,
+  scheduler,
+} from '@theme/utilities';
+import { Scroller, scrollIntoView } from '@theme/scrolling';
+import { SlideshowSelectEvent } from '@theme/events';
+
+// The threshold for determining visibility of slides.
+const SLIDE_VISIBLITY_THRESHOLD = 0.7;
+
+/**
+ * Slideshow custom element that allows sliding between content.
+ *
+ * @typedef {Object} Refs
+ * @property {HTMLElement} scroller
+ * @property {HTMLElement} slideshowContainer
+ * @property {HTMLElement[]} [slides]
+ * @property {HTMLElement} [current]
+ * @property {HTMLElement[]} [thumbnails]
+ * @property {HTMLElement[]} [dots]
+ * @property {HTMLButtonElement} [previous]
+ * @property {HTMLButtonElement} [next]
+ *
+ * @extends {Component<Refs>}
+ */
+export class Slideshow extends Component {
+  static get observedAttributes() {
+    return ['initial-slide'];
+  }
+
+  /**
+   * @param {string} name
+   * @param {string} oldValue
+   * @param {string} newValue
+   */
+  attributeChangedCallback(name, oldValue, newValue) {
+    // Collection page filtering will Morph slideshow galleries in place, updating
+    // the slideshow[initial-slide] and slideshow-slide[hidden] attributes.
+    // We need to re-select() the slide after the morph is complete, but not before
+    // slideshow-slide elements have their [hidden] attribute updated.
+    if (name === 'initial-slide' && oldValue !== newValue) {
+      queueMicrotask(() => {
+        // Only select if the component is connected and initialized
+        if (!this.isConnected || !this.#scroll || !this.refs.slides) return;
+        const index = parseInt(newValue, 10) || 0;
+        const slide_id = this.refs.slides[index]?.getAttribute('slide-id');
+        if (slide_id) {
+          this.select({ id: slide_id }, undefined, { animate: false });
+        }
+      });
+    }
+  }
+
+  requiredRefs = ['scroller'];
+
+  async connectedCallback() {
+    super.connectedCallback();
+
+    // Wait for any in-progress view transitions to finish
+    if (viewTransition.current) {
+      await viewTransition.current;
+      // It's possible that the slideshow was disconnected before the view transition finished
+      if (!this.isConnected) return;
+    }
+
+    const slideCount = this.slides?.length || 0;
+    slideCount <= 1 ? this.#setupSlideshowWithoutControls() : this.#setupSlideshow();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    if (this.#scroll) {
+      const { scroller } = this.refs;
+      scroller.removeEventListener('mousedown', this.#handleMouseDown);
+      this.#scroll.destroy();
+    }
+
+    const slideCount = this.slides?.length || 0;
+    if (slideCount > 1) {
+      this.removeEventListener('mouseenter', this.suspend);
+      this.removeEventListener('mouseleave', this.resume);
+      this.removeEventListener('pointerenter', this.#handlePointerEnter);
+      document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+    }
+
+    if (this.#resizeObserver) {
+      this.#resizeObserver.disconnect();
+    }
+  }
+
+  /** Indicates whether the slideshow is nested inside another slideshow. */
+  get isNested() {
+    return this.parentElement?.closest('slideshow-component') !== null;
+  }
+
+  get initialSlide() {
+    return this.refs.slides?.[this.initialSlideIndex];
+  }
+
+  /**
+   * Selects a slide based on the input index.
+   * @param {number|string|{id: string}} input - The index or id of the slide to select.
+   * @param {Event} [event] - The event that triggered the selection.
+   * @param {Object} [options] - The options for the selection.
+   * @param {boolean} [options.animate=true] - Whether to animate the selection.
+   */
+  async select(input, event, options = {}) {
+    if (this.#disabled || !this.refs.slides?.length) return;
+    if (!this.#scroll) return;
+
+    // Store the actual current slide before any mutations
+    const currentSlide = this.slides?.[this.current];
+
+    for (const slide of this.refs.slides) {
+      if (slide.hasAttribute('reveal')) {
+        slide.removeAttribute('reveal');
+        slide.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    // Figure out the raw desired index (could be -1 if user is on first slide and clicks prev)
+    let requestedIndex = (() => {
+      if (typeof input === 'number') return input;
+      if (typeof input === 'string') return parseInt(input, 10);
+      if ('id' in input) {
+        const requestedSlide = this.refs.slides.find((slide) => slide.getAttribute('slide-id') == input.id);
+
+        if (!requestedSlide || !this.slides) return;
+
+        // Force the slide to be revealed if it is hidden
+        if (requestedSlide.hasAttribute('hidden')) {
+          requestedSlide.setAttribute('reveal', '');
+          requestedSlide.setAttribute('aria-hidden', 'false');
+        }
+
+        return this.slides.indexOf(requestedSlide);
+      }
+    })();
+
+    const { current } = this;
+    const { slides } = this;
+
+    // Guard checks: no slides, invalid index, or selecting the same slide
+    if (!slides?.length || requestedIndex === undefined || isNaN(requestedIndex)) return;
+
+    const requestedSlideElement = slides?.[requestedIndex];
+    if (currentSlide === requestedSlideElement) return;
+
+    if (!this.infinite) requestedIndex = clamp(requestedIndex, 0, slides.length - 1);
+
+    event?.preventDefault();
+
+    const { animate = true } = options;
+    const lastIndex = slides.length - 1;
+
+    // Decide the actual target index (clamp for infinite loop)
+    let index = requestedIndex;
+    if (requestedIndex < 0) index = lastIndex;
+    else if (requestedIndex > lastIndex) index = 0;
+
+    const isAdjacentSlide = Math.abs(index - current) <= 1 && requestedIndex >= 0 && requestedIndex <= lastIndex;
+    const { visibleSlides } = this;
+    const instant = prefersReducedMotion() || !animate;
+
+    // If jump is more than 1 or we looped, do the placeholder + reorder trick
+    if (!instant && !isAdjacentSlide && visibleSlides.length === 1) {
+      this.#disabled = true;
+      await this.#scroll.finished; // ensure we're not mid-scroll
+
+      const targetSlide = slides[index];
+      if (!targetSlide || !currentSlide) return;
+
+      // Create a placeholder in the original DOM position of targetSlide
+      const placeholder = document.createElement('slideshow-slide');
+      targetSlide.before(placeholder);
+
+      // Decide whether targetSlide goes before or after currentSlide
+      // so that we scroll a short distance in the correct direction
+      if (requestedIndex < current) {
+        currentSlide.before(targetSlide);
+      } else {
+        currentSlide.after(targetSlide);
+      }
+
+      if (current === 0) this.#scroll.to(currentSlide, { instant: true });
+
+      // Once that scroll finishes, restore the DOM
+      queueMicrotask(async () => {
+        await this.#scroll.finished;
+        this.#disabled = false;
+
+        // Restore the slide back to its original position. This triggers a scroll event.
+        placeholder.replaceWith(targetSlide);
+
+        // Instantly scroll to the target slide as its position will have changed
+        this.#scroll.to(targetSlide, { instant: true });
+      });
+    }
+
+    const slide = slides[index];
+    if (!slide) return;
+
+    const previousIndex = this.current;
+
+    slide.setAttribute('aria-hidden', 'false');
+
+    if (this.#scroll) {
+      this.#scroll.to(slide, { instant });
+    }
+
+    this.current = this.slides?.indexOf(slide) || 0;
+
+    this.#centerSelectedThumbnail(index, instant ? 'instant' : 'smooth');
+
+    this.dispatchEvent(
+      new SlideshowSelectEvent({
+        index,
+        previousIndex,
+        userInitiated: event != null,
+        trigger: 'select',
+        slide,
+        id: slide.getAttribute('slide-id'),
+      })
+    );
+  }
+
+  /**
+   * Advances to the next slide.
+   * @param {Event} [event] - The event that triggered the next slide.
+   * @param {Object} [options] - The options for the next slide.
+   * @param {boolean} [options.animate=true] - Whether to animate the next slide.
+   */
+  next(event, options) {
+    event?.preventDefault();
+    this.select(this.nextIndex, event, options);
+  }
+
+  /**
+   * Goes back to the previous slide.
+   * @param {Event} [event] - The event that triggered the previous slide.
+   * @param {Object} [options] - The options for the previous slide.
+   * @param {boolean} [options.animate=true] - Whether to animate the previous slide.
+   */
+  previous(event, options) {
+    event?.preventDefault();
+    this.select(this.previousIndex, event, options);
+  }
+
+  /**
+   * Starts automatic slide playback.
+   * @param {number} [interval] - The time interval in seconds between slides.
+   */
+  play(interval = this.autoplayInterval) {
+    if (this.#interval) return;
+
+    this.paused = false;
+
+    this.#interval = setInterval(() => {
+      if (this.matches(':hover') || document.hidden) return;
+
+      this.next();
+    }, interval);
+  }
+
+  /**
+   * Pauses automatic slide playback.
+   */
+  pause() {
+    this.paused = true;
+    this.suspend();
+  }
+
+  get paused() {
+    return this.hasAttribute('paused');
+  }
+
+  set paused(value) {
+    if (value) {
+      this.setAttribute('paused', '');
+    } else {
+      this.removeAttribute('paused');
+    }
+  }
+
+  /**
+   * Suspends automatic slide playback.
+   */
+  suspend() {
+    clearInterval(this.#interval);
+    this.#interval = undefined;
+  }
+
+  /**
+   * Resumes automatic slide playback if autoplay is enabled.
+   */
+  resume() {
+    if (!this.autoplay || this.paused) return;
+
+    this.pause();
+    this.play();
+  }
+
+  get autoplay() {
+    return Boolean(this.autoplayInterval);
+  }
+
+  get autoplayInterval() {
+    const interval = this.getAttribute('autoplay');
+    const value = parseInt(`${interval}`, 10);
+
+    if (Number.isNaN(value)) return undefined;
+
+    return value * 1000;
+  }
+
+  /**
+   * The current slide index.
+   * @type {number}
+   */
+  #current = 0;
+
+  get current() {
+    return this.#current;
+  }
+
+  /**
+   * Sets the current slide index and update the DOM
+   * @type {number}
+   */
+  set current(value) {
+    const { current, thumbnails, dots, slides, previous, next } = this.refs;
+
+    this.#current = value;
+
+    if (current) current.textContent = `${value + 1}`;
+
+    for (const controls of [thumbnails, dots]) {
+      controls?.forEach((el, i) => el.setAttribute('aria-selected', `${i === value}`));
+    }
+
+    if (previous) previous.disabled = Boolean(!this.infinite && value === 0);
+    if (next) next.disabled = Boolean(!this.infinite && slides && this.nextIndex >= slides.length);
+  }
+
+  get infinite() {
+    return this.getAttribute('infinite') != null;
+  }
+
+  get visibleSlides() {
+    return getVisibleElements(this.refs.scroller, this.slides, SLIDE_VISIBLITY_THRESHOLD, 'x');
+  }
+
+  get previousIndex() {
+    const { current, visibleSlides } = this;
+    const modifier = visibleSlides.length > 1 ? visibleSlides.length : 1;
+
+    return current - modifier;
+  }
+
+  get nextIndex() {
+    const { current, visibleSlides } = this;
+    const modifier = visibleSlides.length > 1 ? visibleSlides.length : 1;
+
+    return current + modifier;
+  }
+
+  get atStart() {
+    const { current, slides } = this;
+
+    return slides?.length ? current === 0 : false;
+  }
+
+  get atEnd() {
+    const { current, slides } = this;
+
+    return slides?.length ? current === slides.length - 1 : false;
+  }
+
+  /**
+   * Sets the disabled attribute.
+   * @param {boolean} value - The value to set the disabled attribute to.
+   */
+  set disabled(value) {
+    this.setAttribute('disabled', String(value));
+  }
+  /**
+   * Whether the slideshow is disabled.
+   * @type {boolean}
+   */
+  get disabled() {
+    return (
+      this.getAttribute('disabled') === 'true' || (this.hasAttribute('mobile-disabled') && !mediaQueryLarge.matches)
+    );
+  }
+
+  /**
+   * Indicates whether the slideshow is temporarily disabled (e.g., during infinite loop transition).
+   * @type {boolean}
+   */
+  #disabled = false;
+
+  /**
+   * The interval ID for automatic playback.
+   * @type {number|undefined}
+   */
+  #interval = undefined;
+
+  /**
+   * The Scroller instance that manages scrolling.
+   * @type {Scroller}
+   */
+  #scroll;
+
+  /**
+   * The ResizeObserver instance for monitoring scroller size changes
+   * @type {ResizeObserver}
+   */
+  #resizeObserver;
+
+  /**
+   * Setup the slideshow without controls for zero or one slides
+   */
+  #setupSlideshowWithoutControls() {
+    this.current = 0;
+    if (this.hasAttribute('auto-hide-controls')) {
+      const { slideshowControls } = this.refs;
+      if (slideshowControls instanceof HTMLElement) {
+        slideshowControls.hidden = true;
+      }
+    }
+
+    if (this.refs.slides?.[0]) {
+      this.refs.slides[0].setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  /**
+   * Setup the slideshow with controls for when there are multiple slides
+   */
+  #setupSlideshow() {
+    // Setup the scroll instance
+    const { scroller } = this.refs;
+    this.#scroll = new Scroller(scroller, {
+      onScroll: this.#handleScroll,
+      onScrollStart: this.#onTransitionInit,
+      onScrollEnd: this.#onTransitionEnd,
+    });
+
+    scroller.addEventListener('mousedown', this.#handleMouseDown);
+
+    this.addEventListener('mouseenter', this.suspend);
+    this.addEventListener('mouseleave', this.resume);
+    this.addEventListener('pointerenter', this.#handlePointerEnter);
+    document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+
+    this.#updateControlsVisibility();
+
+    this.disabled = this.isNested || this.disabled;
+
+    this.resume();
+
+    this.current = this.initialSlideIndex;
+
+    // Batch reads and writes to the DOM
+    scheduler.schedule(() => {
+      let visibleSlidesAmount = 0;
+      const initialSlideId = this.initialSlide?.getAttribute('slide-id');
+
+      // Wait for next frame to ensure layout is fully calculated before setting initial scroll position
+      // This prevents race conditions on Safari mobile when section_width is 'full-width'
+      requestAnimationFrame(() => {
+        if (this.initialSlideIndex !== 0 && initialSlideId) {
+          this.select({ id: initialSlideId }, undefined, { animate: false });
+          visibleSlidesAmount = 1;
+        } else {
+          visibleSlidesAmount = this.#updateVisibleSlides();
+          if (visibleSlidesAmount === 0) {
+            this.select(0, undefined, { animate: false });
+            visibleSlidesAmount = 1;
+          }
+        }
+      });
+
+      this.#resizeObserver = new ResizeObserver(async () => {
+        if (viewTransition.current) await viewTransition.current;
+
+        if (visibleSlidesAmount > 1) {
+          this.#updateVisibleSlides();
+        }
+
+        if (this.hasAttribute('auto-hide-controls')) {
+          this.#updateControlsVisibility();
+        }
+      });
+
+      this.#resizeObserver.observe(this.refs.slideshowContainer);
+    });
+  }
+
+  /**
+   * Callback invoked on user initiated scroll to sync the current slide index
+   * and emit a slide change event if the index has changed.
+   */
+  #handleScroll = () => {
+    const previousIndex = this.#current;
+    const index = this.#sync();
+
+    if (index === previousIndex) return;
+
+    const slide = this.slides?.[index];
+    if (!slide) return;
+
+    this.dispatchEvent(
+      new SlideshowSelectEvent({
+        index,
+        previousIndex,
+        userInitiated: true,
+        trigger: 'scroll',
+        slide,
+        id: slide.getAttribute('slide-id'),
+      })
+    );
+  };
+
+  #onTransitionInit = () => {
+    this.setAttribute('transitioning', '');
+  };
+
+  #onTransitionEnd = () => {
+    this.#updateVisibleSlides();
+    this.removeAttribute('transitioning');
+  };
+
+  /**
+   * Synchronizes the scroll position and updates the current slide index.
+   * @returns {number} The index of the current slide.
+   */
+  #sync = () => {
+    const { slides } = this;
+    if (!slides) return (this.current = 0);
+
+    if (!this.#scroll) return (this.current = 0);
+
+    const visibleSlides = this.visibleSlides;
+
+    if (!visibleSlides.length) return this.current;
+
+    const { axis } = this.#scroll;
+    const { scroller } = this.refs;
+    const centers = visibleSlides.map((slide) => center(slide, axis));
+    const referencePoint = visibleSlides.length > 1 ? scroller.getBoundingClientRect()[axis] : center(scroller, axis);
+    const closestCenter = closest(centers, referencePoint);
+    const closestVisibleSlide = visibleSlides[centers.indexOf(closestCenter)];
+
+    if (!closestVisibleSlide) return (this.current = 0);
+
+    const index = slides.indexOf(closestVisibleSlide);
+
+    return (this.current = index);
+  };
+
+  #dragging = false;
+
+  /**
+   * Handles the 'mousedown' event to start dragging slides.
+   * @param {MouseEvent} event - The mousedown event.
+   */
+  #handleMouseDown = (event) => {
+    const { slides } = this;
+
+    if (!slides || slides.length <= 1) return;
+    if (!(event.target instanceof Element)) return;
+    if (this.disabled || this.#dragging) return;
+
+    // Check if the event target is within a 3D model interactive element
+    // This prevents the slideshow from capturing drag events when interacting with 3D models
+    if (event.target.closest('model-viewer')) {
+      return;
+    }
+
+    event.preventDefault();
+    // Store initial position but don't start handling yet
+    const { axis } = this.#scroll;
+    const startPosition = event[axis];
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    const startTime = performance.now();
+    let previous = startPosition;
+    let velocity = 0;
+    let moved = false;
+    let distanceTravelled = 0;
+
+    this.#dragging = true;
+
+    /**
+     * Handles the 'pointermove' event to update the scroll position.
+     * @param {PointerEvent} event - The pointermove event.
+     */
+    const onPointerMove = (event) => {
+      const current = event[axis];
+      const initialDelta = startPosition - current;
+
+      if (!initialDelta) return;
+
+      if (!moved) {
+        moved = true;
+        this.setPointerCapture(event.pointerId);
+
+        // Prevent clicks once the user starts dragging
+        document.addEventListener('click', preventDefault, { once: true, signal });
+
+        const movingRight = initialDelta < 0;
+        const movingLeft = initialDelta > 0;
+
+        // Check if the current slideshow should handle this drag
+        const closestSlideshow = this.parentElement?.closest('slideshow-component');
+        const isNested = closestSlideshow instanceof Slideshow && closestSlideshow !== this;
+        const cannotMoveInDirection = (movingRight && this.atStart) || (movingLeft && this.atEnd);
+
+        // Abort and let the parent slideshow handle the drag if we're moving in a direction where nested slideshow can't move
+        if (isNested && cannotMoveInDirection) {
+          controller.abort();
+          return;
+        }
+
+        this.pause();
+        this.setAttribute('dragging', '');
+      }
+
+      // Stop the event from bubbling up to parent slideshow components
+      event.stopImmediatePropagation();
+
+      const delta = previous - current;
+      const timeDelta = performance.now() - startTime;
+      velocity = Math.round((delta / timeDelta) * 1000);
+      previous = current;
+      distanceTravelled += Math.abs(delta);
+
+      this.#scroll.by(delta, { instant: true });
+    };
+
+    /**
+     * Handles the 'pointerup' event to stop dragging slides.
+     * @param {PointerEvent} event - The pointerup event.
+     */
+    const onPointerUp = async (event) => {
+      controller.abort();
+      const { current, slides } = this;
+      const { scroller } = this.refs;
+
+      this.#dragging = false;
+
+      if (!slides?.length || !scroller) return;
+
+      const direction = Math.sign(velocity);
+      const next = this.#sync();
+
+      const modifier = current !== next || Math.abs(velocity) < 10 || distanceTravelled < 10 ? 0 : direction;
+      const newIndex = clamp(next + modifier, 0, slides.length - 1);
+
+      const newSlide = slides[newIndex];
+      const currentIndex = this.current;
+
+      if (!newSlide) throw new Error(`Slide not found at index ${newIndex}`);
+
+      this.#scroll.to(newSlide);
+
+      this.removeAttribute('dragging');
+      this.releasePointerCapture(event.pointerId);
+
+      this.#centerSelectedThumbnail(newIndex);
+
+      this.dispatchEvent(
+        new SlideshowSelectEvent({
+          index: newIndex,
+          previousIndex: currentIndex,
+          userInitiated: true,
+          trigger: 'drag',
+          slide: newSlide,
+          id: newSlide.getAttribute('slide-id'),
+        })
+      );
+
+      this.current = newIndex;
+
+      await this.#scroll.finished;
+
+      // It's possible that the user started dragging again before the scroll finished
+      if (this.#dragging) return;
+
+      this.#scroll.snap = true;
+      this.resume();
+    };
+
+    this.#scroll.snap = false;
+
+    document.addEventListener('pointermove', onPointerMove, { signal });
+    document.addEventListener('pointerup', onPointerUp, { signal });
+    /**
+     * pointerDown calls onPointerUp to fix an issue where the first tap-and-drag
+     * on the zoom dialog is captured by the pointerMove/pointerUp listeners,
+     * sometimes causing the slideshow to change slides unexpectedly
+     */
+    document.addEventListener('pointerdown', onPointerUp, { signal });
+    document.addEventListener('pointercancel', onPointerUp, { signal });
+    document.addEventListener('pointercapturelost', onPointerUp, { signal });
+  };
+
+  #handlePointerEnter = () => {
+    this.setAttribute('actioned', '');
+  };
+
+  get slides() {
+    return this.refs.slides?.filter((slide) => !slide.hasAttribute('hidden') || slide.hasAttribute('reveal'));
+  }
+
+  /**
+   * The initial slide index.
+   * @type {number}
+   */
+  get initialSlideIndex() {
+    const initialSlide = this.getAttribute('initial-slide');
+    if (initialSlide == null) return 0;
+
+    return parseInt(initialSlide, 10);
+  }
+
+  /**
+   * Pause the slideshow when the page is hidden.
+   */
+  #handleVisibilityChange = () => (document.hidden ? this.pause() : this.resume());
+
+  #updateControlsVisibility() {
+    if (!this.hasAttribute('auto-hide-controls')) return;
+
+    const { scroller, slideshowControls } = this.refs;
+
+    if (!(slideshowControls instanceof HTMLElement)) return;
+
+    slideshowControls.hidden = scroller.scrollWidth <= scroller.offsetWidth;
+  }
+
+  /**
+   * Centers the selected thumbnail in the thumbnails container
+   * @param {number} index - The index of the selected thumbnail
+   * @param {ScrollBehavior} [behavior] - The scroll behavior.
+   */
+  #centerSelectedThumbnail(index, behavior = 'smooth') {
+    const selectedThumbnail = this.refs.thumbnails?.[index];
+    if (!selectedThumbnail) return;
+
+    const { thumbnailsContainer } = this.refs;
+    if (!thumbnailsContainer || !(thumbnailsContainer instanceof HTMLElement)) return;
+
+    const { slideshowControls } = this.refs;
+    if (!slideshowControls || !(slideshowControls instanceof HTMLElement)) return;
+
+    scrollIntoView(selectedThumbnail, {
+      ancestor: thumbnailsContainer,
+      behavior,
+      block: 'center',
+      inline: 'center',
+    });
+  }
+
+  #updateVisibleSlides() {
+    const { slides } = this;
+    if (!slides || !slides.length) return 0;
+
+    const visibleSlides = this.visibleSlides;
+
+    // Batch writes to the DOM
+    scheduler.schedule(() => {
+      // Update aria-hidden based on visibility
+      slides.forEach((slide) => {
+        const isVisible = visibleSlides.includes(slide);
+        slide.setAttribute('aria-hidden', `${!isVisible}`);
+      });
+    });
+
+    return visibleSlides.length;
+  }
+}
+
+if (!customElements.get('slideshow-component')) {
+  customElements.define('slideshow-component', Slideshow);
+}

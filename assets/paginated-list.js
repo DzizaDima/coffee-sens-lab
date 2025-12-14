@@ -1,1 +1,355 @@
-var F=Object.defineProperty;var E=r=>{throw TypeError(r)};var I=(r,o,e)=>o in r?F(r,o,{enumerable:!0,configurable:!0,writable:!0,value:e}):r[o]=e;var x=(r,o,e)=>I(r,typeof o!="symbol"?o+"":o,e),C=(r,o,e)=>o.has(r)||E("Cannot "+e);var l=(r,o,e)=>(C(r,o,"read from private field"),e?e.call(r):o.get(r)),w=(r,o,e)=>o.has(r)?E("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(r):o.set(r,e),h=(r,o,e,t)=>(C(r,o,"write to private field"),t?t.call(r,e):o.set(r,e),e),n=(r,o,e)=>(C(r,o,"access private method"),e);import{C as N}from"./component.js";import{s as k}from"./section-renderer.js";import{r as M,v as O}from"./utilities.js";import{T}from"./events.js";import{P as q}from"./paginated-list-aspect-ratio.js";import"./morph.js";var u,f,v,s,L,P,g,H,R,U,y,m,b;class z extends N{constructor(){super(...arguments);w(this,s);x(this,"pages",new Map);x(this,"infinityScrollObserver");w(this,u,null);w(this,f,null);w(this,v);w(this,b,()=>{var a,c;this.pages.clear(),(a=l(this,u))==null||a.call(this),(c=l(this,f))==null||c.call(this),h(this,u,null),h(this,f,null);const e=this.refs.grid?.dataset.lastPage,t=new MutationObserver(()=>{if(this.refs.grid?.dataset.lastPage!==e){if(t.disconnect(),!this.isConnected)return;n(this,s,L).call(this),n(this,s,g).call(this,"next")}}),{grid:i}=this.refs;i&&(t.observe(i,{attributes:!0,attributeFilter:["data-last-page"],childList:!0}),setTimeout(()=>{t&&t.disconnect()},3e3))})}connectedCallback(){super.connectedCallback();const e=this.querySelector('[ref="cardGallery"]');e&&h(this,v,new q({templateCard:e})),n(this,s,g).call(this,"next"),n(this,s,g).call(this,"previous"),n(this,s,L).call(this),document.addEventListener(T.FilterUpdate,l(this,b))}disconnectedCallback(){super.disconnectedCallback(),this.infinityScrollObserver&&this.infinityScrollObserver.disconnect(),document.removeEventListener(T.FilterUpdate,l(this,b))}get sectionId(){const e=this.getAttribute("section-id");if(!e)throw new Error("The section-id attribute is required");return e}}u=new WeakMap,f=new WeakMap,v=new WeakMap,s=new WeakSet,L=function(){const{viewMorePrevious:e,viewMoreNext:t}=this.refs;!e&&!t||(this.infinityScrollObserver||(this.infinityScrollObserver=new IntersectionObserver(async i=>{O.current&&await O.current;for(const a of i)if(a.isIntersecting){const{viewMorePrevious:c,viewMoreNext:d}=this.refs;a.target===c?n(this,s,U).call(this):a.target===d&&n(this,s,R).call(this)}},{rootMargin:"100px"})),e&&this.infinityScrollObserver.observe(e),t&&this.infinityScrollObserver.observe(t))},P=function(e){if(!e)return!1;const{grid:t}=this.refs,i=t?.dataset.lastPage;return!(!i||e.page<1||e.page>Number(i))},g=async function(e){const t=n(this,s,y).call(this,e),i=()=>{var a,c;e==="next"?((a=l(this,u))==null||a.call(this),h(this,u,null)):((c=l(this,f))==null||c.call(this),h(this,f,null))};if(!t||!n(this,s,P).call(this,t)){i();return}await n(this,s,H).call(this,t.page,t.url),i()},H=async function(e,t=void 0){const i={page:e,url:t};if(!t){const c=new URL(window.location.href);c.searchParams.set("page",e.toString()),c.hash="",i.url=c}if(!n(this,s,P).call(this,i))return;const a=await k.getSectionHTML(this.sectionId,!0,i.url);this.pages.set(e,a)},R=async function(){const{grid:e}=this.refs;if(!e)return;const t=n(this,s,y).call(this,"next");if(!t||!n(this,s,P).call(this,t))return;let i=n(this,s,m).call(this,t.page);if(!i){const a=new Promise(c=>{h(this,u,c)});if(n(this,s,g).call(this,"next"),await a,i=n(this,s,m).call(this,t.page),!i)return}e.append(...i),l(this,v).processNewElements(),history.pushState("","",t.url.toString()),M(()=>{n(this,s,g).call(this,"next")})},U=async function(){const{grid:e}=this.refs;if(!e)return;const t=n(this,s,y).call(this,"previous");if(!t||!n(this,s,P).call(this,t))return;let i=n(this,s,m).call(this,t.page);if(!i){const p=new Promise(S=>{h(this,f,S)});if(n(this,s,g).call(this,"previous"),await p,i=n(this,s,m).call(this,t.page),!i)return}const a=window.scrollY,c=e.firstElementChild,d=c?c.getBoundingClientRect().top+window.scrollY:0;if(e.prepend(...i),l(this,v).processNewElements(),history.pushState("","",t.url.toString()),c){const S=c.getBoundingClientRect().top+window.scrollY-d;window.scrollTo({top:a+S,behavior:"instant"})}M(()=>{n(this,s,g).call(this,"previous")})},y=function(e){const{cards:t}=this.refs,i=e==="previous";if(!Array.isArray(t))return;const a=t[i?0:t.length-1];if(!a)return;const c=Number(a.dataset.page),d=i?c-1:c+1,p=new URL(window.location.href);return p.searchParams.set("page",d.toString()),p.hash="",{page:d,url:p}},m=function(e){const t=this.pages.get(e);if(!t)return;const a=new DOMParser().parseFromString(t,"text/html").querySelector('[ref="grid"]');if(a)return a.querySelectorAll(':scope > [ref="cards[]"]')},b=new WeakMap;export{z as P};
+import { Component } from '@theme/component';
+import { sectionRenderer } from '@theme/section-renderer';
+import { requestIdleCallback, viewTransition } from '@theme/utilities';
+import { ThemeEvents } from '@theme/events';
+import { PaginatedListAspectRatioHelper } from '@theme/paginated-list-aspect-ratio';
+
+/**
+ * A custom element that renders a paginated list of items.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLUListElement} [grid] - The grid element.
+ * @property {HTMLSpanElement} [viewMorePrevious] - The view more previous button.
+ * @property {HTMLSpanElement} [viewMoreNext] - The view more next button.
+ * @property {HTMLElement[]} [cards] - The cards elements.
+ *
+ * @extends Component<Refs>
+ */
+export default class PaginatedList extends Component {
+  /**
+   * @type {Map<number, string>}
+   */
+  pages = new Map();
+
+  /** @type {IntersectionObserver | undefined} */
+  infinityScrollObserver;
+
+  /** @type {((value: void) => void) | null} */
+  #resolveNextPagePromise = null;
+
+  /** @type {((value: void) => void) | null} */
+  #resolvePreviousPagePromise = null;
+
+  /** @type {PaginatedListAspectRatioHelper} */
+  #aspectRatioHelper;
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    /** @type {HTMLElement | null} */
+    const templateCard = this.querySelector('[ref="cardGallery"]');
+    if (templateCard) {
+      this.#aspectRatioHelper = new PaginatedListAspectRatioHelper({
+        templateCard,
+      });
+    }
+
+    this.#fetchPage('next');
+    this.#fetchPage('previous');
+    this.#observeViewMore();
+
+    // Listen for filter updates to clear cached pages
+    document.addEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.infinityScrollObserver) {
+      this.infinityScrollObserver.disconnect();
+    }
+    // Remove the filter update listener
+    document.removeEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
+  }
+
+  #observeViewMore() {
+    const { viewMorePrevious, viewMoreNext } = this.refs;
+
+    // Return if neither element exists
+    if (!viewMorePrevious && !viewMoreNext) return;
+
+    // Create observer if it doesn't exist
+    if (!this.infinityScrollObserver) {
+      this.infinityScrollObserver = new IntersectionObserver(
+        async (entries) => {
+          // Wait for any in-progress view transitions to finish
+          if (viewTransition.current) await viewTransition.current;
+
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              // Use current refs to check which element triggered
+              const { viewMorePrevious, viewMoreNext } = this.refs;
+
+              if (entry.target === viewMorePrevious) {
+                this.#renderPreviousPage();
+              } else if (entry.target === viewMoreNext) {
+                this.#renderNextPage();
+              }
+            }
+          }
+        },
+        {
+          rootMargin: '100px',
+        }
+      );
+    }
+
+    // Observe the view more elements
+    if (viewMorePrevious) {
+      this.infinityScrollObserver.observe(viewMorePrevious);
+    }
+
+    if (viewMoreNext) {
+      this.infinityScrollObserver.observe(viewMoreNext);
+    }
+  }
+
+  /**
+   * @param {{ page: number, url?: URL } | undefined} pageInfo - The page info
+   * @returns {boolean} Whether to use the page
+   */
+  #shouldUsePage(pageInfo) {
+    if (!pageInfo) return false;
+
+    const { grid } = this.refs;
+    const lastPage = grid?.dataset.lastPage;
+
+    if (!lastPage || pageInfo.page < 1 || pageInfo.page > Number(lastPage)) return false;
+
+    return true;
+  }
+
+  /**
+   * @param {"previous" | "next"} type
+   */
+  async #fetchPage(type) {
+    const page = this.#getPage(type);
+
+    // Always resolve the promise, even if we can't fetch the page
+    const resolvePromise = () => {
+      if (type === 'next') {
+        this.#resolveNextPagePromise?.();
+        this.#resolveNextPagePromise = null;
+      } else {
+        this.#resolvePreviousPagePromise?.();
+        this.#resolvePreviousPagePromise = null;
+      }
+    };
+
+    if (!page || !this.#shouldUsePage(page)) {
+      // Resolve the promise even if we can't fetch
+      resolvePromise();
+      return;
+    }
+
+    await this.#fetchSpecificPage(page.page, page.url);
+    resolvePromise();
+  }
+
+  /**
+   * @param {number} pageNumber - The page number to fetch
+   * @param {URL} [url] - Optional URL, will be constructed if not provided
+   */
+  async #fetchSpecificPage(pageNumber, url = undefined) {
+    const pageInfo = { page: pageNumber, url };
+
+    if (!url) {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('page', pageNumber.toString());
+      newUrl.hash = '';
+      pageInfo.url = newUrl;
+    }
+
+    if (!this.#shouldUsePage(pageInfo)) return;
+    const pageContent = await sectionRenderer.getSectionHTML(this.sectionId, true, pageInfo.url);
+    this.pages.set(pageNumber, pageContent);
+  }
+
+  async #renderNextPage() {
+    const { grid } = this.refs;
+
+    if (!grid) return;
+
+    const nextPage = this.#getPage('next');
+
+    if (!nextPage || !this.#shouldUsePage(nextPage)) return;
+    let nextPageItemElements = this.#getGridForPage(nextPage.page);
+
+    if (!nextPageItemElements) {
+      const promise = new Promise((res) => {
+        this.#resolveNextPagePromise = res;
+      });
+
+      // Trigger the fetch for this page
+      this.#fetchPage('next');
+
+      await promise;
+      nextPageItemElements = this.#getGridForPage(nextPage.page);
+      if (!nextPageItemElements) return;
+    }
+
+    grid.append(...nextPageItemElements);
+
+    this.#aspectRatioHelper.processNewElements();
+
+    history.pushState('', '', nextPage.url.toString());
+
+    requestIdleCallback(() => {
+      this.#fetchPage('next');
+    });
+  }
+
+  async #renderPreviousPage() {
+    const { grid } = this.refs;
+
+    if (!grid) return;
+
+    const previousPage = this.#getPage('previous');
+    if (!previousPage || !this.#shouldUsePage(previousPage)) return;
+
+    let previousPageItemElements = this.#getGridForPage(previousPage.page);
+    if (!previousPageItemElements) {
+      const promise = new Promise((res) => {
+        this.#resolvePreviousPagePromise = res;
+      });
+
+      // Trigger the fetch for this page
+      this.#fetchPage('previous');
+
+      await promise;
+      previousPageItemElements = this.#getGridForPage(previousPage.page);
+      if (!previousPageItemElements) return;
+    }
+
+    // Store the current scroll position and height of the first element
+    const scrollTop = window.scrollY;
+    const firstElement = grid.firstElementChild;
+    const oldHeight = firstElement ? firstElement.getBoundingClientRect().top + window.scrollY : 0;
+
+    // Prepend the new elements
+    grid.prepend(...previousPageItemElements);
+
+    this.#aspectRatioHelper.processNewElements();
+
+    history.pushState('', '', previousPage.url.toString());
+
+    // Calculate and adjust scroll position to maintain the same view
+    if (firstElement) {
+      const newHeight = firstElement.getBoundingClientRect().top + window.scrollY;
+      const heightDiff = newHeight - oldHeight;
+      window.scrollTo({
+        top: scrollTop + heightDiff,
+        behavior: 'instant',
+      });
+    }
+
+    requestIdleCallback(() => {
+      this.#fetchPage('previous');
+    });
+  }
+
+  /**
+   * @param {"previous" | "next"} type
+   * @returns {{ page: number, url: URL } | undefined}
+   */
+  #getPage(type) {
+    const { cards } = this.refs;
+    const isPrevious = type === 'previous';
+
+    if (!Array.isArray(cards)) return;
+
+    const targetCard = cards[isPrevious ? 0 : cards.length - 1];
+
+    if (!targetCard) return;
+
+    const currentCardPage = Number(targetCard.dataset.page);
+    const page = isPrevious ? currentCardPage - 1 : currentCardPage + 1;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', page.toString());
+    url.hash = '';
+
+    return {
+      page,
+      url,
+    };
+  }
+
+  /**
+   * @param {number} page
+   * @returns {NodeListOf<Element> | undefined}
+   */
+  #getGridForPage(page) {
+    const pageHTML = this.pages.get(page);
+
+    if (!pageHTML) return;
+
+    const parsedPage = new DOMParser().parseFromString(pageHTML, 'text/html');
+    const gridElement = parsedPage.querySelector('[ref="grid"]');
+    if (!gridElement) return;
+    return gridElement.querySelectorAll(':scope > [ref="cards[]"]');
+  }
+
+  get sectionId() {
+    const id = this.getAttribute('section-id');
+
+    if (!id) throw new Error('The section-id attribute is required');
+
+    return id;
+  }
+
+  /**
+   * Handle filter updates by clearing cached pages
+   */
+  #handleFilterUpdate = () => {
+    this.pages.clear();
+
+    // Resolve any pending promises to unblock waiting renders
+    this.#resolveNextPagePromise?.();
+    this.#resolvePreviousPagePromise?.();
+
+    this.#resolveNextPagePromise = null;
+    this.#resolvePreviousPagePromise = null;
+
+    // Store the current lastPage value to detect when it changes
+    const currentLastPage = this.refs.grid?.dataset.lastPage;
+
+    // We need to wait for the DOM to be updated with the new filtered content
+    // Using mutation observer to detect when the grid actually updates
+    const observer = new MutationObserver(() => {
+      // Check if data-last-page changed
+      const newLastPage = this.refs.grid?.dataset.lastPage;
+
+      if (newLastPage !== currentLastPage) {
+        observer.disconnect();
+
+        // Check if component is still connected
+        if (!this.isConnected) {
+          return;
+        }
+
+        // Now the DOM has been updated with the new filtered content
+        this.#observeViewMore();
+
+        // Fetch the next page
+        this.#fetchPage('next');
+      }
+    });
+
+    // Observe the grid for changes
+    const { grid } = this.refs;
+    if (grid) {
+      observer.observe(grid, {
+        attributes: true,
+        attributeFilter: ['data-last-page'],
+        childList: true, // Also watch for child changes in case the whole grid is replaced
+      });
+
+      // Set a timeout as a fallback in case the mutation never fires
+      setTimeout(() => {
+        if (observer) {
+          observer.disconnect();
+        }
+      }, 3000);
+    }
+  };
+}

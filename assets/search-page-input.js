@@ -1,1 +1,49 @@
-var f=Object.defineProperty;var c=e=>{throw TypeError(e)};var l=(e,t,s)=>t in e?f(e,t,{enumerable:!0,configurable:!0,writable:!0,value:s}):e[t]=s;var n=(e,t,s)=>l(e,typeof t!="symbol"?t+"":t,s),m=(e,t,s)=>t.has(e)||c("Cannot "+s);var i=(e,t,s)=>(m(e,t,"read from private field"),s?s.call(e):t.get(e)),o=(e,t,s)=>t.has(e)?c("Cannot add the same private member more than once"):t instanceof WeakSet?t.add(e):t.set(e,s);var p=(e,t,s)=>(m(e,t,"access private method"),s);import{C as g}from"./component.js";import{d}from"./utilities.js";var r,h,a;class P extends g{constructor(){super(...arguments);o(this,r);n(this,"requiredRefs",["searchPageInput"]);n(this,"handleKeyDown",d(s=>{const u=this.refs.searchPageInput.value.trim();s.key==="Escape"&&u===""&&p(this,r,h).call(this)},100));o(this,a,()=>(new URL(window.location.href).searchParams.get("q")??"").trim()==="")}}r=new WeakSet,h=function(){const s=this.refs.searchPageInput;s.focus(),s.value="",!i(this,a).call(this)&&s.form?.submit()},a=new WeakMap;customElements.get("search-page-input-component")||customElements.define("search-page-input-component",P);
+import { Component } from '@theme/component';
+import { debounce } from '@theme/utilities';
+
+/**
+ * A custom element that allows the user to clean a search input.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLInputElement} searchPageInput - The search input element.
+ * @extends {Component<Refs>}
+ */
+class SearchPageInputComponent extends Component {
+  requiredRefs = ['searchPageInput'];
+
+  /**
+   * Handles the keydown event on the search input and resets the search when
+   * empty and Escape is pressed.
+   *
+   * @param {KeyboardEvent} event - The keyboard event.
+   */
+  handleKeyDown = debounce((event) => {
+    const value = this.refs.searchPageInput.value.trim();
+
+    if (event.key === 'Escape' && value === '') {
+      this.#submitEmptySearch();
+    }
+  }, 100);
+
+  #submitEmptySearch() {
+    const searchInput = this.refs.searchPageInput;
+
+    searchInput.focus();
+    searchInput.value = '';
+
+    if (this.#isEmptyState()) return;
+
+    searchInput.form?.submit();
+  }
+
+  #isEmptyState = () => {
+    const url = new URL(window.location.href);
+    const queryParam = url.searchParams.get('q') ?? '';
+
+    return queryParam.trim() === '';
+  };
+}
+
+if (!customElements.get('search-page-input-component')) {
+  customElements.define('search-page-input-component', SearchPageInputComponent);
+}

@@ -1,1 +1,270 @@
-var O=Object.defineProperty;var T=t=>{throw TypeError(t)};var z=(t,i,e)=>i in t?O(t,i,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[i]=e;var E=(t,i,e)=>z(t,typeof i!="symbol"?i+"":i,e),L=(t,i,e)=>i.has(t)||T("Cannot "+e);var s=(t,i,e)=>(L(t,i,"read from private field"),e?e.call(t):i.get(t)),r=(t,i,e)=>i.has(t)?T("Cannot add the same private member more than once"):i instanceof WeakSet?i.add(t):i.set(t,e),a=(t,i,e,n)=>(L(t,i,"write to private field"),n?n.call(t,e):i.set(t,e),e),C=(t,i,e)=>(L(t,i,"access private method"),e);import{C as H}from"./component.js";import{n as x,q as A}from"./utilities.js";var c,d,f,p,l,S,v,M,g,y,D,w;class R extends H{constructor(){super(...arguments);r(this,y);E(this,"requiredRefs",["headerDrawerContainer","headerMenu","headerRowTop"]);r(this,c,null);r(this,d,null);r(this,f,!1);r(this,p,0);r(this,l,null);r(this,S,150);r(this,v,new ResizeObserver(([e])=>{if(!e||!e.borderBoxSize[0])return;const n=Math.round(e.borderBoxSize[0].blockSize);document.body.style.setProperty("--header-height",`${n}px`),s(this,c)&&window.innerWidth>s(this,c)&&C(this,y,D).call(this,!1)}));r(this,M,(e=!0)=>{if(s(this,d))return;const n={threshold:e?1:0};a(this,d,new IntersectionObserver(([h])=>{if(!h)return;const{isIntersecting:o}=h;e?(this.dataset.stickyState=o?"inactive":"active",A(this.refs.headerRowTop)):a(this,f,!o||this.dataset.stickyState==="active")},n)),s(this,d).observe(this)});r(this,g,e=>{C(this,y,D).call(this,e.detail.minimumReached)});r(this,w,()=>{const e=this.getAttribute("sticky");if(!s(this,f)&&e!=="always")return;const n=document.scrollingElement?.scrollTop??0,h=n<s(this,p);if(s(this,l)&&(clearTimeout(s(this,l)),a(this,l,null)),e==="always"){this.getBoundingClientRect().top>=0?this.dataset.scrollDirection="none":h?this.dataset.scrollDirection="up":this.dataset.scrollDirection="down",a(this,p,n);return}h?(this.removeAttribute("data-animating"),this.getBoundingClientRect().top>=0?(a(this,f,!1),this.dataset.stickyState="inactive",this.dataset.scrollDirection="none"):(this.dataset.stickyState="active",this.dataset.scrollDirection="up")):this.dataset.stickyState==="active"?(this.dataset.scrollDirection="none",this.setAttribute("data-animating",""),a(this,l,setTimeout(()=>{this.dataset.stickyState="idle",this.removeAttribute("data-animating")},s(this,S)))):(this.dataset.scrollDirection="none",this.dataset.stickyState="idle"),a(this,p,n)})}connectedCallback(){super.connectedCallback(),s(this,v).observe(this),this.addEventListener("overflowMinimum",s(this,g));const e=this.getAttribute("sticky");e&&(s(this,M).call(this,e==="always"),(e==="scroll-up"||e==="always")&&document.addEventListener("scroll",s(this,w)))}disconnectedCallback(){super.disconnectedCallback(),s(this,v).disconnect(),s(this,d)?.disconnect(),this.removeEventListener("overflowMinimum",s(this,g)),document.removeEventListener("scroll",s(this,w)),document.body.style.setProperty("--header-height","0px")}}c=new WeakMap,d=new WeakMap,f=new WeakMap,p=new WeakMap,l=new WeakMap,S=new WeakMap,v=new WeakMap,M=new WeakMap,g=new WeakMap,y=new WeakSet,D=function(e){e?(this.refs.headerDrawerContainer.classList.remove("desktop:hidden"),a(this,c,window.innerWidth),this.refs.headerMenu.classList.add("hidden")):(this.refs.headerDrawerContainer.classList.add("desktop:hidden"),a(this,c,null),this.refs.headerMenu.classList.remove("hidden"))},w=new WeakMap;customElements.get("header-component")||customElements.define("header-component",R);x(()=>{const t=document.querySelector("header-component"),i=document.querySelector("#header-group");if(i){const e=new ResizeObserver(o=>{const u=o.reduce((m,b)=>b.target!==t||t.hasAttribute("transparent")&&t.parentElement?.nextElementSibling?m+(b.borderBoxSize[0]?.blockSize??0):m,0),k=Math.round(u);document.body.style.setProperty("--header-group-height",`${k}px`)});t instanceof HTMLElement&&e.observe(t);const n=i.children;for(let o=0;o<n.length;o++){const u=n[o];u instanceof HTMLElement&&e.observe(u)}new MutationObserver(o=>{for(const u of o)if(u.type==="childList"){const k=i.children;for(let m=0;m<k.length;m++){const b=k[m];b instanceof HTMLElement&&e.observe(b)}}}).observe(i,{childList:!0})}});
+import { Component } from '@theme/component';
+import { onDocumentLoaded, changeMetaThemeColor } from '@theme/utilities';
+
+/**
+ * @typedef {Object} HeaderComponentRefs
+ * @property {HTMLDivElement} headerDrawerContainer - The header drawer container element
+ * @property {HTMLElement} headerMenu - The header menu element
+ * @property {HTMLElement} headerRowTop - The header top row element
+ */
+
+/**
+ * @typedef {CustomEvent<{ minimumReached: boolean }>} OverflowMinimumEvent
+ */
+
+/**
+ * A custom element that manages the site header.
+ *
+ * @extends {Component<HeaderComponentRefs>}
+ */
+
+class HeaderComponent extends Component {
+  requiredRefs = ['headerDrawerContainer', 'headerMenu', 'headerRowTop'];
+
+  /**
+   * Width of window when header drawer was hidden
+   * @type {number | null}
+   */
+  #menuDrawerHiddenWidth = null;
+
+  /**
+   * An intersection observer for monitoring sticky header position
+   * @type {IntersectionObserver | null}
+   */
+  #intersectionObserver = null;
+
+  /**
+   * Whether the header has been scrolled offscreen, when sticky behavior is 'scroll-up'
+   * @type {boolean}
+   */
+  #offscreen = false;
+
+  /**
+   * The last recorded scrollTop of the document, when sticky behavior is 'scroll-up
+   * @type {number}
+   */
+  #lastScrollTop = 0;
+
+  /**
+   * A timeout to allow for hiding animation, when sticky behavior is 'scroll-up'
+   * @type {number | null}
+   */
+  #timeout = null;
+
+  /**
+   * The duration to wait for hiding animation, when sticky behavior is 'scroll-up'
+   * @constant {number}
+   */
+  #animationDelay = 150;
+
+  /**
+   * Keeps the global `--header-height` custom property up to date,
+   * which other theme components can then consume
+   */
+  #resizeObserver = new ResizeObserver(([entry]) => {
+    if (!entry || !entry.borderBoxSize[0]) return;
+
+    // The initial height is calculated using the .offsetHeight property, which returns an integer.
+    // We round to the nearest integer to avoid unnecessaary reflows.
+    const roundedHeaderHeight = Math.round(entry.borderBoxSize[0].blockSize);
+    document.body.style.setProperty('--header-height', `${roundedHeaderHeight}px`);
+
+    // Check if the menu drawer should be hidden in favor of the header menu
+    if (this.#menuDrawerHiddenWidth && window.innerWidth > this.#menuDrawerHiddenWidth) {
+      this.#updateMenuVisibility(false);
+    }
+  });
+
+  /**
+   * Observes the header while scrolling the viewport to track when its actively sticky
+   * @param {Boolean} alwaysSticky - Determines if we need to observe when the header is offscreen
+   */
+  #observeStickyPosition = (alwaysSticky = true) => {
+    if (this.#intersectionObserver) return;
+
+    const config = {
+      threshold: alwaysSticky ? 1 : 0,
+    };
+
+    this.#intersectionObserver = new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+
+      const { isIntersecting } = entry;
+
+      if (alwaysSticky) {
+        this.dataset.stickyState = isIntersecting ? 'inactive' : 'active';
+        changeMetaThemeColor(this.refs.headerRowTop);
+      } else {
+        this.#offscreen = !isIntersecting || this.dataset.stickyState === 'active';
+      }
+    }, config);
+
+    this.#intersectionObserver.observe(this);
+  };
+
+  /**
+   * Handles the overflow minimum event from the header menu
+   * @param {OverflowMinimumEvent} event
+   */
+  #handleOverflowMinimum = (event) => {
+    this.#updateMenuVisibility(event.detail.minimumReached);
+  };
+
+  /**
+   * Updates the visibility of the menu and drawer
+   * @param {boolean} hideMenu - Whether to hide the menu and show the drawer
+   */
+  #updateMenuVisibility(hideMenu) {
+    if (hideMenu) {
+      this.refs.headerDrawerContainer.classList.remove('desktop:hidden');
+      this.#menuDrawerHiddenWidth = window.innerWidth;
+      this.refs.headerMenu.classList.add('hidden');
+    } else {
+      this.refs.headerDrawerContainer.classList.add('desktop:hidden');
+      this.#menuDrawerHiddenWidth = null;
+      this.refs.headerMenu.classList.remove('hidden');
+    }
+  }
+
+  #handleWindowScroll = () => {
+    const stickyMode = this.getAttribute('sticky');
+    if (!this.#offscreen && stickyMode !== 'always') return;
+
+    const scrollTop = document.scrollingElement?.scrollTop ?? 0;
+    const isScrollingUp = scrollTop < this.#lastScrollTop;
+    if (this.#timeout) {
+      clearTimeout(this.#timeout);
+      this.#timeout = null;
+    }
+
+    if (stickyMode === 'always') {
+      const isAtTop = this.getBoundingClientRect().top >= 0;
+
+      if (isAtTop) {
+        this.dataset.scrollDirection = 'none';
+      } else if (isScrollingUp) {
+        this.dataset.scrollDirection = 'up';
+      } else {
+        this.dataset.scrollDirection = 'down';
+      }
+
+      this.#lastScrollTop = scrollTop;
+      return;
+    }
+
+    if (isScrollingUp) {
+      this.removeAttribute('data-animating');
+
+      if (this.getBoundingClientRect().top >= 0) {
+        // reset sticky state when header is scrolled up to natural position
+        this.#offscreen = false;
+        this.dataset.stickyState = 'inactive';
+        this.dataset.scrollDirection = 'none';
+      } else {
+        // show sticky header when scrolling up
+        this.dataset.stickyState = 'active';
+        this.dataset.scrollDirection = 'up';
+      }
+    } else if (this.dataset.stickyState === 'active') {
+      this.dataset.scrollDirection = 'none';
+      // delay transitioning to idle hidden state for hiding animation
+      this.setAttribute('data-animating', '');
+
+      this.#timeout = setTimeout(() => {
+        this.dataset.stickyState = 'idle';
+        this.removeAttribute('data-animating');
+      }, this.#animationDelay);
+    } else {
+      this.dataset.scrollDirection = 'none';
+      this.dataset.stickyState = 'idle';
+    }
+
+    this.#lastScrollTop = scrollTop;
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.#resizeObserver.observe(this);
+    this.addEventListener('overflowMinimum', this.#handleOverflowMinimum);
+
+    const stickyMode = this.getAttribute('sticky');
+    if (stickyMode) {
+      this.#observeStickyPosition(stickyMode === 'always');
+
+      if (stickyMode === 'scroll-up' || stickyMode === 'always') {
+        document.addEventListener('scroll', this.#handleWindowScroll);
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#resizeObserver.disconnect();
+    this.#intersectionObserver?.disconnect();
+    this.removeEventListener('overflowMinimum', this.#handleOverflowMinimum);
+    document.removeEventListener('scroll', this.#handleWindowScroll);
+    document.body.style.setProperty('--header-height', '0px');
+  }
+}
+
+if (!customElements.get('header-component')) {
+  customElements.define('header-component', HeaderComponent);
+}
+
+onDocumentLoaded(() => {
+  const header = document.querySelector('header-component');
+  const headerGroup = document.querySelector('#header-group');
+
+  // Note: Initial header heights are set via inline script in theme.liquid
+  // This ResizeObserver handles dynamic updates after page load
+
+  // Update header group height on resize of any child
+  if (headerGroup) {
+    const resizeObserver = new ResizeObserver((entries) => {
+      const headerGroupHeight = entries.reduce((totalHeight, entry) => {
+        if (
+          entry.target !== header ||
+          (header.hasAttribute('transparent') && header.parentElement?.nextElementSibling)
+        ) {
+          return totalHeight + (entry.borderBoxSize[0]?.blockSize ?? 0);
+        }
+        return totalHeight;
+      }, 0);
+      // The initial height is calculated using the .offsetHeight property, which returns an integer.
+      // We round to the nearest integer to avoid unnecessaary reflows.
+      const roundedHeaderGroupHeight = Math.round(headerGroupHeight);
+      document.body.style.setProperty('--header-group-height', `${roundedHeaderGroupHeight}px`);
+    });
+
+    if (header instanceof HTMLElement) {
+      resizeObserver.observe(header);
+    }
+
+    // Observe all children of the header group
+    const children = headerGroup.children;
+    for (let i = 0; i < children.length; i++) {
+      const element = children[i];
+      if (element instanceof HTMLElement) {
+        resizeObserver.observe(element);
+      }
+    }
+
+    // Also observe the header group itself for child changes
+    const mutationObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          // Re-observe all children when the list changes
+          const children = headerGroup.children;
+          for (let i = 0; i < children.length; i++) {
+            const element = children[i];
+            if (element instanceof HTMLElement) {
+              resizeObserver.observe(element);
+            }
+          }
+        }
+      }
+    });
+
+    mutationObserver.observe(headerGroup, { childList: true });
+  }
+});

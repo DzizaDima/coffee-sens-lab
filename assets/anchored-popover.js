@@ -1,1 +1,132 @@
-var y=Object.defineProperty;var m=t=>{throw TypeError(t)};var P=(t,o,e)=>o in t?y(t,o,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[o]=e;var f=(t,o,e)=>P(t,typeof o!="symbol"?o+"":o,e),u=(t,o,e)=>o.has(t)||m("Cannot "+e);var i=(t,o,e)=>(u(t,o,"read from private field"),e?e.call(t):o.get(t)),p=(t,o,e)=>o.has(t)?m("Cannot add the same private member more than once"):o instanceof WeakSet?o.add(t):o.set(t,e),c=(t,o,e,r)=>(u(t,o,"write to private field"),r?r.call(t,e):o.set(t,e),e);import{C as E}from"./component.js";import{d as w,r as L}from"./utilities.js";var s,d,v,l,g,a,h;class b extends E{constructor(){super(...arguments);f(this,"requiredRefs",["popover","trigger"]);f(this,"interaction_delay",200);p(this,s,null);p(this,d,()=>{const{trigger:e,popover:r}=this.refs;e.dataset.hoverActive="true",r.matches(":popover-open")||c(this,s,setTimeout(()=>{e.matches("[data-hover-active]")&&r.showPopover()},this.interaction_delay))});p(this,v,()=>{const{trigger:e,popover:r}=this.refs;delete e.dataset.hoverActive,i(this,s)&&clearTimeout(i(this,s)),r.matches(":popover-open")&&c(this,s,setTimeout(()=>{r.hidePopover()},this.interaction_delay))});p(this,l,()=>{i(this,s)&&clearTimeout(i(this,s))});p(this,g,()=>{const{popover:e}=this.refs;c(this,s,setTimeout(()=>{e.hidePopover()},this.interaction_delay))});p(this,a,async()=>{const{popover:e,trigger:r}=this.refs;if(!e||!r)return;const n=r.getBoundingClientRect();e.style.setProperty("--anchor-top",`${n.top}`),e.style.setProperty("--anchor-right",`${window.innerWidth-n.right}`),e.style.setProperty("--anchor-bottom",`${window.innerHeight-n.bottom}`),e.style.setProperty("--anchor-left",`${n.left}`),e.style.setProperty("--anchor-height",`${n.height}`),e.style.setProperty("--anchor-width",`${n.width}`)});p(this,h,w(()=>{const e=this.refs.popover;e&&e.matches(":popover-open")&&e.hidePopover()},100))}connectedCallback(){super.connectedCallback();const{popover:e,trigger:r}=this.refs;this.dataset.closeOnResize&&e.addEventListener("beforetoggle",n=>{window[n.newState==="open"?"addEventListener":"removeEventListener"]("resize",i(this,h))}),this.dataset.hoverTriggered&&(r.addEventListener("pointerenter",i(this,d)),r.addEventListener("pointerleave",i(this,v)),e.addEventListener("pointerenter",i(this,l)),e.addEventListener("pointerleave",i(this,g))),CSS.supports("position-anchor: --trigger")||(e.addEventListener("beforetoggle",()=>{i(this,a).call(this)}),L(()=>{i(this,a).call(this)}))}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("resize",i(this,h))}}s=new WeakMap,d=new WeakMap,v=new WeakMap,l=new WeakMap,g=new WeakMap,a=new WeakMap,h=new WeakMap;customElements.get("anchored-popover-component")||customElements.define("anchored-popover-component",b);
+import { Component } from '@theme/component';
+import { debounce, requestIdleCallback } from '@theme/utilities';
+
+/**
+ * A custom element that manages the popover + popover trigger relationship for anchoring.
+ * Calculates the trigger position and inlines custom properties on the popover element
+ * that can be consumed by CSS for positioning.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLElement} popover – The popover element.
+ * @property {HTMLElement} trigger – The popover trigger element.
+ *
+ * @extends Component<Refs>
+ *
+ * @example
+ * ```html
+ * <anchored-popover-component data-close-on-resize>
+ *   <button data-ref="trigger" popovertarget="menu">Open Menu</button>
+ *   <div data-ref="popover" id="menu" popover>Menu content</div>
+ * </anchored-popover-component>
+ * ```
+ *
+ * @property {string[]} requiredRefs - Required refs: 'popover' and 'trigger'
+ * @property {number} [interaction_delay] - The delay in milliseconds for the hover interaction
+ * @property {string} [data-close-on-resize] - When present, closes popover on window resize
+ * @property {string} [data-hover-triggered] - When present, makes the popover function via pointerenter/leave
+ * @property {number | null} [popoverTrigger] - The timeout for the popover trigger
+ */
+export class AnchoredPopoverComponent extends Component {
+  requiredRefs = ['popover', 'trigger'];
+  interaction_delay = 200;
+  #popoverTrigger = /** @type {number | null} */ (null);
+
+  #onTriggerEnter = () => {
+    const { trigger, popover } = this.refs;
+    trigger.dataset.hoverActive = 'true';
+    if (!popover.matches(':popover-open')) {
+      this.#popoverTrigger = setTimeout(() => {
+        if (trigger.matches('[data-hover-active]')) popover.showPopover();
+      }, this.interaction_delay);
+    }
+  };
+
+  #onTriggerLeave = () => {
+    const { trigger, popover } = this.refs;
+    delete trigger.dataset.hoverActive;
+    if (this.#popoverTrigger) clearTimeout(this.#popoverTrigger);
+    if (popover.matches(':popover-open')) {
+      this.#popoverTrigger = setTimeout(() => {
+        popover.hidePopover();
+      }, this.interaction_delay);
+    }
+  };
+
+  #onPopoverEnter = () => {
+    if (this.#popoverTrigger) clearTimeout(this.#popoverTrigger);
+  };
+
+  #onPopoverLeave = () => {
+    const { popover } = this.refs;
+    this.#popoverTrigger = setTimeout(() => {
+      popover.hidePopover();
+    }, this.interaction_delay);
+  };
+
+  /**
+   * Updates the popover position by calculating trigger element bounds
+   * and setting CSS custom properties on the popover element.
+   */
+  #updatePosition = async () => {
+    const { popover, trigger } = this.refs;
+    if (!popover || !trigger) return;
+    const positions = trigger.getBoundingClientRect();
+    popover.style.setProperty('--anchor-top', `${positions.top}`);
+    popover.style.setProperty('--anchor-right', `${window.innerWidth - positions.right}`);
+    popover.style.setProperty('--anchor-bottom', `${window.innerHeight - positions.bottom}`);
+    popover.style.setProperty('--anchor-left', `${positions.left}`);
+    popover.style.setProperty('--anchor-height', `${positions.height}`);
+    popover.style.setProperty('--anchor-width', `${positions.width}`);
+  };
+
+  /**
+   * Debounced resize handler that optionally closes the popover
+   * when the window is resized, based on the data-close-on-resize attribute.
+   */
+  #resizeListener = debounce(() => {
+    const popover = /** @type {HTMLElement} */ (this.refs.popover);
+    if (popover && popover.matches(':popover-open')) {
+      popover.hidePopover();
+    }
+  }, 100);
+
+  /**
+   * Component initialization - sets up event listeners for resize and popover toggle events.
+   */
+  connectedCallback() {
+    super.connectedCallback();
+    const { popover, trigger } = this.refs;
+    if (this.dataset.closeOnResize) {
+      popover.addEventListener('beforetoggle', (event) => {
+        const evt = /** @type {ToggleEvent} */ (event);
+        window[evt.newState === 'open' ? 'addEventListener' : 'removeEventListener']('resize', this.#resizeListener);
+      });
+    }
+    if (this.dataset.hoverTriggered) {
+      trigger.addEventListener('pointerenter', this.#onTriggerEnter);
+      trigger.addEventListener('pointerleave', this.#onTriggerLeave);
+      popover.addEventListener('pointerenter', this.#onPopoverEnter);
+      popover.addEventListener('pointerleave', this.#onPopoverLeave);
+    }
+    if (!CSS.supports('position-anchor: --trigger')) {
+      popover.addEventListener('beforetoggle', () => {
+        this.#updatePosition();
+      });
+      requestIdleCallback(() => {
+        this.#updatePosition();
+      });
+    }
+  }
+
+  /**
+   * Component cleanup - removes resize event listener.
+   */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this.#resizeListener);
+  }
+}
+
+if (!customElements.get('anchored-popover-component')) {
+  customElements.define('anchored-popover-component', AnchoredPopoverComponent);
+}

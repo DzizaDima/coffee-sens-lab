@@ -1,1 +1,150 @@
-var L=e=>{throw TypeError(e)};var w=(e,r,t)=>r.has(e)||L("Cannot "+t);var o=(e,r,t)=>(w(e,r,"read from private field"),t?t.call(e):r.get(e)),d=(e,r,t)=>r.has(e)?L("Cannot add the same private member more than once"):r instanceof WeakSet?r.add(e):r.set(e,t),E=(e,r,t,n)=>(w(e,r,"write to private field"),n?n.call(e,t):r.set(e,t),t),a=(e,r,t)=>(w(e,r,"access private method"),t);var b,p,l,c,s,M,x,f;class y extends HTMLElement{constructor(){super(...arguments);d(this,s);d(this,b,new IntersectionObserver((t,n)=>{t[0]?.isIntersecting&&(n.disconnect(),a(this,s,M).call(this))},{rootMargin:"0px 0px 400px 0px"}));d(this,p,new MutationObserver(t=>{for(const n of t)if(!(n.target!==this||n.type!=="attributes")&&n.attributeName!=="data-error"&&!(n.attributeName==="class"&&this.classList.contains("hidden"))&&!(n.attributeName==="data-recommendations-performed"&&this.dataset.recommendationsPerformed==="true")){a(this,s,M).call(this);break}}));d(this,l,{});d(this,c,null)}connectedCallback(){o(this,b).observe(this),o(this,p).observe(this,{attributes:!0})}}b=new WeakMap,p=new WeakMap,l=new WeakMap,c=new WeakMap,s=new WeakSet,M=function(){const{productId:t,recommendationsPerformed:n,sectionId:g,intent:m}=this.dataset,u=this.id;if(!t||!u)throw new Error("Product ID and an ID attribute are required");n!=="true"&&a(this,s,x).call(this,t,g,m).then(i=>{if(!i.success){Shopify.designMode||a(this,s,f).call(this,new Error(`Server returned ${i.status}`));return}const h=document.createElement("div");h.innerHTML=i.data||"";const v=h.querySelector(`product-recommendations[id="${u}"]`);v?.innerHTML&&v.innerHTML.trim().length?(this.dataset.recommendationsPerformed="true",this.innerHTML=v.innerHTML):a(this,s,f).call(this,new Error("No recommendations available"))}).catch(i=>{a(this,s,f).call(this,i)})},x=async function(t,n,g){const m=`${this.dataset.url}&product_id=${t}&section_id=${n}&intent=${g}`,u=o(this,l)[m];if(u)return{success:!0,data:u};o(this,c)?.abort(),E(this,c,new AbortController);try{const i=await fetch(m,{signal:o(this,c).signal});if(!i.ok)return{success:!1,status:i.status};const h=await i.text();return o(this,l)[m]=h,{success:!0,data:h}}finally{E(this,c,null)}},f=function(t){console.error("Product recommendations error:",t.message),this.classList.add("hidden"),this.dataset.error="Error loading product recommendations"};customElements.get("product-recommendations")||customElements.define("product-recommendations",y);
+class ProductRecommendations extends HTMLElement {
+  /**
+   * The observer for the product recommendations
+   * @type {IntersectionObserver}
+   */
+  #intersectionObserver = new IntersectionObserver(
+    (entries, observer) => {
+      if (!entries[0]?.isIntersecting) return;
+
+      observer.disconnect();
+      this.#loadRecommendations();
+    },
+    { rootMargin: '0px 0px 400px 0px' }
+  );
+
+  /**
+   * Observing changes to the elements attributes
+   * @type {MutationObserver}
+   */
+  #mutationObserver = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      // Only attribute changes are interesting
+      if (mutation.target !== this || mutation.type !== 'attributes') continue;
+
+      // Ignore error attribute changes
+      if (mutation.attributeName === 'data-error') continue;
+
+      // Ignore addition of hidden class because it means there's an error with the display
+      if (mutation.attributeName === 'class' && this.classList.contains('hidden')) continue;
+
+      // Ignore when the data-recommendations-performed attribute has been set to 'true'
+      if (
+        mutation.attributeName === 'data-recommendations-performed' &&
+        this.dataset.recommendationsPerformed === 'true'
+      )
+        continue;
+
+      // All other attribute changes trigger a reload
+      this.#loadRecommendations();
+      break;
+    }
+  });
+
+  /**
+   * The cached recommendations
+   * @type {Record<string, string>}
+   */
+  #cachedRecommendations = {};
+
+  /**
+   * An abort controller for the active fetch (if there is one)
+   * @type {AbortController | null}
+   */
+  #activeFetch = null;
+
+  connectedCallback() {
+    this.#intersectionObserver.observe(this);
+    this.#mutationObserver.observe(this, { attributes: true });
+  }
+
+  /**
+   * Load the product recommendations
+   */
+  #loadRecommendations() {
+    const { productId, recommendationsPerformed, sectionId, intent } = this.dataset;
+    const id = this.id;
+
+    if (!productId || !id) {
+      throw new Error('Product ID and an ID attribute are required');
+    }
+
+    // If the recommendations have already been loaded, accounts for the case where the Theme Editor
+    // is loaded the section from the editor's visual preview context.
+    if (recommendationsPerformed === 'true') {
+      return;
+    }
+
+    this.#fetchCachedRecommendations(productId, sectionId, intent)
+      .then((result) => {
+        if (!result.success) {
+          // The Theme Editor will place a section element element in the DOM whose section_id is not available
+          // to the Section Renderer API. In this case, we can safely ignore the error.
+          if (!Shopify.designMode) {
+            this.#handleError(new Error(`Server returned ${result.status}`));
+          }
+          return;
+        }
+
+        const html = document.createElement('div');
+        html.innerHTML = result.data || '';
+        const recommendations = html.querySelector(`product-recommendations[id="${id}"]`);
+
+        if (recommendations?.innerHTML && recommendations.innerHTML.trim().length) {
+          this.dataset.recommendationsPerformed = 'true';
+          this.innerHTML = recommendations.innerHTML;
+        } else {
+          this.#handleError(new Error('No recommendations available'));
+        }
+      })
+      .catch((e) => {
+        this.#handleError(e);
+      });
+  }
+
+  /**
+   * Fetches the recommendations and cached the result for future use
+   * @param {string} productId
+   * @param {string | undefined} sectionId
+   * @param {string | undefined} intent
+   * @returns {Promise<{ success: true, data: string } | { success: false, status: number }>}
+   */
+  async #fetchCachedRecommendations(productId, sectionId, intent) {
+    const url = `${this.dataset.url}&product_id=${productId}&section_id=${sectionId}&intent=${intent}`;
+
+    const cachedResponse = this.#cachedRecommendations[url];
+    if (cachedResponse) {
+      return { success: true, data: cachedResponse };
+    }
+
+    this.#activeFetch?.abort();
+    this.#activeFetch = new AbortController();
+
+    try {
+      const response = await fetch(url, { signal: this.#activeFetch.signal });
+      if (!response.ok) {
+        return { success: false, status: response.status };
+      }
+
+      const text = await response.text();
+      this.#cachedRecommendations[url] = text;
+      return { success: true, data: text };
+    } finally {
+      this.#activeFetch = null;
+    }
+  }
+
+  /**
+   * Handle errors in a consistent way
+   * @param {Error} error
+   */
+  #handleError(error) {
+    console.error('Product recommendations error:', error.message);
+    this.classList.add('hidden');
+    this.dataset.error = 'Error loading product recommendations';
+  }
+}
+
+if (!customElements.get('product-recommendations')) {
+  customElements.define('product-recommendations', ProductRecommendations);
+}

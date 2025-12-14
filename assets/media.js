@@ -1,1 +1,248 @@
-var v=Object.defineProperty;var y=t=>{throw TypeError(t)};var P=(t,i,e)=>i in t?v(t,i,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[i]=e;var p=(t,i,e)=>P(t,typeof i!="symbol"?i+"":i,e),M=(t,i,e)=>i.has(t)||y("Cannot "+e);var d=(t,i,e)=>(M(t,i,"read from private field"),e?e.call(t):i.get(t)),c=(t,i,e)=>i.has(t)?y("Cannot add the same private member more than once"):i instanceof WeakSet?i.add(t):i.set(t,e);var g=(t,i,e)=>(M(t,i,"access private method"),e);import{C}from"./component.js";import{T as S,b as E}from"./events.js";import{a as V}from"./dialog.js";import"./utilities.js";var l;class w extends C{constructor(){super(...arguments);p(this,"isPlaying",!1);c(this,l,new AbortController);p(this,"showDeferredMedia",()=>{this.loadContent(!0),this.isPlaying=!0,this.updatePlayPauseHint(this.isPlaying)})}connectedCallback(){super.connectedCallback();const e=d(this,l).signal;document.addEventListener(S.mediaStartedPlaying,this.pauseMedia.bind(this),{signal:e}),window.addEventListener(V.eventName,this.pauseMedia.bind(this),{signal:e})}disconnectedCallback(){super.disconnectedCallback(),d(this,l).abort()}updatePlayPauseHint(e){const a=this.refs.toggleMediaButton;if(a instanceof HTMLElement){a.classList.remove("hidden");const s=a.querySelector(".icon-play");s&&s.classList.toggle("hidden",e);const n=a.querySelector(".icon-pause");n&&n.classList.toggle("hidden",!e)}}loadContent(e=!0){if(this.getAttribute("data-media-loaded"))return;this.dispatchEvent(new E(this));const a=this.querySelector("template")?.content.firstElementChild?.cloneNode(!0);a&&(this.setAttribute("data-media-loaded","true"),this.appendChild(a),e&&a instanceof HTMLElement&&a.focus(),this.refs.deferredMediaPlayButton?.classList.add("deferred-media__playing"),a instanceof HTMLVideoElement&&a.getAttribute("autoplay")&&a.play())}toggleMedia(){this.isPlaying?this.pauseMedia():this.playMedia()}playMedia(){const e=this.querySelector("iframe[data-video-type]");e?e.contentWindow?.postMessage(e.dataset.videoType==="youtube"?'{"event":"command","func":"playVideo","args":""}':'{"method":"play"}',"*"):this.querySelector("video")?.play(),this.isPlaying=!0,this.updatePlayPauseHint(this.isPlaying)}pauseMedia(){const e=this.querySelector("iframe[data-video-type]");e?e.contentWindow?.postMessage(e.dataset.videoType==="youtube"?'{"event":"command","func":"pauseVideo","args":""}':'{"method":"pause"}',"*"):this.querySelector("video")?.pause(),this.isPlaying=!1,this.getAttribute("data-media-loaded")&&this.updatePlayPauseHint(this.isPlaying)}}l=new WeakMap;customElements.get("deferred-media")||customElements.define("deferred-media",w);var r,u,b;class I extends w{constructor(){super(...arguments);c(this,u);c(this,r,new AbortController)}loadContent(){super.loadContent(),Shopify.loadFeatures([{name:"model-viewer-ui",version:"1.0",onLoad:this.setupModelViewerUI.bind(this)}])}disconnectedCallback(){super.disconnectedCallback(),d(this,r).abort()}pauseMedia(){super.pauseMedia(),this.modelViewerUI?.pause()}playMedia(){super.playMedia(),this.modelViewerUI?.play()}async setupModelViewerUI(e){if(e||(Shopify.ModelViewerUI||await g(this,u,b).call(this),!Shopify.ModelViewerUI))return;const a=this.querySelector("model-viewer");if(!a)return;const s=d(this,r).signal;if(this.modelViewerUI=new Shopify.ModelViewerUI(a),!this.modelViewerUI)return;this.playMedia();let n=0,h=0;a.addEventListener("pointerdown",o=>{n=o.clientX,h=o.clientY},{signal:s}),a.addEventListener("click",o=>{const m=Math.abs(o.clientX-n),f=Math.abs(o.clientY-h);Math.sqrt(m*m+f*f)<10&&this.pauseMedia()},{signal:s})}}r=new WeakMap,u=new WeakSet,b=async function(){for(let s=0;s<10;s++){if(Shopify.ModelViewerUI)return;await new Promise(n=>setTimeout(n,50))}};customElements.get("product-model")||customElements.define("product-model",I);
+import { Component } from '@theme/component';
+import { ThemeEvents, MediaStartedPlayingEvent } from '@theme/events';
+import { DialogCloseEvent } from '@theme/dialog';
+
+/**
+ * A deferred media element
+ * @typedef {Object} Refs
+ * @property {HTMLElement} deferredMediaPlayButton - The button to show the deferred media content
+ * @property {HTMLElement} toggleMediaButton - The button to toggle the media
+ *
+ * @extends {Component<Refs>}
+ */
+class DeferredMedia extends Component {
+  /** @type {boolean} */
+  isPlaying = false;
+
+  #abortController = new AbortController();
+
+  connectedCallback() {
+    super.connectedCallback();
+    const signal = this.#abortController.signal;
+    // If we're to use deferred media for images, we will need to run this only when it's not an image type media
+    document.addEventListener(ThemeEvents.mediaStartedPlaying, this.pauseMedia.bind(this), { signal });
+    window.addEventListener(DialogCloseEvent.eventName, this.pauseMedia.bind(this), { signal });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#abortController.abort();
+  }
+
+  /**
+   * Updates the visual hint for play/pause state
+   * @param {boolean} isPlaying - Whether the video is currently playing
+   */
+  updatePlayPauseHint(isPlaying) {
+    const toggleMediaButton = this.refs.toggleMediaButton;
+    if (toggleMediaButton instanceof HTMLElement) {
+      toggleMediaButton.classList.remove('hidden');
+      const playIcon = toggleMediaButton.querySelector('.icon-play');
+      if (playIcon) playIcon.classList.toggle('hidden', isPlaying);
+      const pauseIcon = toggleMediaButton.querySelector('.icon-pause');
+      if (pauseIcon) pauseIcon.classList.toggle('hidden', !isPlaying);
+    }
+  }
+
+  /**
+   * Shows the deferred media content
+   */
+  showDeferredMedia = () => {
+    this.loadContent(true);
+    this.isPlaying = true;
+    this.updatePlayPauseHint(this.isPlaying);
+  };
+
+  /**
+   * Loads the content
+   * @param {boolean} [focus] - Whether to focus the content
+   */
+  loadContent(focus = true) {
+    if (this.getAttribute('data-media-loaded')) return;
+
+    this.dispatchEvent(new MediaStartedPlayingEvent(this));
+
+    const content = this.querySelector('template')?.content.firstElementChild?.cloneNode(true);
+
+    if (!content) return;
+
+    this.setAttribute('data-media-loaded', 'true');
+    this.appendChild(content);
+
+    if (focus && content instanceof HTMLElement) {
+      content.focus();
+    }
+
+    this.refs.deferredMediaPlayButton?.classList.add('deferred-media__playing');
+
+    if (content instanceof HTMLVideoElement && content.getAttribute('autoplay')) {
+      // force autoplay for safari
+      content.play();
+    }
+  }
+
+  /**
+   * Toggle play/pause state of the media
+   */
+  toggleMedia() {
+    if (this.isPlaying) {
+      this.pauseMedia();
+    } else {
+      this.playMedia();
+    }
+  }
+
+  playMedia() {
+    /** @type {HTMLIFrameElement | null} */
+    const iframe = this.querySelector('iframe[data-video-type]');
+    if (iframe) {
+      iframe.contentWindow?.postMessage(
+        iframe.dataset.videoType === 'youtube'
+          ? '{"event":"command","func":"playVideo","args":""}'
+          : '{"method":"play"}',
+        '*'
+      );
+    } else {
+      this.querySelector('video')?.play();
+    }
+    this.isPlaying = true;
+    this.updatePlayPauseHint(this.isPlaying);
+  }
+
+  /**
+   * Pauses the media
+   */
+  pauseMedia() {
+    /** @type {HTMLIFrameElement | null} */
+    const iframe = this.querySelector('iframe[data-video-type]');
+
+    if (iframe) {
+      iframe.contentWindow?.postMessage(
+        iframe.dataset.videoType === 'youtube'
+          ? '{"event":"command","func":"' + 'pauseVideo' + '","args":""}'
+          : '{"method":"pause"}',
+        '*'
+      );
+    } else {
+      this.querySelector('video')?.pause();
+    }
+    this.isPlaying = false;
+
+    // If we've already revealed the deferred media, we should toggle the play/pause hint
+    if (this.getAttribute('data-media-loaded')) {
+      this.updatePlayPauseHint(this.isPlaying);
+    }
+  }
+}
+
+if (!customElements.get('deferred-media')) {
+  customElements.define('deferred-media', DeferredMedia);
+}
+
+/**
+ * A product model
+ */
+class ProductModel extends DeferredMedia {
+  #abortController = new AbortController();
+
+  loadContent() {
+    super.loadContent();
+
+    Shopify.loadFeatures([
+      {
+        name: 'model-viewer-ui',
+        version: '1.0',
+        onLoad: this.setupModelViewerUI.bind(this),
+      },
+    ]);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#abortController.abort();
+  }
+
+  pauseMedia() {
+    super.pauseMedia();
+    this.modelViewerUI?.pause();
+  }
+
+  playMedia() {
+    super.playMedia();
+    this.modelViewerUI?.play();
+  }
+
+  /**
+   * @param {Error[]} errors
+   */
+  async setupModelViewerUI(errors) {
+    if (errors) return;
+
+    if (!Shopify.ModelViewerUI) {
+      await this.#waitForModelViewerUI();
+    }
+
+    if (!Shopify.ModelViewerUI) return;
+
+    const element = this.querySelector('model-viewer');
+    if (!element) return;
+
+    const signal = this.#abortController.signal;
+
+    this.modelViewerUI = new Shopify.ModelViewerUI(element);
+    if (!this.modelViewerUI) return;
+
+    this.playMedia();
+
+    // Track pointer events to detect taps
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+
+    element.addEventListener(
+      'pointerdown',
+      (/** @type {PointerEvent} */ event) => {
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      },
+      { signal }
+    );
+
+    element.addEventListener(
+      'click',
+      (/** @type {PointerEvent} */ event) => {
+        const distanceX = Math.abs(event.clientX - pointerStartX);
+        const distanceY = Math.abs(event.clientY - pointerStartY);
+        const totalDistance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        // Try to ensure that this is a tap, not a drag.
+        if (totalDistance < 10) {
+          // When the model is paused, it has its own button overlay for playing the model again.
+          // If we're receiving a click event, it means the model is playing, all we can do is pause it.
+          this.pauseMedia();
+        }
+      },
+      { signal }
+    );
+  }
+
+  /**
+   * Waits for Shopify.ModelViewerUI to be defined.
+   * This seems to be necessary for Safari since Shopify.ModelViewerUI is always undefined on the first try.
+   * @returns {Promise<void>}
+   */
+  async #waitForModelViewerUI() {
+    const maxAttempts = 10;
+    const interval = 50;
+
+    for (let i = 0; i < maxAttempts; i++) {
+      if (Shopify.ModelViewerUI) {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, interval));
+    }
+  }
+}
+
+if (!customElements.get('product-model')) {
+  customElements.define('product-model', ProductModel);
+}

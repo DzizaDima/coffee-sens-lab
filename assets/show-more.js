@@ -1,1 +1,162 @@
-var v=Object.defineProperty;var b=e=>{throw TypeError(e)};var D=(e,s,t)=>s in e?v(e,s,{enumerable:!0,configurable:!0,writable:!0,value:t}):e[s]=t;var C=(e,s,t)=>D(e,typeof s!="symbol"?s+"":s,t),H=(e,s,t)=>s.has(e)||b("Cannot "+t);var i=(e,s,t)=>(H(e,s,"read from private field"),t?t.call(e):s.get(e)),n=(e,s,t)=>s.has(e)?b("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(e):s.set(e,t),r=(e,s,t,o)=>(H(e,s,"write to private field"),o?o.call(e,t):s.set(e,t),t),x=(e,s,t)=>(H(e,s,"access private method"),t);import{C as O}from"./component.js";import{i as S}from"./utilities.js";var a,d,l,c,m,k,f,g,p,u,w,M,E;class y extends O{constructor(){super(...arguments);n(this,m);C(this,"requiredRefs",["showMoreButton","showMoreItems","showMoreContent"]);n(this,a,!1);n(this,d,!1);n(this,l,0);n(this,c,"hidden");n(this,f);n(this,g,300);n(this,p,()=>{r(this,d,this.dataset.disableOnDesktop==="true"),r(this,c,i(this,d)?"mobile:hidden":"hidden")});n(this,u,()=>{const{showMoreItems:t,showMoreContent:o}=this.refs;r(this,l,o.offsetHeight);const h=i(this,l);return t?.forEach(B=>B.classList.remove(i(this,c))),{startHeight:h,endHeight:o.scrollHeight}});n(this,w,()=>{const{showMoreContent:t}=this.refs,o=t.offsetHeight,h=i(this,l);return{startHeight:o,endHeight:h}});n(this,M,(t,o)=>{const{showMoreContent:h}=this.refs;h.style.overflow="hidden",i(this,f)?.cancel(),r(this,f,h.animate({height:[`${t}px`,`${o}px`]},{duration:i(this,g),easing:"ease-in-out"})),i(this,f).onfinish=()=>x(this,m,E).call(this)});C(this,"toggle",t=>{if(t.preventDefault(),i(this,p).call(this),i(this,m,k)==="DESKTOP"&&i(this,d))return;const{startHeight:o,endHeight:h}=i(this,a)?i(this,w).call(this):i(this,u).call(this);this.dataset.expanded=i(this,a)?"false":"true",this.refs.showMoreButton.setAttribute("aria-expanded",this.dataset.expanded),i(this,M).call(this,o,h)})}connectedCallback(){super.connectedCallback(),i(this,p).call(this)}}a=new WeakMap,d=new WeakMap,l=new WeakMap,c=new WeakMap,m=new WeakSet,k=function(){return S()?"MOBILE":"DESKTOP"},f=new WeakMap,g=new WeakMap,p=new WeakMap,u=new WeakMap,w=new WeakMap,M=new WeakMap,E=function(){const{showMoreContent:t,showMoreItems:o}=this.refs;i(this,a)&&o.forEach(h=>h.classList.add(i(this,c))),t.style.removeProperty("height"),t.style.overflow="",r(this,a,!i(this,a))};customElements.get("show-more-component")||customElements.define("show-more-component",y);
+import { Component } from '@theme/component';
+import { isMobileBreakpoint } from '@theme/utilities';
+
+/**
+ * @typedef {Object} ShowMoreRefs
+ * @property {HTMLElement} showMoreButton - The button to toggle visibility of the items
+ * @property {HTMLElement[]} showMoreItems - The hidden items to show and hide
+ * @property {HTMLElement} showMoreContent - The content container to measure and animate
+ */
+
+/**
+ * A custom element that manages the showing and hiding excess content items
+ *
+ * @extends {Component<ShowMoreRefs>}
+ */
+
+class ShowMoreComponent extends Component {
+  requiredRefs = ['showMoreButton', 'showMoreItems', 'showMoreContent'];
+
+  /**
+   * @type {boolean}
+   */
+  #expanded = false;
+
+  /**
+   * @type {boolean}
+   */
+  #disableOnDesktop = false;
+
+  /**
+   * @type {number}
+   */
+  #collapsedHeight = 0;
+
+  /**
+   * @type {'mobile:hidden' | 'hidden'}
+   */
+  #disabledClass = 'hidden';
+
+  /**
+   * @type {'MOBILE' | 'DESKTOP'}
+   */
+  get #currentBreakpoint() {
+    return isMobileBreakpoint() ? 'MOBILE' : 'DESKTOP';
+  }
+
+  /**
+   * @type {Animation | undefined}
+   */
+  #animation;
+
+  /**
+   * @constant {number}
+   */
+  #animationSpeed = 300;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.#updateBreakpointState();
+  }
+
+  /**
+   * Updates the current breakpoint and apprpropriate disabled class
+   */
+  #updateBreakpointState = () => {
+    this.#disableOnDesktop = this.dataset.disableOnDesktop === 'true';
+    this.#disabledClass = this.#disableOnDesktop ? 'mobile:hidden' : 'hidden';
+  };
+
+  /**
+   * Handles expanding the content
+   * @returns {{startHeight: number, endHeight: number}}
+   */
+  #expand = () => {
+    const { showMoreItems, showMoreContent } = this.refs;
+
+    this.#collapsedHeight = showMoreContent.offsetHeight;
+    const startHeight = this.#collapsedHeight;
+
+    showMoreItems?.forEach((item) => item.classList.remove(this.#disabledClass));
+
+    return {
+      startHeight,
+      endHeight: showMoreContent.scrollHeight,
+    };
+  };
+
+  /**
+   * Handles collapsing the content
+   * @returns {{startHeight: number, endHeight: number}}
+   */
+  #collapse = () => {
+    const { showMoreContent } = this.refs;
+    const startHeight = showMoreContent.offsetHeight;
+    const endHeight = this.#collapsedHeight;
+
+    return { startHeight, endHeight };
+  };
+
+  /**
+   * Initializes a height transition
+   * @param {number} startHeight
+   * @param {number} endHeight
+   */
+  #animateHeight = (startHeight, endHeight) => {
+    const { showMoreContent } = this.refs;
+
+    showMoreContent.style.overflow = 'hidden';
+    this.#animation?.cancel();
+
+    this.#animation = showMoreContent.animate(
+      {
+        height: [`${startHeight}px`, `${endHeight}px`],
+      },
+      {
+        duration: this.#animationSpeed,
+        easing: 'ease-in-out',
+      }
+    );
+
+    this.#animation.onfinish = () => this.#onAnimationFinish();
+  };
+
+  /**
+   * Handles the animation finish event.
+   */
+  #onAnimationFinish() {
+    const { showMoreContent, showMoreItems } = this.refs;
+
+    if (this.#expanded) {
+      showMoreItems.forEach((item) => item.classList.add(this.#disabledClass));
+    }
+
+    showMoreContent.style.removeProperty('height');
+    showMoreContent.style.overflow = '';
+    this.#expanded = !this.#expanded;
+  }
+
+  /**
+   * Toggles the expansion state of the content.
+   *
+   * @param {Event} event - The click event
+   */
+  toggle = (event) => {
+    event.preventDefault();
+
+    this.#updateBreakpointState();
+
+    if (this.#currentBreakpoint === 'DESKTOP' && this.#disableOnDesktop) return;
+
+    const { startHeight, endHeight } = !this.#expanded ? this.#expand() : this.#collapse();
+
+    this.dataset.expanded = this.#expanded ? 'false' : 'true';
+    this.refs.showMoreButton.setAttribute('aria-expanded', this.dataset.expanded);
+
+    this.#animateHeight(startHeight, endHeight);
+  };
+}
+
+if (!customElements.get('show-more-component')) {
+  customElements.define('show-more-component', ShowMoreComponent);
+}

@@ -1,1 +1,152 @@
-var m=t=>{throw TypeError(t)};var b=(t,s,e)=>s.has(t)||m("Cannot "+e);var o=(t,s,e)=>(b(t,s,"read from private field"),e?e.call(t):s.get(t)),c=(t,s,e)=>s.has(t)?m("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(t):s.set(t,e);var u=(t,s,e)=>(b(t,s,"access private method"),e);import{p as x,R as S}from"./utilities.js";var h,z,f,a,r;class E extends HTMLElement{constructor(){super(...arguments);c(this,h);c(this,f,()=>{if(!this.textContent?.trim()||(this.classList.remove("ready"),this.offsetWidth<=0))return;o(this,r).disconnect(),this.style.fontSize="1px";const e=g(this,this.offsetWidth);this.style.fontSize=`${e}px`,o(this,r).observe(this),this.classList.add("ready")});c(this,a,()=>{o(this,f).call(this);const i=this.getBoundingClientRect().bottom+window.scrollY,l=document.documentElement.offsetHeight-i;this.dataset.capText=(l<=100).toString()});c(this,r,new S(o(this,a)))}connectedCallback(){requestAnimationFrame(o(this,a)),this.dataset.textEffect&&this.dataset.textEffect!=="none"&&!x()&&u(this,h,z).call(this)}disconnectedCallback(){o(this,r).disconnect(),this.dataset.textEffect&&this.dataset.textEffect!=="none"&&!x()&&this.intersectionObserver?.disconnect()}}h=new WeakSet,z=function(){this.intersectionObserver=new IntersectionObserver(e=>{e.forEach(i=>{i.isIntersecting?(this.classList.add("jumbo-text-visible"),this.dataset.animationRepeat==="false"&&this.intersectionObserver.unobserve(i.target)):this.classList.remove("jumbo-text-visible")})},{threshold:.3}),this.intersectionObserver.observe(this)},f=new WeakMap,a=new WeakMap,r=new WeakMap;function v(t,s,e){return t.style.fontSize=`${e}px`,t.scrollWidth>s}function g(t,s){let e=1,i=500;const l=.5,p=t.textContent?.length||0;let n=Math.min(i,Math.sqrt(s)*(15/Math.sqrt(Math.max(1,p))));v(t,s,n)?i=n:e=n;let d=0;const O=30;for(;i-e>l&&d<O;)n=(e+i)/2,v(t,s,n)?i=n:e=n,d++;return e*.99}customElements.get("jumbo-text")||customElements.define("jumbo-text",E);
+import { ResizeNotifier } from '@theme/utilities';
+import { prefersReducedMotion } from '@theme/utilities';
+
+/**
+ * A custom element that automatically sizes text to fit its container width.
+ */
+class JumboText extends HTMLElement {
+  connectedCallback() {
+    // Initial calculation
+    requestAnimationFrame(this.#handleResize);
+    if (this.dataset.textEffect && this.dataset.textEffect !== 'none' && !prefersReducedMotion()) {
+      this.#setIntersectionObserver();
+    }
+  }
+
+  disconnectedCallback() {
+    this.#resizeObserver.disconnect();
+    if (this.dataset.textEffect && this.dataset.textEffect !== 'none' && !prefersReducedMotion()) {
+      this.intersectionObserver?.disconnect();
+    }
+  }
+
+  /**
+   * Sets the intersection observer to calculate the optimal font size when the text is in view
+   */
+  #setIntersectionObserver() {
+    // The threshold could be different based on the repetition of the animation.
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.classList.add('jumbo-text-visible');
+            if (this.dataset.animationRepeat === 'false') {
+              this.intersectionObserver.unobserve(entry.target);
+            }
+          } else {
+            this.classList.remove('jumbo-text-visible');
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    this.intersectionObserver.observe(this);
+  }
+
+  /**
+   * Calculates the optimal font size to make the text fit the container width
+   */
+  #calculateOptimalFontSize = () => {
+    // Check for empty text
+    if (!this.textContent?.trim()) {
+      return;
+    }
+
+    // Hide text during calculation
+    this.classList.remove('ready');
+
+    if (this.offsetWidth <= 0) return;
+
+    // Disconnect the resize observer
+    this.#resizeObserver.disconnect();
+
+    // Start with a minimal font size
+    this.style.fontSize = '1px';
+
+    // Find the optimal font size
+    const fontSize = findOptimalFontSize(this, this.offsetWidth);
+
+    // Apply the final size
+    this.style.fontSize = `${fontSize}px`;
+
+    // Reconnect the resize observer
+    this.#resizeObserver.observe(this);
+
+    // Show the text
+    this.classList.add('ready');
+  };
+
+  #handleResize = () => {
+    this.#calculateOptimalFontSize();
+
+    // Calculate distance from bottom of page, when the jumb text is close to the bottom of the page then force it
+    // to use `cap text` instead of `cap alphabetic` to not cause any extra padding below the bottom of the page.
+    const rect = this.getBoundingClientRect();
+    const bottom = rect.bottom + window.scrollY;
+    const distanceFromBottom = document.documentElement.offsetHeight - bottom;
+    this.dataset.capText = (distanceFromBottom <= 100).toString();
+  };
+
+  #resizeObserver = new ResizeNotifier(this.#handleResize);
+}
+
+/**
+ * Checks if text with the given font size overflows the container
+ * @param {HTMLElement} element - The element to check
+ * @param {number} containerWidth - The width of the container
+ * @param {number} size - Font size to check
+ * @returns {boolean} - True if text overflows
+ */
+function checkTextOverflow(element, containerWidth, size) {
+  element.style.fontSize = `${size}px`;
+  return element.scrollWidth > containerWidth;
+}
+
+/**
+ * Find optimal font size using binary search
+ * @param {HTMLElement} element - The text element
+ * @param {number} containerWidth - Available width
+ * @returns {number} - The optimal font size
+ */
+function findOptimalFontSize(element, containerWidth) {
+  // Binary search parameters
+  let minSize = 1;
+  let maxSize = 500;
+  const precision = 0.5;
+
+  // Initial guess based on container width and text length
+  const textLength = element.textContent?.length || 0;
+  let fontSize = Math.min(maxSize, Math.sqrt(containerWidth) * (15 / Math.sqrt(Math.max(1, textLength))));
+
+  // Adjust initial bounds based on first check
+  if (checkTextOverflow(element, containerWidth, fontSize)) {
+    maxSize = fontSize;
+  } else {
+    minSize = fontSize;
+  }
+
+  // Binary search implementation
+  let iterations = 0;
+  const MAX_ITERATIONS = 30;
+
+  while (maxSize - minSize > precision && iterations < MAX_ITERATIONS) {
+    fontSize = (minSize + maxSize) / 2;
+
+    if (checkTextOverflow(element, containerWidth, fontSize)) {
+      maxSize = fontSize;
+    } else {
+      minSize = fontSize;
+    }
+
+    iterations++;
+  }
+
+  // Add a small safety margin
+  return minSize * 0.99;
+}
+
+// Register once
+if (!customElements.get('jumbo-text')) {
+  customElements.define('jumbo-text', JumboText);
+}

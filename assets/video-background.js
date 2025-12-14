@@ -1,1 +1,32 @@
-var r=Object.defineProperty;var i=(o,e,t)=>e in o?r(o,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):o[e]=t;var s=(o,e,t)=>i(o,typeof e!="symbol"?e+"":e,t);import{C as m}from"./component.js";import"./utilities.js";class a extends m{constructor(){super(...arguments);s(this,"requiredRefs",["videoSources","videoElement"])}connectedCallback(){super.connectedCallback();const{videoSources:t,videoElement:d}=this.refs;for(const n of t){const{videoSource:c}=n.dataset;c&&n.setAttribute("src",c)}d.load()}}customElements.get("video-background-component")||customElements.define("video-background-component",a);
+import { Component } from '@theme/component';
+
+/**
+ * A custom element that renders a video background.
+ *
+ * @typedef {object} Refs
+ * @property {HTMLElement[]} videoSources - The video sources.
+ * @property {HTMLVideoElement} videoElement - The video element.
+ *
+ * @extends Component<Refs>
+ */
+export class VideoBackgroundComponent extends Component {
+  requiredRefs = ['videoSources', 'videoElement'];
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    const { videoSources, videoElement } = this.refs;
+
+    for (const source of videoSources) {
+      const { videoSource } = source.dataset;
+
+      if (videoSource) source.setAttribute('src', videoSource);
+    }
+
+    videoElement.load();
+  }
+}
+
+if (!customElements.get('video-background-component')) {
+  customElements.define('video-background-component', VideoBackgroundComponent);
+}

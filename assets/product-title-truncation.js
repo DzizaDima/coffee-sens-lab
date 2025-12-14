@@ -1,1 +1,86 @@
-var c=i=>{throw TypeError(i)};var w=(i,s,e)=>s.has(i)||c("Cannot "+e);var a=(i,s,e)=>s.has(i)?c("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(i):s.set(i,e);var n=(i,s,e)=>(w(i,s,"access private method"),e);import{C as g}from"./component.js";import"./utilities.js";var t,d,o,l;class f extends g{constructor(){super();a(this,t)}connectedCallback(){super.connectedCallback(),n(this,t,d).call(this)}disconnectedCallback(){super.disconnectedCallback(),this.resizeObserver&&this.resizeObserver.disconnect(),window.removeEventListener("resize",n(this,t,l))}}t=new WeakSet,d=function(){"ResizeObserver"in window?(this.resizeObserver=new ResizeObserver(()=>{n(this,t,o).call(this)}),this.resizeObserver.observe(this),n(this,t,o).call(this)):(window.addEventListener("resize",n(this,t,l).bind(this)),n(this,t,o).call(this))},o=function(){const e=this.refs.text||this.querySelector(".title-text")||this;if(!e.textContent)return;const h=this.clientHeight,r=window.getComputedStyle(this),p=parseFloat(r.lineHeight),b=parseFloat(r.paddingTop),m=parseFloat(r.paddingBottom),u=h-b-m,v=Math.max(1,Math.floor(u/p));e.style.display="-webkit-box",e.style.webkitBoxOrient="vertical",e.style.overflow="hidden",e.style.textOverflow="ellipsis",e.style.webkitLineClamp=String(v)},l=function(){n(this,t,o).call(this)};customElements.get("product-title")||customElements.define("product-title",f);
+import { Component } from '@theme/component';
+
+/** @typedef {typeof globalThis} Window */
+
+/**
+ * A component that handles title truncation with responsive behavior
+ *
+ * @typedef {Object} Refs
+ * @property {HTMLElement} [text] - The text element to truncate (optional)
+ *
+ * @extends {Component<Refs>}
+ */
+class ProductTitle extends Component {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.#initializeTruncation();
+  }
+
+  /**
+   * Initialize the title truncation
+   */
+  #initializeTruncation() {
+    if ('ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.#calculateTruncation();
+      });
+
+      this.resizeObserver.observe(this);
+      this.#calculateTruncation();
+    } else {
+      /** @type {Window} */
+      (window).addEventListener('resize', this.#handleResize.bind(this));
+      this.#calculateTruncation();
+    }
+  }
+
+  /**
+   * Calculate truncation for the title
+   */
+  #calculateTruncation() {
+    /** @type {HTMLElement} */
+    const textElement = this.refs.text || this.querySelector('.title-text') || this;
+    if (!textElement.textContent) return;
+
+    const containerHeight = this.clientHeight;
+
+    const computedStyle = window.getComputedStyle(this);
+    const lineHeight = parseFloat(computedStyle.lineHeight);
+    const paddingTop = parseFloat(computedStyle.paddingTop);
+    const paddingBottom = parseFloat(computedStyle.paddingBottom);
+
+    const availableHeight = containerHeight - paddingTop - paddingBottom;
+    const maxLines = Math.max(1, Math.floor(availableHeight / lineHeight));
+
+    textElement.style.display = '-webkit-box';
+    textElement.style.webkitBoxOrient = 'vertical';
+    textElement.style.overflow = 'hidden';
+    textElement.style.textOverflow = 'ellipsis';
+    textElement.style.webkitLineClamp = String(maxLines);
+  }
+
+  /**
+   * Handle window resize events
+   */
+  #handleResize() {
+    this.#calculateTruncation();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    window.removeEventListener('resize', this.#handleResize);
+  }
+}
+
+if (!customElements.get('product-title')) {
+  customElements.define('product-title', ProductTitle);
+}
+
+export default ProductTitle;

@@ -1,1 +1,358 @@
-var F=Object.defineProperty;var _=r=>{throw TypeError(r)};var P=(r,s,t)=>s in r?F(r,s,{enumerable:!0,configurable:!0,writable:!0,value:t}):r[s]=t;var x=(r,s,t)=>P(r,typeof s!="symbol"?s+"":s,t),w=(r,s,t)=>s.has(r)||_("Cannot "+t);var i=(r,s,t)=>(w(r,s,"read from private field"),t?t.call(r):s.get(r)),n=(r,s,t)=>s.has(r)?_("Cannot add the same private member more than once"):s instanceof WeakSet?s.add(r):s.set(r,t),d=(r,s,t,e)=>(w(r,s,"write to private field"),e?e.call(r,t):s.set(r,t),t),u=(r,s,t)=>(w(r,s,"access private method"),t);import{C as R}from"./component.js";import{T as v}from"./events.js";import{m as D}from"./morph.js";import{o as N}from"./utilities.js";var k,b,C,f,B,I,h,y,m,a,Q,T,q,A,g,E,L,O,U,$,S;class j extends R{constructor(){super(...arguments);n(this,a);x(this,"requiredRefs",["stickyBar","addToCartButton","quantityDisplay","quantityNumber"]);n(this,k,null);n(this,b,null);n(this,C);n(this,f,!1);n(this,B,null);n(this,I,new AbortController);n(this,h,null);n(this,y,1);n(this,m,!1);x(this,"handleAddToCartClick",async()=>{if(!i(this,h))return;i(this,h).dataset.puppet="true",i(this,h).click();const t=document.querySelector(".header-actions__cart-icon");if(this.refs.addToCartButton.dataset.added!=="true"&&(this.refs.addToCartButton.dataset.added="true"),!t||!this.refs.addToCartButton||!this.refs.productImage)return;i(this,C)&&clearTimeout(i(this,C));const e=document.createElement("fly-to-cart");getComputedStyle(this.refs.productImage),e.classList.add("fly-to-cart--sticky"),e.style.setProperty("background-image",`url(${this.refs.productImage.src})`),e.useSourceSize="true",e.source=this.refs.productImage,e.destination=t,document.body.appendChild(e),await N([this.refs.addToCartButton,e]),d(this,C,setTimeout(()=>{this.refs.addToCartButton.removeAttribute("data-added")},800))});n(this,T,t=>{if(t.detail.data.productId!==this.dataset.productId)return;const e=t.detail.resource,c=t.detail.data.html.querySelector("sticky-add-to-cart");if(!c)return;const l=c.querySelector('[ref="stickyBar"]');if(!l)return;const o=this.refs.stickyBar.getAttribute("data-stuck")||"false",p=c.dataset.variantAvailable;D(this.refs.stickyBar,l,{childrenOnly:!0}),this.refs.stickyBar.setAttribute("data-stuck",o),this.dataset.variantAvailable=p,e&&e.id&&(this.dataset.currentVariantId=e.id);const V=u(this,a,U).call(this);V&&d(this,h,V.querySelector('[ref="addToCartButton"]')),e==null&&i(this,A).call(this),u(this,a,S).call(this)});n(this,q,t=>{const e=t.detail.resource?.id;e&&(this.dataset.currentVariantId=e)});n(this,A,()=>{this.dataset.currentVariantId="";const t=this.querySelector(".sticky-add-to-cart__variant"),e=this.dataset.productId,c=document.querySelector(`variant-picker[data-product-id="${e}"]`);if(!t||!c)return;const l=Array.from(c.querySelectorAll("input:checked")).map(o=>o.value).filter(o=>o!=="").join(" / ");l&&(t.textContent=l)});n(this,g,t=>{i(this,h)&&(i(this,h).dataset.puppet="false")});n(this,E,t=>{t.detail.cartLine||(d(this,y,t.detail.quantity),u(this,a,S).call(this))})}connectedCallback(){super.connectedCallback(),u(this,a,Q).call(this);const{signal:t}=i(this,I),e=this.closest(".shopify-section");e?.addEventListener(v.variantUpdate,i(this,T),{signal:t}),e?.addEventListener(v.variantSelected,i(this,q),{signal:t}),document.addEventListener(v.cartUpdate,i(this,g),{signal:t}),document.addEventListener(v.cartError,i(this,g),{signal:t}),document.addEventListener(v.quantitySelectorUpdate,i(this,E),{signal:t}),u(this,a,$).call(this)}disconnectedCallback(){super.disconnectedCallback(),i(this,k)?.disconnect(),i(this,b)?.disconnect(),i(this,I).abort(),i(this,B)&&clearTimeout(i(this,B))}}k=new WeakMap,b=new WeakMap,C=new WeakMap,f=new WeakMap,B=new WeakMap,I=new WeakMap,h=new WeakMap,y=new WeakMap,m=new WeakMap,a=new WeakSet,Q=function(){const t=u(this,a,U).call(this);if(!t)return;const e=t.closest(".buy-buttons-block");if(!e)return;const c=document.querySelector("footer");c&&(d(this,k,new IntersectionObserver(l=>{const[o]=l;if(o)if(!o.isIntersecting&&!i(this,f)){const p=o.target.getBoundingClientRect();(p.bottom<0||p.top<0)&&u(this,a,L).call(this)}else o.isIntersecting&&i(this,f)&&(d(this,m,!1),u(this,a,O).call(this))})),d(this,b,new IntersectionObserver(l=>{const[o]=l;if(o){if(o.isIntersecting&&i(this,f))d(this,m,!0),u(this,a,O).call(this);else if(!o.isIntersecting&&i(this,m)){const p=e.getBoundingClientRect();(p.bottom<0||p.top<0)&&(d(this,m,!1),u(this,a,L).call(this))}}},{rootMargin:"200px 0px 0px 0px"})),i(this,k).observe(e),i(this,b).observe(c),d(this,h,t.querySelector('[ref="addToCartButton"]')))},T=new WeakMap,q=new WeakMap,A=new WeakMap,g=new WeakMap,E=new WeakMap,L=function(){const{stickyBar:t}=this.refs;d(this,f,!0),t.dataset.stuck="true"},O=function(){const{stickyBar:t}=this.refs;d(this,f,!1),t.dataset.stuck="false"},U=function(){const t=this.dataset.productId;if(!t)return null;const e=this.closest(".shopify-section");if(!e)return null;const c=e.id.replace("shopify-section-","");return document.querySelector(`#shopify-section-${c} product-form-component[data-product-id="${t}"]`)},$=function(){d(this,y,parseInt(this.dataset.initialQuantity||"1")||1),u(this,a,S).call(this)},S=function(){const{addToCartButton:t,quantityDisplay:e,quantityNumber:c}=this.refs,l=!t.disabled;c.textContent=i(this,y).toString(),l&&i(this,y)>1?e.style.display="inline":e.style.display="none"};customElements.get("sticky-add-to-cart")||customElements.define("sticky-add-to-cart",j);
+import { Component } from '@theme/component';
+import { ThemeEvents, QuantitySelectorUpdateEvent } from '@theme/events';
+import { morph } from '@theme/morph';
+import { onAnimationEnd } from '@theme/utilities';
+
+/**
+ * @typedef {Object} ProductVariant
+ * @property {string|number} [id] - Variant ID
+ * @property {string} [title] - Variant title
+ * @property {string} [name] - Variant name
+ * @property {boolean} [available] - Whether variant is available
+ * @property {Object} [featured_media] - Featured media object
+ * @property {Object} [featured_media.preview_image] - Preview image data
+ * @property {string} [featured_media.preview_image.src] - Image source URL
+ * @property {string} [featured_media.alt] - Alt text for the image
+ */
+
+/**
+ * @typedef {HTMLElement & {
+ *   source: Element,
+ *   destination: Element,
+ *   useSourceSize: string | boolean
+ * }} FlyToCart
+ */
+
+/**
+ * @typedef {Object} StickyAddToCartRefs
+ * @property {HTMLElement} stickyBar - The floating bar container
+ * @property {HTMLButtonElement} addToCartButton - Sticky bar's button
+ * @property {HTMLElement} quantityDisplay - Quantity display container
+ * @property {HTMLElement} quantityNumber - Quantity number element
+ * @property {HTMLImageElement} productImage - Product image element
+ */
+
+/**
+ * A custom element that manages a sticky add-to-cart bar.
+ * Shows when the main buy buttons scroll out of view.
+ *
+ * @extends {Component<StickyAddToCartRefs>}
+ */
+class StickyAddToCartComponent extends Component {
+  requiredRefs = ['stickyBar', 'addToCartButton', 'quantityDisplay', 'quantityNumber'];
+
+  /** @type {IntersectionObserver | null} */
+  #buyButtonsIntersectionObserver = null;
+
+  /** @type {IntersectionObserver | null} */
+  #mainBottomObserver = null;
+
+  /** @type {number | undefined} */
+  #resetTimeout;
+
+  /** @type {boolean} */
+  #isStuck = false;
+
+  /** @type {number | null} */
+  #animationTimeout = null;
+
+  /** @type {AbortController} */
+  #abortController = new AbortController();
+
+  /** @type {HTMLButtonElement | null} */
+  #targetAddToCartButton = null;
+
+  /** @type {number} */
+  #currentQuantity = 1;
+
+  /** @type {boolean} */
+  #hiddenByBottom = false;
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#setupIntersectionObserver();
+
+    const { signal } = this.#abortController;
+    const target = this.closest('.shopify-section');
+    target?.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate, { signal });
+    target?.addEventListener(ThemeEvents.variantSelected, this.#handleVariantSelected, { signal });
+
+    document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartAddComplete, { signal });
+    document.addEventListener(ThemeEvents.cartError, this.#handleCartAddComplete, { signal });
+    document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#handleQuantityUpdate, { signal });
+
+    this.#getInitialQuantity();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#buyButtonsIntersectionObserver?.disconnect();
+    this.#mainBottomObserver?.disconnect();
+    this.#abortController.abort();
+    if (this.#animationTimeout) {
+      clearTimeout(this.#animationTimeout);
+    }
+  }
+
+  /**
+   * Sets up the IntersectionObserver to watch the buy buttons visibility
+   */
+  #setupIntersectionObserver() {
+    const productForm = this.#getProductForm();
+    if (!productForm) return;
+
+    const buyButtonsBlock = productForm.closest('.buy-buttons-block');
+    if (!buyButtonsBlock) return;
+
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    // Observer for buy buttons visibility
+    this.#buyButtonsIntersectionObserver = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+      if (!entry) return;
+
+      // Only show sticky bar if buy buttons have been scrolled past (above viewport)
+      if (!entry.isIntersecting && !this.#isStuck) {
+        // Check if the element is above the viewport (scrolled past) or below (not yet reached)
+        const rect = entry.target.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top < 0) {
+          // Element is above viewport - show sticky bar
+          this.#showStickyBar();
+        }
+        // If rect.top >= 0, element is below viewport - don't show sticky bar yet
+      } else if (entry.isIntersecting && this.#isStuck) {
+        this.#hiddenByBottom = false;
+        this.#hideStickyBar();
+      }
+    });
+
+    // Observer for footer visibility - hides sticky bar at page bottom
+    this.#mainBottomObserver = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry) return;
+
+        if (entry.isIntersecting && this.#isStuck) {
+          this.#hiddenByBottom = true;
+          this.#hideStickyBar();
+        } else if (!entry.isIntersecting && this.#hiddenByBottom) {
+          // Footer out of view - check if we should show sticky bar again
+          const rect = buyButtonsBlock.getBoundingClientRect();
+          // Only show if buy buttons are above the viewport (scrolled past)
+          if (rect.bottom < 0 || rect.top < 0) {
+            this.#hiddenByBottom = false;
+            this.#showStickyBar();
+          }
+        }
+      },
+      {
+        rootMargin: '200px 0px 0px 0px',
+      }
+    );
+
+    this.#buyButtonsIntersectionObserver.observe(buyButtonsBlock);
+    this.#mainBottomObserver.observe(footer);
+    this.#targetAddToCartButton = productForm.querySelector('[ref="addToCartButton"]');
+  }
+
+  // Public action handlers
+  /**
+   * Handles the add to cart button click in the sticky bar
+   */
+  handleAddToCartClick = async () => {
+    if (!this.#targetAddToCartButton) return;
+    this.#targetAddToCartButton.dataset.puppet = 'true';
+    this.#targetAddToCartButton.click();
+    const cartIcon = document.querySelector('.header-actions__cart-icon');
+
+    if (this.refs.addToCartButton.dataset.added !== 'true') {
+      this.refs.addToCartButton.dataset.added = 'true';
+    }
+
+    if (!cartIcon || !this.refs.addToCartButton || !this.refs.productImage) return;
+    if (this.#resetTimeout) clearTimeout(this.#resetTimeout);
+
+    const flyToCartElement = /** @type {FlyToCart} */ (document.createElement('fly-to-cart'));
+    const sourceStyles = getComputedStyle(this.refs.productImage);
+
+    flyToCartElement.classList.add('fly-to-cart--sticky');
+    flyToCartElement.style.setProperty('background-image', `url(${this.refs.productImage.src})`);
+    flyToCartElement.useSourceSize = 'true';
+    flyToCartElement.source = this.refs.productImage;
+    flyToCartElement.destination = cartIcon;
+
+    document.body.appendChild(flyToCartElement);
+
+    await onAnimationEnd([this.refs.addToCartButton, flyToCartElement]);
+    this.#resetTimeout = setTimeout(() => {
+      this.refs.addToCartButton.removeAttribute('data-added');
+    }, 800);
+  };
+
+  /**
+   * Handles variant update events
+   * @param {CustomEvent} event - The variant update event
+   */
+  #handleVariantUpdate = (event) => {
+    if (event.detail.data.productId !== this.dataset.productId) return;
+
+    const variant = event.detail.resource;
+
+    // Get the new sticky add to cart HTML from the server response
+    const newStickyAddToCart = event.detail.data.html.querySelector('sticky-add-to-cart');
+    if (!newStickyAddToCart) return;
+
+    const newStickyBar = newStickyAddToCart.querySelector('[ref="stickyBar"]');
+    if (!newStickyBar) return;
+
+    // Store current visibility state before morphing
+    const currentStuck = this.refs.stickyBar.getAttribute('data-stuck') || 'false';
+    const variantAvailable = newStickyAddToCart.dataset.variantAvailable;
+
+    // Morph the entire sticky bar content
+    morph(this.refs.stickyBar, newStickyBar, { childrenOnly: true });
+
+    // Restore visibility state after morphing
+    this.refs.stickyBar.setAttribute('data-stuck', currentStuck);
+    this.dataset.variantAvailable = variantAvailable;
+
+    // Update the dataset attributes with new variant info
+    if (variant && variant.id) {
+      this.dataset.currentVariantId = variant.id;
+    }
+
+    // Re-cache the target add to cart button after morphing
+    const productForm = this.#getProductForm();
+    if (productForm) {
+      this.#targetAddToCartButton = productForm.querySelector('[ref="addToCartButton"]');
+    }
+
+    if (variant == null) {
+      this.#handleVariantUnavailable();
+    }
+    // Restore the current quantity display if needed
+    this.#updateButtonText();
+  };
+
+  /**
+   * Handles variant selected events
+   * @param {CustomEvent} event - The variant selected event
+   */
+  #handleVariantSelected = (event) => {
+    // The variant update event will follow and handle all updates via morph
+    // We just update the dataset here for tracking
+    const variantId = event.detail.resource?.id;
+    if (!variantId) return;
+    this.dataset.currentVariantId = variantId;
+  };
+
+  /**
+   * Updates the variant title based on selected options when the variant is unavailable
+   */
+  #handleVariantUnavailable = () => {
+    this.dataset.currentVariantId = '';
+    const variantTitleElement = this.querySelector('.sticky-add-to-cart__variant');
+    const productId = this.dataset.productId;
+    const variantPicker = document.querySelector(`variant-picker[data-product-id="${productId}"]`);
+    if (!variantTitleElement || !variantPicker) return;
+
+    const selectedOptions = Array.from(variantPicker.querySelectorAll('input:checked'))
+      .map((option) => /** @type {HTMLInputElement} */ (option).value)
+      .filter((value) => value !== '')
+      .join(' / ');
+    if (!selectedOptions) return;
+    variantTitleElement.textContent = selectedOptions;
+  };
+
+  /**
+   * Handles cart add complete (success or error) - resets puppet flag
+   * @param {CustomEvent} _event - The cart event (unused)
+   */
+  #handleCartAddComplete = (_event) => {
+    // Reset the puppet flag after cart operation
+    if (this.#targetAddToCartButton) {
+      this.#targetAddToCartButton.dataset.puppet = 'false';
+    }
+  };
+
+  /**
+   * Handles quantity selector update events
+   * @param {QuantitySelectorUpdateEvent} event - The quantity update event
+   */
+  #handleQuantityUpdate = (event) => {
+    // Only respond to product page quantity selector updates, not cart drawer
+    if (event.detail.cartLine) return;
+
+    this.#currentQuantity = event.detail.quantity;
+    this.#updateButtonText();
+  };
+
+  /**
+   * Shows the sticky bar with animation
+   */
+  #showStickyBar() {
+    const { stickyBar } = this.refs;
+    this.#isStuck = true;
+    stickyBar.dataset.stuck = 'true';
+  }
+
+  /**
+   * Hides the sticky bar with animation
+   */
+  #hideStickyBar() {
+    const { stickyBar } = this.refs;
+    this.#isStuck = false;
+    stickyBar.dataset.stuck = 'false';
+  }
+
+  // Helper methods
+  /**
+   * Gets the product form element
+   * @returns {HTMLElement | null}
+   */
+  #getProductForm() {
+    const productId = this.dataset.productId;
+    if (!productId) return null;
+
+    const sectionElement = this.closest('.shopify-section');
+    if (!sectionElement) return null;
+
+    const sectionId = sectionElement.id.replace('shopify-section-', '');
+    return document.querySelector(
+      `#shopify-section-${sectionId} product-form-component[data-product-id="${productId}"]`
+    );
+  }
+
+  /**
+   * Gets the initial quantity from the data attribute
+   */
+  #getInitialQuantity() {
+    this.#currentQuantity = parseInt(this.dataset.initialQuantity || '1') || 1;
+    this.#updateButtonText();
+  }
+
+  /**
+   * Updates the button text to include quantity
+   */
+  #updateButtonText() {
+    const { addToCartButton, quantityDisplay, quantityNumber } = this.refs;
+
+    const available = !addToCartButton.disabled;
+
+    // Update the quantity number
+    quantityNumber.textContent = this.#currentQuantity.toString();
+
+    // Show/hide the quantity display based on availability and quantity
+    if (available && this.#currentQuantity > 1) {
+      quantityDisplay.style.display = 'inline';
+    } else {
+      quantityDisplay.style.display = 'none';
+    }
+  }
+}
+
+if (!customElements.get('sticky-add-to-cart')) {
+  customElements.define('sticky-add-to-cart', StickyAddToCartComponent);
+}
