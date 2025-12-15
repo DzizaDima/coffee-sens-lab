@@ -8,439 +8,49 @@
  * ------------------------------------------------------------
  */
 {
-  "settings_schema": {
-    "global": {
-      "settings": {
-        "header__border": {
-          "content": "Border"
-        },
-        "header__shadow": {
-          "content": "Shadow"
-        },
-        "blur": {
-          "label": "Blur"
-        },
-        "corner_radius": {
-          "label": "Corner radius"
-        },
-        "horizontal_offset": {
-          "label": "Horizontal offset"
-        },
-        "vertical_offset": {
-          "label": "Vertical offset"
-        },
-        "thickness": {
-          "label": "Thickness"
-        },
-        "opacity": {
-          "label": "Opacity"
-        },
-        "image_padding": {
-          "label": "Image padding"
-        },
-        "text_alignment": {
-          "options__1": {
-            "label": "Left"
-          },
-          "options__2": {
-            "label": "Center"
-          },
-          "options__3": {
-            "label": "Right"
-          },
-          "label": "Text alignment"
-        }
-      }
-    },
-    "cards": {
-      "name": "Product cards",
-      "settings": {
-        "style": {
-          "options__1": {
-            "label": "Standard"
-          },
-          "options__2": {
-            "label": "Card"
-          },
-          "label": "Style"
-        }
-      }
-    },
-    "collection_cards": {
-      "name": "Collection cards",
-      "settings": {
-        "style": {
-          "options__1": {
-            "label": "Standard"
-          },
-          "options__2": {
-            "label": "Card"
-          },
-          "label": "Style"
-        }
-      }
-    },
-    "blog_cards": {
-      "name": "Blog cards",
-      "settings": {
-        "style": {
-          "options__1": {
-            "label": "Standard"
-          },
-          "options__2": {
-            "label": "Card"
-          },
-          "label": "Style"
-        }
-      }
-    },
-    "badges": {
-      "name": "Badges",
-      "settings": {
-        "position": {
-          "options__1": {
-            "label": "Bottom left"
-          },
-          "options__2": {
-            "label": "Bottom right"
-          },
-          "options__3": {
-            "label": "Top left"
-          },
-          "options__4": {
-            "label": "Top right"
-          },
-          "label": "Position on cards"
-        },
-        "sale_badge_color_scheme": {
-          "label": "Sale badge color scheme"
-        },
-        "sold_out_badge_color_scheme": {
-          "label": "Sold out badge color scheme"
-        }
-      }
-    },
-    "colors": {
-      "name": "Colors",
-      "settings": {
-        "background": {
-          "label": "Background"
-        },
-        "background_gradient": {
-          "label": "Background gradient",
-          "info": "Background gradient replaces background where possible."
-        },
-        "text": {
-          "label": "Text"
-        },
-        "button_background": {
-          "label": "Solid button background"
-        },
-        "button_label": {
-          "label": "Solid button label"
-        },
-        "secondary_button_label": {
-          "label": "Outline button"
-        },
-        "shadow": {
-          "label": "Shadow"
-        }
-      }
-    },
-    "logo": {
-      "name": "Logo",
-      "settings": {
-        "logo_image": {
-          "label": "Logo"
-        },
-        "logo_width": {
-          "label": "Width"
-        },
-        "logo_width_mobile": {
-          "label": "Mobile width"
-        },
-        "favicon": {
-          "label": "Favicon",
-          "info": "Displayed at 32 x 32px"
-        }
-      }
-    },
-    "brand_information": {
-      "name": "Brand information",
-      "settings": {
-        "paragraph": {
-          "content": "Displays in the footer's brand information block"
-        },
-        "brand_headline": {
-          "label": "Headline"
-        },
-        "brand_description": {
-          "label": "Description"
-        },
-        "brand_image": {
-          "label": "Image"
-        },
-        "brand_image_width": {
-          "label": "Image width"
-        }
-      }
-    },
-    "typography": {
-      "name": "Typography",
-      "settings": {
-        "type_header_font": {
-          "label": "Font"
-        },
-        "heading_scale": {
-          "label": "Scale"
-        },
-        "header__1": {
-          "content": "Headings"
-        },
-        "header__2": {
-          "content": "Body"
-        },
-        "type_body_font": {
-          "label": "Font"
-        },
-        "body_scale": {
-          "label": "Scale"
-        }
-      }
-    },
-    "buttons": {
-      "name": "Buttons"
-    },
-    "variant_pills": {
-      "name": "Variant pills",
-      "paragraph": "Variant pills are one way of displaying your [product variants](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types/product-pages#variant-picker-block)"
-    },
-    "inputs": {
-      "name": "Inputs"
-    },
-    "content_containers": {
-      "name": "Content containers"
-    },
-    "popups": {
-      "name": "Dropdowns and pop-ups",
-      "paragraph": "Affects areas like navigation dropdowns, pop-up modals, and cart pop-ups"
-    },
-    "media": {
-      "name": "Media"
-    },
-    "drawers": {
-      "name": "Drawers"
-    },
-    "animations": {
-      "name": "Animations",
-      "settings": {
-        "animations_reveal_on_scroll": {
-          "label": "Reveal sections on scroll"
-        },
-        "animations_hover_elements": {
-          "options__1": {
-            "label": "None"
-          },
-          "options__2": {
-            "label": "Vertical lift"
-          },
-          "options__3": {
-            "label": "3D lift"
-          },
-          "label": "Hover effect",
-          "info": "Affects cards and buttons"
-        }
-      }
-    },
-    "social-media": {
-      "name": "Social media",
-      "settings": {
-        "header": {
-          "content": "Social accounts"
-        },
-        "social_twitter_link": {
-          "label": "X / Twitter",
-          "info": "https://x.com/shopify"
-        },
-        "social_facebook_link": {
-          "label": "Facebook",
-          "info": "https://facebook.com/shopify"
-        },
-        "social_pinterest_link": {
-          "label": "Pinterest",
-          "info": "https://pinterest.com/shopify"
-        },
-        "social_instagram_link": {
-          "label": "Instagram",
-          "info": "http://instagram.com/shopify"
-        },
-        "social_tiktok_link": {
-          "label": "TikTok",
-          "info": "https://tiktok.com/@shopify"
-        },
-        "social_tumblr_link": {
-          "label": "Tumblr",
-          "info": "https://shopify.tumblr.com"
-        },
-        "social_snapchat_link": {
-          "label": "Snapchat",
-          "info": "https://www.snapchat.com/add/shopify"
-        },
-        "social_youtube_link": {
-          "label": "YouTube",
-          "info": "https://www.youtube.com/shopify"
-        },
-        "social_vimeo_link": {
-          "label": "Vimeo",
-          "info": "https://vimeo.com/shopify"
-        }
-      }
-    },
-    "search_input": {
-      "name": "Search behavior",
-      "settings": {
-        "predictive_search_enabled": {
-          "label": "Search suggestions"
-        },
-        "predictive_search_show_vendor": {
-          "label": "Product vendor",
-          "info": "Shown when search suggestions enabled"
-        },
-        "predictive_search_show_price": {
-          "label": "Product price",
-          "info": "Shown when search suggestions enabled"
-        }
-      }
-    },
-    "currency_format": {
-      "name": "Currency format",
-      "settings": {
-        "paragraph": "Cart and checkout prices always show currency codes",
-        "currency_code_enabled": {
-          "label": "Currency codes"
-        }
-      }
-    },
-    "cart": {
-      "name": "Cart",
-      "settings": {
-        "cart_type": {
-          "label": "Type",
-          "drawer": {
-            "label": "Drawer"
-          },
-          "page": {
-            "label": "Page"
-          },
-          "notification": {
-            "label": "Popup notification"
-          }
-        },
-        "show_vendor": {
-          "label": "Vendor"
-        },
-        "show_cart_note": {
-          "label": "Cart note"
-        },
-        "cart_drawer": {
-          "header": "Cart drawer",
-          "collection": {
-            "label": "Collection",
-            "info": "Shown when cart drawer is empty"
-          }
-        }
-      }
-    },
-    "layout": {
-      "name": "Layout",
-      "settings": {
-        "page_width": {
-          "label": "Page width"
-        },
-        "spacing_sections": {
-          "label": "Space between template sections"
-        },
-        "header__grid": {
-          "content": "Grid"
-        },
-        "paragraph__grid": {
-          "content": "Affects areas with multiple columns or rows"
-        },
-        "spacing_grid_horizontal": {
-          "label": "Horizontal space"
-        },
-        "spacing_grid_vertical": {
-          "label": "Vertical space"
-        }
-      }
-    }
-  },
-  "sections": {
-    "all": {
-      "animation": {
-        "content": "Animations",
-        "image_behavior": {
-          "options__1": {
-            "label": "None"
-          },
-          "options__2": {
-            "label": "Ambient movement"
-          },
-          "options__3": {
-            "label": "Fixed background position"
-          },
-          "options__4": {
-            "label": "Zoom in on scroll"
-          },
-          "label": "Animation"
-        }
-      },
-      "padding": {
-        "section_padding_heading": "Padding",
-        "section_mobile_padding_heading": "Mobile padding",
-        "padding_top": "Top",
-        "padding_bottom": "Bottom",
-        "padding_top_mobile": "Mobile padding top",
-        "padding_bottom_mobile": "Mobile padding bottom"
-      },
-      "spacing": "Spacing",
-      "colors": {
-        "label": "Color scheme",
-        "has_cards_info": "To change the card color scheme, update your theme settings."
-      },
-      "heading_size": {
-        "label": "Heading size",
-        "options__1": {
-          "label": "Small"
-        },
-        "options__2": {
-          "label": "Medium"
-        },
-        "options__3": {
-          "label": "Large"
-        },
-        "options__4": {
-          "label": "Extra large"
-        },
-        "options__5": {
-          "label": "Extra extra large"
-        }
-      },
-      "image_shape": {
-        "options__1": {
-          "label": "Default"
-        },
-        "options__2": {
-          "label": "Arch"
-        },
-        "options__3": {
-          "label": "Blob"
-        },
-        "options__4": {
-          "label": "Chevron left"
-        },
-        "options__5": {
-          "label": "Chevron right"
+    "settings_schema": {
+        "global": {
+            "settings": {
+                "header__border": {
+                    "content": "Border"
+                },
+                "header__shadow": {
+                    "content": "Shadow"
+                },
+                "blur": {
+                    "label": "Blur"
+                },
+                "corner_radius": {
+                    "label": "Corner radius"
+                },
+                "horizontal_offset": {
+                    "label": "Horizontal offset"
+                },
+                "vertical_offset": {
+                    "label": "Vertical offset"
+                },
+                "thickness": {
+                    "label": "Thickness"
+                },
+                "opacity": {
+                    "label": "Opacity"
+                },
+                "image_padding": {
+                    "label": "Image padding"
+                },
+                "text_alignment": {
+                    "options__1": {
+                        "label": "Left"
+                    },
+                    "options__2": {
+                        "label": "Center"
+                    },
+                    "options__3": {
+                        "label": "Right"
+                    },
+                    "label": "Text alignment"
+                }
+            }
         },
         "cards": {
             "name": "Product cards",

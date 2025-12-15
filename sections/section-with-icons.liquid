@@ -1,0 +1,90 @@
+{{ 'section-with-icons.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign blocks = section.blocks
+%}
+
+<section class="section-with-icons">
+  <div class="container">
+    <div class="section-with-icons__inner">
+      {%- for block in blocks -%}
+        <div class="section-with-icons__item">
+          {%- if block.settings.title != blank -%}
+            <div class="section-with-icons__item-title">
+              {{- block.settings.title -}}
+            </div>
+          {%- endif -%}
+          {%- if block.settings.icon != blank -%}
+            <div class="section-with-icons__item-icon">
+              <img
+                src="{{ block.settings.icon | image_url }}"
+                alt="{{ block.settings.title }}"
+                width="100"
+                height="100"
+              >
+            </div>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="section-with-icons__item-text">
+              {{- block.settings.text -}}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Section with icons",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "t:sections.section-with-icons.blocks.card.name",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "t:sections.section-with-icons.blocks.card.settings.title.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "t:sections.section-with-icons.blocks.card.settings.icon.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.section-with-icons.blocks.card.settings.text.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.section-with-icons.presets.name",
+      "blocks": [
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

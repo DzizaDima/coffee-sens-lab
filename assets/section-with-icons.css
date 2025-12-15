@@ -1,0 +1,105 @@
+.section-with-icons {
+    padding: 85px 0;
+}
+
+.container {
+    max-width: 1384px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.section-with-icons__inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    align-items: flex-start;
+    gap: 20px 8px;
+}
+
+.section-with-icons__item {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 92px 1fr;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+}
+
+
+.section-with-icons__item-title {
+    margin: 0;
+}
+
+.section-with-icons__item-title p {
+    font-size: clamp(16px, 5vw, 26px);
+    font-weight: 700;
+    line-height: calc(32/26);
+    text-transform: uppercase;
+    color: #181818;
+    font-family: "ClashDisplay";
+    margin: 0;
+}
+
+.section-with-icons__item-icon {
+    height: 92px;
+    width: auto;
+}
+
+.section-with-icons__item-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.section-with-icons__item-text p {
+    font-size: clamp(16px, 5vw, 18px);
+    line-height: calc(22/18);
+    color: #3F3F3F;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .section-with-icons {
+        padding: 55px 0;
+    }
+
+    .section-with-icons__item-title p {
+        font-size: 16px;
+    }
+
+    .section-with-icons__item-text p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 560px) {
+    .section-with-icons__item {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        gap: 12px;
+        justify-items: start;
+        text-align: start;
+    }
+
+    .section-with-icons__item-icon {
+        grid-column: 1;
+        grid-row: span 1;
+        width: 90px;
+        height: 52px;
+        margin-top: -30px;
+    }
+
+    .section-with-icons__item-title {
+        grid-column: 2;
+        grid-row: span 1;
+    }
+
+    .section-with-icons__item-text {
+        grid-column: 2;
+        grid-row: span 1;
+    }
+
+    .section-with-icons__item-text br {
+        display: none;
+    }
+}
