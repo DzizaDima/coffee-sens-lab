@@ -156,9 +156,6 @@
                 "logo_width": {
                     "label": "Width"
                 },
-                "logo_width_mobile": {
-                    "label": "Mobile width"
-                },
                 "favicon": {
                     "label": "Favicon",
                     "info": "Displayed at 32 x 32px"
@@ -397,11 +394,8 @@
             },
             "padding": {
                 "section_padding_heading": "Padding",
-                "section_mobile_padding_heading": "Mobile padding",
                 "padding_top": "Top",
-                "padding_bottom": "Bottom",
-                "padding_top_mobile": "Mobile padding top",
-                "padding_bottom_mobile": "Mobile padding bottom"
+                "padding_bottom": "Bottom"
             },
             "spacing": "Spacing",
             "colors": {
@@ -3412,25 +3406,60 @@
                 "name": "Collapsible content"
             }
         },
-        "section-with-icons": {
-            "name": "Section with icons",
+        "hero-section": {
+            "name": "Hero Section",
             "settings": {
+                "image": {
+                    "label": "Background Image"
+                },
+                "description": {
+                    "label": "Description"
+                },
                 "title": {
                     "label": "Title"
-                }
-            },
-            "blocks": {
-                "card": {
-                    "name": "Card",
-                    "settings": {
-                        "title": {
-                            "label": "Title"
-                        }
-                    }
+                },
+                "card_image": {
+                    "label": "Card Image"
+                },
+                "card_title": {
+                    "label": "Card Title"
+                },
+                "card_text": {
+                    "label": "Card Text"
+                },
+                "card_button_link": {
+                    "label": "Card Button Link"
+                },
+                "card_button_text": {
+                    "label": "Card Button Text"
+                },
+                "collection": {
+                    "label": "Products Collection"
+                },
+                "timer_header": {
+                    "content": "Timer"
+                },
+                "timer_title": {
+                    "label": "Timer Title"
+                },
+                "timer_text": {
+                    "label": "Timer Text"
+                },
+                "timer_countdown": {
+                    "label": "Timer Countdown"
+                },
+                "timer_image": {
+                    "label": "Timer Image"
+                },
+                "timer_button_link": {
+                    "label": "Timer Button Link"
+                },
+                "timer_button_text": {
+                    "label": "Timer Button Text"
                 }
             },
             "presets": {
-                "name": "Section with icons"
+                "name": "Hero Section"
             }
         }
     }

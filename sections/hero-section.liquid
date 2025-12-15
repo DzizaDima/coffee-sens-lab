@@ -1,0 +1,373 @@
+{{ 'hero-section.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .hero-section__title em {
+    background-image: url('{{ 'text-underline.svg' | asset_url }}');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: 100% 185%;
+  }
+
+  .hero-section__slide{
+      background-color:{{settings.color_scheme.background}};
+      color:{{settings.color_scheme.text}};
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign products = section.settings.collection.products
+-%}
+
+<section class="hero-section">
+  <div class="hero-section__bg">
+    <img
+      src="{{ section.settings.image | image_url: width: 1440 }}"
+      alt="{{ section.settings.title }}"
+      width="1920"
+      height="1080"
+    >
+  </div>
+  <div class="container">
+    <div class="hero-section__inner">
+      <div class="hero-section__content">
+        {%- if section.settings.description != blank -%}
+          <p class="hero-section__subtitle">{{ section.settings.description }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h1 class="hero-section__title">{{ section.settings.title }}</h1>
+        {%- endif -%}
+        <div class="hero-section__card">
+          <div class="hero-section__card-image">
+            <img
+              src="{{ 'hero-card-bg.png' | asset_url }}"
+              alt="{{ section.settings.card_title }}"
+              width="360"
+              height="400"
+            >
+          </div>
+          <div class="hero-section__card-content">
+            {%- if section.settings.card_title != blank -%}
+              <h3 class="hero-section__card-title">{{ section.settings.card_title }}</h3>
+            {%- endif -%}
+            {%- if section.settings.card_text != blank -%}
+              <div class="hero-section__card-text">{{ section.settings.card_text }}</div>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.card_button_link != blank -%}
+            <a href="{{ section.settings.card_button_link }}" class="hero-section__card-link">
+              <span>{{- section.settings.card_button_text -}}</span>
+              {{- 'arrow-right.svg' | inline_asset_content -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="swiper hero-section__slider">
+        <div class="swiper-wrapper">
+          {% for product in products %}
+            <div class="swiper-slide hero-section__slide" data-product-index="{{ forloop.index0 }}">
+              <div class="hero-section__slide-image">
+                <img
+                  src="{{ product.featured_image | image_url: width: 340 }}"
+                  alt="{{ product.title }}"
+                  width="340"
+                  height="340"
+                >
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% for card_product in products %}
+        <div class="hero-section__slider-card" data-product-index="{{ forloop.index0 }}">
+          <img
+            class="hero-section__slider-card-frame"
+            src="{{ 'card-frame.png' | asset_url }}"
+            alt="card-frame"
+            width="360"
+            height="400"
+          >
+          {% render 'card-product',
+            card_product: card_product,
+            media_aspect_ratio: section.settings.image_ratio,
+            image_shape: section.settings.image_shape,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            section_id: section.id,
+            quick_add: section.settings.quick_add
+          %}
+        </div>
+      {% endfor %}
+      <div class="hero-section__timer-wrapper ">
+        <div class="hero-section__timer-frame-top --frame">
+          <img
+            src="{{ 'top-frame.png' | asset_url }}"
+            alt="top-frame"
+            width="454"
+            height="3"
+          >
+        </div>
+        <div class="hero-section__timer-frame-bottom --frame">
+          <img
+            src="{{ 'bottom-frame.png' | asset_url }}"
+            alt="bottom-frame"
+            width="454"
+            height="3"
+          >
+        </div>
+        <div class="hero-section__timer-frame-left --frame">
+          <img
+            src="{{ 'left-frame.png' | asset_url }}"
+            alt="left-frame"
+            width="3"
+            height="277"
+          >
+        </div>
+        <div class="hero-section__timer-frame-right --frame">
+          <img
+            src="{{ 'right-frame.png' | asset_url }}"
+            alt="right-frame"
+            width="3"
+            height="277"
+          >
+        </div>
+
+        <div class="hero-section__timer">
+          {%- if section.settings.timer_image != blank -%}
+            <div class="hero-section__timer-image">
+              <img
+                src="{{section.settings.timer_image | image_url: width: 290}}"
+                alt="timer-image"
+                width="290"
+                height="290"
+              >
+            </div>
+          {%- endif -%}
+          {%- if section.settings.timer_title != blank -%}
+            <span class="hero-section__timer-title">
+              {{- section.settings.timer_title -}}
+            </span>
+          {%- endif -%}
+          {%- if section.settings.timer_end_date != blank -%}
+            <div class="hero-section__timer-countdown" data-end-date="{{ section.settings.timer_end_date }}">
+              <span class="timer-hours">00</span>
+              <span class="timer-hours-dots">{{ 'dots.svg' | inline_asset_content }}</span>
+              <span class="timer-minutes">00</span>
+              <span class="timer-minutes-dots">{{ 'dots.svg' | inline_asset_content }}</span>
+              <span class="timer-seconds">00</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.timer_text != blank -%}
+            <p class="hero-section__timer-text">
+              {{- section.settings.timer_text -}}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.timer_button_link != blank -%}
+            <a href="{{ section.settings.timer_button_link }}" class="hero-section__timer-button">
+              <span>{{- section.settings.timer_button_text -}}</span>
+              {{- 'arrow-right.svg' | inline_asset_content -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero-section.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:sections.hero-section.settings.description.label"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "t:sections.hero-section.settings.title.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.hero-section.settings.image.label"
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "t:sections.hero-section.settings.card_title.label"
+    },
+    {
+      "type": "richtext",
+      "id": "card_text",
+      "label": "t:sections.hero-section.settings.card_text.label"
+    },
+    {
+      "type": "url",
+      "id": "card_button_link",
+      "label": "t:sections.hero-section.settings.card_button_link.label"
+    },
+    {
+      "type": "text",
+      "id": "card_button_text",
+      "label": "t:sections.hero-section.settings.card_button_text.label"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.hero-section.settings.collection.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-collection.settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.featured-collection.settings.image_ratio.label"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.image_shape.options__1.label"
+        },
+        {
+          "value": "arch",
+          "label": "t:sections.all.image_shape.options__2.label"
+        },
+        {
+          "value": "blob",
+          "label": "t:sections.all.image_shape.options__3.label"
+        },
+        {
+          "value": "chevronleft",
+          "label": "t:sections.all.image_shape.options__4.label"
+        },
+        {
+          "value": "chevronright",
+          "label": "t:sections.all.image_shape.options__5.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.all.image_shape.options__6.label"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:sections.all.image_shape.options__7.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.all.image_shape.options__8.label"
+        }
+      ],
+      "default": "default",
+      "label": "t:sections.all.image_shape.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_rating.label",
+      "info": "t:sections.featured-collection.settings.show_rating.info"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+        },
+        {
+          "value": "bulk",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero-section.settings.timer_header.content"
+    },
+    {
+      "type": "text",
+      "id": "timer_title",
+      "label": "t:sections.hero-section.settings.timer_title.label"
+    },
+    {
+      "type": "text",
+      "id": "timer_text",
+      "label": "t:sections.hero-section.settings.timer_text.label"
+    },
+    {
+      "type": "text",
+      "id": "timer_end_date",
+      "label": "Timer end date",
+      "info": "Format: YYYY-MM-DD HH:MM:SS (e.g., 2024-12-31 23:59:59)"
+    },
+    {
+      "type": "image_picker",
+      "id": "timer_image",
+      "label": "t:sections.hero-section.settings.timer_image.label"
+    },
+    {
+      "type": "url",
+      "id": "timer_button_link",
+      "label": "t:sections.hero-section.settings.timer_button_link.label"
+    },
+    {
+      "type": "text",
+      "id": "timer_button_text",
+      "label": "t:sections.hero-section.settings.timer_button_text.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero-section.presets.name"
+    }
+  ]
+}
+{% endschema %}
+
+<script src="{{ 'hero-section.js' | asset_url }}" defer></script>
