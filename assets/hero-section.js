@@ -10,22 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 
-    // Обработка hover для показа карточек продуктов
     const slides = document.querySelectorAll('.hero-section__slide');
     const cards = document.querySelectorAll('.hero-section__slider-card');
     let hideTimeout = null;
 
     const showCard = (productIndex) => {
-        // Отменяем таймер скрытия, если он был установлен
         if (hideTimeout) {
             clearTimeout(hideTimeout);
             hideTimeout = null;
         }
-        // Скрываем все карточки
         cards.forEach(card => {
             card.classList.remove('active');
         });
-        // Показываем соответствующую карточку
         const targetCard = document.querySelector(`.hero-section__slider-card[data-product-index="${productIndex}"]`);
         if (targetCard) {
             targetCard.classList.add('active');
@@ -33,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const hideAllCards = () => {
-        // Используем небольшую задержку, чтобы можно было перейти на карточку
         hideTimeout = setTimeout(() => {
             cards.forEach(card => {
                 card.classList.remove('active');
@@ -42,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 100);
     };
 
-    // При наведении на слайд - показываем карточку
     slides.forEach((slide) => {
         slide.addEventListener('mouseenter', () => {
             const productIndex = slide.getAttribute('data-product-index');
@@ -50,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // При наведении на карточку - показываем её (если курсор перешёл на карточку)
     cards.forEach((card) => {
         card.addEventListener('mouseenter', () => {
             const productIndex = card.getAttribute('data-product-index');
@@ -58,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // При уходе курсора со слайда - скрываем карточки с задержкой
     const slider = document.querySelector('.hero-section__slider');
     if (slider) {
         slider.addEventListener('mouseleave', () => {
@@ -66,14 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // При уходе курсора с карточки - скрываем её
     cards.forEach((card) => {
         card.addEventListener('mouseleave', () => {
             hideAllCards();
         });
     });
 
-    // Таймер обратного отсчета
     const countdownElement = document.querySelector('.hero-section__timer-countdown');
     if (countdownElement) {
         const endDateStr = countdownElement.getAttribute('data-end-date');
@@ -88,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const difference = endDate - now;
 
                 if (difference <= 0) {
-                    // Таймер истек
                     const hoursEl = countdownElement.querySelector('.timer-hours');
                     const minutesEl = countdownElement.querySelector('.timer-minutes');
                     const secondsEl = countdownElement.querySelector('.timer-seconds');
@@ -111,7 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (secondsEl) secondsEl.textContent = formatTime(seconds);
             };
 
-            // Обновляем таймер каждую секунду
             updateCountdown();
             setInterval(updateCountdown, 1000);
         }
