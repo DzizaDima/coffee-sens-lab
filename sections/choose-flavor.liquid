@@ -1,0 +1,228 @@
+{{ 'choose-flavor.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'choose-flavor.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .choose-flavor__flavor {
+    background-image: url('{{ 'flavor-border.png' | asset_url }}');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+{%- endstyle -%}
+
+<section class="choose-flavor">
+  <img
+    src="{{ 'flavor-bg-left.png' | asset_url }}"
+    alt=""
+    class="choose-flavor__bg-left"
+    width="800"
+    height="800"
+    aria-hidden="true"
+  >
+  <img
+    src="{{ 'flavor-bg-right.png' | asset_url }}"
+    alt=""
+    class="choose-flavor__bg-right"
+    width="800"
+    height="800"
+    aria-hidden="true"
+  >
+  <div class="container">
+    <div class="choose-flavor__inner">
+      {%- if section.settings.title != blank -%}
+        <div class="choose-flavor__title">
+          <h2>{{ section.settings.title }}</h2>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <div class="choose-flavor__subtitle">
+          <p>{{ section.settings.subtitle }}</p>
+        </div>
+      {%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="choose-flavor__flavors">
+          {% for block in section.blocks %}
+            <div class="choose-flavor__flavor-wrapper">
+              <button
+                type="button"
+                class="choose-flavor__flavor"
+                data-flavor-index="{{ forloop.index0 }}"
+                aria-expanded="false"
+                aria-controls="collection-{{ forloop.index0 }}"
+                {%- if block.settings.title != blank -%}
+                  aria-label="{{ block.settings.title }} - {{ 'accessibility.show_collection' | t }}"
+                {%- else -%}
+                  aria-label="{{ 'accessibility.show_collection' | t }}"
+                {%- endif -%}
+              >
+                {%- if block.settings.image != blank -%}
+                  <div class="choose-flavor__flavor-icon">
+                    {{
+                      block.settings.image
+                      | image_url: width: 60
+                      | image_tag: width: 60, alt: ''
+                      | default: 'Flavor Icon', class: 'flavor-icon', loading: 'lazy', aria-hidden: 'true'
+                    }}
+                  </div>
+                {%- endif -%}
+                <div class="choose-flavor__flavor-title">
+                  {%- if block.settings.title != blank -%}
+                    <h3>{{ block.settings.title }}</h3>
+                  {%- endif -%}
+                </div>
+              </button>
+              <div
+                class="choose-flavor__collections"
+                id="collection-{{ forloop.index0 }}"
+                data-collection-index="{{ forloop.index0 }}"
+                role="region"
+                aria-label="{%- if block.settings.title != blank -%}{{ block.settings.title }} {%- endif -%}{{ 'accessibility.collection' | t }}"
+                aria-live="polite"
+                aria-hidden="true"
+              >
+                <div class="choose-flavor__collections-frame-top --frame">
+                  <img
+                    src="{{ 'top-frame.png' | asset_url }}"
+                    alt=""
+                    width="454"
+                    height="2"
+                    aria-hidden="true"
+                  >
+                </div>
+                <div class="choose-flavor__collections-frame-bottom --frame">
+                  <img
+                    src="{{ 'bottom-frame.png' | asset_url }}"
+                    alt=""
+                    width="454"
+                    height="2"
+                    aria-hidden="true"
+                  >
+                </div>
+                <div class="choose-flavor__collections-frame-left --frame">
+                  <img
+                    src="{{ 'left-frame.png' | asset_url }}"
+                    alt=""
+                    width="3"
+                    height="277"
+                    aria-hidden="true"
+                  >
+                </div>
+                <div class="choose-flavor__collections-frame-right --frame">
+                  <img
+                    src="{{ 'right-frame.png' | asset_url }}"
+                    alt=""
+                    width="3"
+                    height="277"
+                    aria-hidden="true"
+                  >
+                </div>
+
+                <div class="choose-flavor__collections-inner">
+                  <div class="choose-flavor__collection">
+                    {%- if block.settings.collection != blank -%}
+                      {% for product in block.settings.collection.products limit: 3 %}
+                        {{
+                          product.featured_image
+                          | image_url: width: 128, height: 100
+                          | image_tag:
+                            width: 128,
+                            height: 100,
+                            alt: product.title,
+                            class: 'choose-flavor__collection-image',
+                            loading: 'lazy'
+                        }}
+                      {% endfor %}
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.button_text != blank -%}
+                    <a href="{{ block.settings.button_link }}" class="choose-flavor__collections-button">
+                      {{- block.settings.button_text }}
+                      {% render 'arrow-right' -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.button_text != blank -%}
+        <a href="{{ section.settings.button_link }}" class="choose-flavor__button">
+          {{- section.settings.button_text }}
+          {% render 'arrow-right' -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Choose Flavor",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "info": "Text for section button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "info": "Link for section button"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "flavor",
+      "name": "Flavor",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Select a collection to display the flavors"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "info": "Text for popup collection button"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link",
+          "info": "Link for popup collection button"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Choose Flavor"
+    }
+  ]
+}
+{% endschema %}
