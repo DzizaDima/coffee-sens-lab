@@ -40,7 +40,7 @@
           <div class="hero-section__card-image">
             <img
               src="{{ 'hero-card-bg.png' | asset_url }}"
-              alt="{{ section.settings.card_title }}"
+              alt=""
               width="360"
               height="400"
             >
@@ -66,12 +66,11 @@
           {% for product in products %}
             <div class="swiper-slide hero-section__slide" data-product-index="{{ forloop.index0 }}">
               <div class="hero-section__slide-image">
-                <img
-                  src="{{ product.featured_image | image_url: width: 340 }}"
-                  alt="{{ product.title }}"
-                  width="340"
-                  height="340"
-                >
+                {{
+                  product.featured_image
+                  | image_url: width: 340
+                  | image_tag: width: 340, height: 340, alt: product.title
+                }}
               </div>
             </div>
           {% endfor %}

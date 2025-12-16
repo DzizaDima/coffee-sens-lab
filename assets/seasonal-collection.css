@@ -122,9 +122,9 @@
     width: 100%;
 }
 
-.swiper-slide {
+.seasonal-collection_swiper-wrapper .swiper-slide {
     min-height: 100%;
-    height: auto;
+    height: auto !important;
 }
 
 @media (max-width: 1024px) {
