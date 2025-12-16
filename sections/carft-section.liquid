@@ -1,0 +1,115 @@
+{{ 'craft-section.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'craft-section.js' | asset_url }}" defer="defer"></script>
+
+<section class="craft-section" aria-labelledby="craft-section-title">
+  <div class="container">
+    <div class="craft-section__inner">
+      <div class="craft-section__content">
+        {%- if section.settings.title != blank -%}
+          <div class="craft-section__title">
+            <h2 id="craft-section-title">{{ section.settings.title }}</h2>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="craft-section__subtitle">
+            <p data-subtitle-text data-sens-logo="{{ 'sens-logo.png' | asset_url }}">
+              {{ section.settings.subtitle }}
+            </p>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="craft-section__text">
+            <p>{{ section.settings.text }}</p>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.quote != blank -%}
+          <div class="craft-section__quote">
+            <blockquote>
+              <img
+                src="{{ 'quote-top.png' | asset_url }}"
+                alt=""
+                width="24"
+                height="24"
+                class="craft-section__quote-top"
+                aria-hidden="true"
+              >
+              <p>{{ section.settings.quote }}</p>
+              <img
+                src="{{ 'quote-bottom.png' | asset_url }}"
+                alt=""
+                width="24"
+                height="24"
+                class="craft-section__quote-bottom"
+                aria-hidden="true"
+              >
+            </blockquote>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="craft-section__image">
+        {%- if section.settings.image != blank -%}
+          {%- liquid
+            assign image_alt = section.settings.image.alt
+            if image_alt == blank
+              assign image_alt = section.settings.title | default: 'Craft section image'
+            endif
+          -%}
+          {{ section.settings.image | image_url: width: 465 | image_tag: alt: image_alt }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  {%- if section.settings.image_bg != blank -%}
+    <img
+      src="{{ section.settings.image_bg | image_url: width: 1440 }}"
+      alt=""
+      class="craft-section__image-bg"
+      aria-hidden="true"
+      width="1440"
+      height="auto"
+    >
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Craft Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "quote",
+      "label": "Quote"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_bg",
+      "label": "Image Background"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Craft Section"
+    }
+  ]
+}
+{% endschema %}

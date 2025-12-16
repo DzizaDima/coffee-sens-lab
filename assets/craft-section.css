@@ -1,0 +1,173 @@
+.craft-section {
+    position: relative;
+    padding: 88px 0 0 0;
+    overflow: hidden;
+    background-color: #FBF8F4;
+}
+
+.craft-section__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 24px;
+    margin-bottom: 44px;
+}
+
+.craft-section__content {
+    max-width: 750px;
+    width: 100%;
+}
+
+.craft-section__title h2 {
+    font-size: 80px;
+    color: #181818;
+    font-weight: 600;
+    line-height: calc(84 / 80);
+    letter-spacing: -0.01em;
+    margin: 0 0 12px 0;
+}
+
+.craft-section__subtitle p {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #181818;
+    font-weight: 300;
+    line-height: calc(24 / 20);
+    margin: 0 0 70px 0;
+    font-weight: 300;
+}
+
+.craft-section__sens-logo {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 12px;
+    width: 122px;
+    height: 44px;
+}
+
+.craft-section__text p {
+    font-size: 20px;
+    color: #181818;
+    line-height: calc(26 / 20);
+    margin: 0 0 60px 0;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.craft-section__quote blockquote {
+    margin: 0;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.craft-section__quote blockquote p {
+    font-size: 20px;
+    color: #181818;
+    line-height: calc(26 / 20);
+    font-weight: 300;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.craft-section__quote-top {
+    margin-bottom: 25px;
+}
+
+.craft-section__quote-bottom {
+    margin-top: 25px;
+}
+
+.craft-section__image {
+    max-width: 465px;
+    width: 100%;
+    height: auto;
+}
+
+.craft-section__image img {
+    width: 100%;
+    height: auto;
+}
+
+.craft-section__image-bg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    min-height: 116px;
+}
+
+@media (max-width:1024px) {
+    .craft-section {
+        padding: 56px 0 0 0;
+    }
+
+    .craft-section__inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    .craft-section__content {
+        max-width: 100%;
+        display: contents;
+    }
+
+    .craft-section__title h2 {
+        font-size: 48px;
+    }
+
+    .craft-section__subtitle p {
+        margin-bottom: 40px;
+        font-size: 16px;
+    }
+
+    .craft-section__sens-logo {
+        margin: 0 8px;
+        width: 78px;
+        height: 28px;
+    }
+
+    .craft-section__text p {
+        margin-bottom: 24px;
+        font-size: 16px;
+    }
+
+    .craft-section__quote {
+        order: 5;
+        margin-bottom: 24px;
+    }
+
+    .craft-section__quote blockquote p {
+        font-size: 16px;
+    }
+
+    .craft-section__image {
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width:560px) {
+    .craft-section__inner {
+        align-items: flex-start;
+        text-align: start;
+    }
+
+    .craft-section__title h2 {
+        font-size: 38px;
+    }
+
+    .craft-section__image {
+        max-width: 100%;
+    }
+
+    .craft-section__quote blockquote {
+        gap: 4px;
+    }
+
+    .craft-section__quote blockquote p {
+        text-align: center;
+    }
+}
