@@ -1,0 +1,213 @@
+{{ 'seasonal-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'seasonal-collection.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign products = section.settings.collection.products
+-%}
+
+{% style %}
+  .seasonal-collection_title span {
+    background-image: url('{{ 'text-underline-2.png' | asset_url }}');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 100% 100%;
+    padding-bottom: 10px;
+    margin-top: 10px;
+  }
+{% endstyle %}
+
+<div class="seasonal-collection">
+  <div class="container">
+    <div class="seasonal-collection_title">
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.tip != blank %}
+        <span>{{ section.settings.tip }}</span>
+      {% endif %}
+    </div>
+    <div class="seasonal-collection_content">
+      {% if section.settings.description != blank %}
+        <p class="seasonal-collection_description">{{ section.settings.description }}</p>
+      {% endif %}
+      {% if section.settings.button_text != blank %}
+        <a class="seasonal-collection_button" href="{{ section.settings.button_link }}">
+          {{- section.settings.button_text -}}
+          {% render 'arrow-right' %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="seasonal-collection_swiper-wrapper">
+    <div class="seasonal-collection_swiper-buttons">
+      <div class="swiper-button-prev">{% render 'arrow-right' %}</div>
+      <div class="swiper-button-next">{% render 'arrow-right' %}</div>
+    </div>
+    {% if products.size > 0 %}
+      <div class="swiper seasonal-collection_swiper">
+        <div class="swiper-wrapper">
+          {% for card_product in products %}
+            <div class="swiper-slide">
+              {% render 'card-product',
+                card_product: card_product,
+                media_aspect_ratio: section.settings.image_ratio,
+                image_shape: section.settings.image_shape,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_vendor: section.settings.show_vendor,
+                show_rating: section.settings.show_rating,
+                section_id: section.id,
+                quick_add: section.settings.quick_add
+              %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Seasonal Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "tip",
+      "label": "Tip"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured-collection.settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.featured-collection.settings.image_ratio.label"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.image_shape.options__1.label"
+        },
+        {
+          "value": "arch",
+          "label": "t:sections.all.image_shape.options__2.label"
+        },
+        {
+          "value": "blob",
+          "label": "t:sections.all.image_shape.options__3.label"
+        },
+        {
+          "value": "chevronleft",
+          "label": "t:sections.all.image_shape.options__4.label"
+        },
+        {
+          "value": "chevronright",
+          "label": "t:sections.all.image_shape.options__5.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.all.image_shape.options__6.label"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:sections.all.image_shape.options__7.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.all.image_shape.options__8.label"
+        }
+      ],
+      "default": "default",
+      "label": "t:sections.all.image_shape.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_rating.label",
+      "info": "t:sections.featured-collection.settings.show_rating.info"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+        },
+        {
+          "value": "bulk",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seasonal Collection"
+    }
+  ]
+}
+{% endschema %}
