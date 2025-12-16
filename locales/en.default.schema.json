@@ -3414,7 +3414,7 @@
                 },
                 "description": {
                     "label": "Description"
-                },
+                }, 
                 "title": {
                     "label": "Title"
                 },
@@ -3460,6 +3460,28 @@
             },
             "presets": {
                 "name": "Hero Section"
+            }
+        },
+        "section-with-icons": {
+            "name": "Section with Icons",
+            "blocks": {
+                "card": {
+                    "name": "Card",
+                    "settings": {
+                        "title": {
+                            "label": "Title"
+                        },
+                        "icon": {
+                            "label": "Icon"
+                        },
+                        "text": {
+                            "label": "Text"
+                        }
+                    }
+                }
+            },
+            "presets": {
+                "name": "Section with Icons"
             }
         }
     }
