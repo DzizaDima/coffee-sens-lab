@@ -312,6 +312,17 @@
         "description": "Trusted by thousands of customers who care deeply about the coffee they drink."
       }
     },
+    "content_section_g3E6CY": {
+      "type": "content-section",
+      "name": "Content Section",
+      "settings": {
+        "title": "<p>Drink Better Coffee.<br/> Every Day.</p>",
+        "description": "<p>Shop blends crafted for clarity, sweetness,<br/>and unforgettable flavor.<br/><br/></p>",
+        "image": "shopify://shop_images/image_25.png",
+        "button_text": "Shop All  Coffee",
+        "button_link": "#"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -349,6 +360,7 @@
     "carft_section_9eyPeC",
     "best_cup_section_aMfKkM",
     "reviews_section_7Hyqfk",
+    "content_section_g3E6CY",
     "featured_collection"
   ]
 }
