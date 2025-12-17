@@ -35,6 +35,51 @@
         "timer_button_text": "Shop All  Coffee"
       }
     },
+    "section_with_icons_Kn7DrM": {
+      "type": "section-with-icons",
+      "blocks": {
+        "card_FyxERT": {
+          "type": "card",
+          "settings": {
+            "title": "<p>Specialty-Grade<br/>Beans Only</p>",
+            "icon": "shopify://shop_images/Mask_group_2.png",
+            "text": "<p>Hand-selected lots from <br/>the world’s most celebrated growing regions.<br/><br/></p>"
+          }
+        },
+        "card_PY7M6M": {
+          "type": "card",
+          "settings": {
+            "title": "<p>Freshly Roasted<br/>in Small Batches</p>",
+            "icon": "shopify://shop_images/Mask_group_1_825bfb3d-756e-46f4-8b84-a2a196283b6a.png",
+            "text": "<p>Your coffee is roasted <br/>to order for unmatched freshness and flavor.</p>"
+          }
+        },
+        "card_WfAKQX": {
+          "type": "card",
+          "settings": {
+            "title": "<p>Free Shipping<br/>over $55</p>",
+            "icon": "shopify://shop_images/image_19.png",
+            "text": "<p>Premium coffee, <br/>delivered effortlessly<br/>with care.</p>"
+          }
+        },
+        "card_7zUKcL": {
+          "type": "card",
+          "settings": {
+            "title": "<p>Pause, Skip, <br/>Cancel Anytime</p>",
+            "icon": "shopify://shop_images/Mask_group_0207cb8f-2c98-4c29-8d4f-3d62215a2287.png",
+            "text": "<p>Subscriptions <br/>on your terms, <br/>with ease.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "card_FyxERT",
+        "card_PY7M6M",
+        "card_WfAKQX",
+        "card_7zUKcL"
+      ],
+      "name": "t:sections.section-with-icons.presets.name",
+      "settings": {}
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -66,6 +111,7 @@
   },
   "order": [
     "hero_section_M3fVzX",
+    "section_with_icons_Kn7DrM",
     "featured_collection"
   ]
 }
