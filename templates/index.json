@@ -240,6 +240,77 @@
         "button_link": "#"
       }
     },
+    "reviews_section_7Hyqfk": {
+      "type": "reviews-section",
+      "blocks": {
+        "review_UiwGMi": {
+          "type": "review",
+          "settings": {
+            "author_name_video": "Michael R.",
+            "position_video": "Verified Buyer",
+            "avatar_video": "shopify://shop_images/Frame_219.png",
+            "video": "",
+            "video_file": "shopify://files/videos/test_video.mp4",
+            "name": "Samantha P.",
+            "position": "Verified Buyer",
+            "avatar": "shopify://shop_images/Frame_219-1.png",
+            "text": "“The freshest, cleanest cup I’ve brewed at home. SENS nailed the balance.”"
+          }
+        },
+        "review_bwtJMr": {
+          "type": "review",
+          "settings": {
+            "author_name_video": "Milley G.",
+            "position_video": "Verified Buyer",
+            "avatar_video": "shopify://shop_images/Frame_219-3.png",
+            "video": "",
+            "video_file": "shopify://files/videos/test_video.mp4",
+            "name": "Luis H.",
+            "position": "Verified Buyer",
+            "avatar": "shopify://shop_images/Frame_219-2.png",
+            "text": "“The freshest, cleanest cup I’ve brewed at home. SENS nailed the balance.”"
+          }
+        },
+        "review_eV3p8W": {
+          "type": "review",
+          "settings": {
+            "author_name_video": "Rose F.",
+            "position_video": "Verified Buyer",
+            "avatar_video": "shopify://shop_images/Frame_219-4.png",
+            "video": "",
+            "video_file": "shopify://files/videos/test_video.mp4",
+            "name": "Rose F.",
+            "position": "Verified Buyer",
+            "avatar": "shopify://shop_images/Frame_219-5.png",
+            "text": "“The freshest, cleanest cup I’ve brewed at home. SENS nailed the balance.”"
+          }
+        },
+        "review_fbr4Ux": {
+          "type": "review",
+          "settings": {
+            "author_name_video": "Mike C.",
+            "position_video": "Verified Buyer",
+            "avatar_video": "shopify://shop_images/Frame_219-7.png",
+            "video": "",
+            "name": "Nick A.",
+            "position": "Verified Buyer",
+            "avatar": "shopify://shop_images/Frame_219-6.png",
+            "text": "“The freshest, cleanest cup I’ve brewed at home. SENS nailed the balance.”"
+          }
+        }
+      },
+      "block_order": [
+        "review_UiwGMi",
+        "review_bwtJMr",
+        "review_eV3p8W",
+        "review_fbr4Ux"
+      ],
+      "name": "Reviews Section",
+      "settings": {
+        "title": "Average Rating",
+        "description": "Trusted by thousands of customers who care deeply about the coffee they drink."
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -276,6 +347,7 @@
     "choose_flavor_jkJQrg",
     "carft_section_9eyPeC",
     "best_cup_section_aMfKkM",
+    "reviews_section_7Hyqfk",
     "featured_collection"
   ]
 }
