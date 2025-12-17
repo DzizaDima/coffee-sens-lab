@@ -80,6 +80,24 @@
       "name": "t:sections.section-with-icons.presets.name",
       "settings": {}
     },
+    "seasonal_collection_ncxada": {
+      "type": "seasonal-collection",
+      "name": "Seasonal Collection",
+      "settings": {
+        "title": "Our Seasonal Blends",
+        "tip": "Taste Coffee at Its Peak.",
+        "description": "Every month, we release limited seasonal blends sourced from micro-lots, curated for balance, sweetness, and clarity in every cup.",
+        "button_text": "Shop Seasonal",
+        "button_link": "#",
+        "collection": "frontpage",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -112,6 +130,7 @@
   "order": [
     "hero_section_M3fVzX",
     "section_with_icons_Kn7DrM",
+    "seasonal_collection_ncxada",
     "featured_collection"
   ]
 }
