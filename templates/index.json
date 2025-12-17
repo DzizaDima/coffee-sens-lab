@@ -190,6 +190,56 @@
         "image_bg": "shopify://shop_images/image.png"
       }
     },
+    "best_cup_section_aMfKkM": {
+      "type": "best-cup-section",
+      "blocks": {
+        "icon_BmUjMR": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_5.png",
+            "text": "<p>Freshness <br/>guaranteed</p>"
+          }
+        },
+        "icon_cMtWrw": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_6.png",
+            "text": "<p>Pick Your <br/>Dates</p>"
+          }
+        },
+        "icon_xrcjfJ": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_7.png",
+            "text": "<p>free <br/>shipping</p>"
+          }
+        },
+        "icon_zWenXP": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_8.png",
+            "text": "<p>cancel <br/>anytime</p>"
+          }
+        }
+      },
+      "block_order": [
+        "icon_BmUjMR",
+        "icon_cMtWrw",
+        "icon_xrcjfJ",
+        "icon_zWenXP"
+      ],
+      "name": "Best Cup Section",
+      "settings": {
+        "image_bg": "shopify://shop_images/Frame_199.png",
+        "title_column_direction": false,
+        "title": "Your Best Cup, On Repeat.",
+        "subtitle": "Never run out of exceptional coffee again.",
+        "title_inner": "Subscribe and Save",
+        "percent_img": "shopify://shop_images/Frame_3.png",
+        "button_text": "Join the Coffee Club",
+        "button_link": "#"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -225,6 +275,7 @@
     "seasonal_collection_ncxada",
     "choose_flavor_jkJQrg",
     "carft_section_9eyPeC",
+    "best_cup_section_aMfKkM",
     "featured_collection"
   ]
 }
