@@ -31,8 +31,8 @@
         "timer_text": "Lock in your favorite coffee now.",
         "timer_end_date": "2025:12:20 23:00:00",
         "timer_image": "shopify://shop_images/image_27.png",
-        "timer_button_link": "",
-        "timer_button_text": ""
+        "timer_button_link": "#",
+        "timer_button_text": "Shop All  Coffee"
       }
     },
     "featured_collection": {
