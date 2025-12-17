@@ -1,0 +1,188 @@
+{{ 'reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'reviews.js' | asset_url }}" defer="defer"></script>
+
+<div class="reviews">
+  <div class="container">
+    <div class="reviews__rating" role="img" aria-label="Rating 4.8 out of 5">
+      <img
+        src="{{ 'rating.png' | asset_url }}"
+        alt=""
+        class="reviews__rating-img"
+        width="136"
+        height="24"
+        aria-hidden="true"
+      >
+      <span class="reviews__rating-value" aria-hidden="true">4.8</span>
+    </div>
+    {% if section.settings.title != blank %}
+      <h2 class="reviews__title">{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <p class="reviews__description">{{ section.settings.description }}</p>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="reviews__cards">
+        {% for block in section.blocks %}
+          <div class="reviews_block">
+            <div class="reviews_card --with-video">
+              <button
+                class="reviews_card__play-button --muted"
+                type="button"
+                aria-label="Unmute video"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <span class="sound-icon-wrapper sound-icon-wrapper--muted" aria-hidden="true">
+                  {% render 'sound-icon' %}
+                </span>
+                <span class="sound-icon-wrapper sound-icon-wrapper--unmuted" aria-hidden="true">
+                  {% render 'sound-icon-unmuted' %}
+                </span>
+              </button>
+              <div class="reviews_card__video">
+                {% if block.settings.video_file != blank %}
+                  {{
+                    block.settings.video_file
+                    | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, controls: false
+                  }}
+                {% else %}
+                  {{
+                    block.settings.video
+                    | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, controls: false
+                  }}
+                {% endif %}
+              </div>
+              <div class="reviews_card__content">
+                <div class="reviews_card__author">
+                  <div class="reviews_card__author-avatar">
+                    {% if block.settings.avatar_video != blank %}
+                      {% assign avatar_alt = block.settings.author_name_video | default: 'Author avatar' %}
+                      {{
+                        block.settings.avatar_video
+                        | image_url: width: 52
+                        | image_tag: width: 52, height: 52, alt: avatar_alt
+                      }}
+                    {% endif %}
+                  </div>
+                  <div class="reviews_card__author-info">
+                    <strong>{{ block.settings.author_name_video }}</strong>
+                    <span>{{ block.settings.position_video }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="reviews_card">
+              <div class="reviews_card__content">
+                <div class="reviews_card__author">
+                  <div class="reviews_card__author-avatar">
+                    {% if block.settings.avatar != blank %}
+                      {% assign avatar_alt = block.settings.name | default: 'Author avatar' %}
+                      {{
+                        block.settings.avatar
+                        | image_url: width: 52
+                        | image_tag: width: 52, height: 52, alt: avatar_alt
+                      }}
+                    {% endif %}
+                  </div>
+                  <div class="reviews_card__author-info">
+                    <strong>{{ block.settings.name }}</strong>
+                    <span>{{ block.settings.position }}</span>
+                  </div>
+                </div>
+                <div class="reviews_card__text">
+                  <blockquote>{{ block.settings.text }}</blockquote>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Reviews Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Review with video"
+        },
+        {
+          "type": "text",
+          "id": "author_name_video",
+          "label": "Author name"
+        },
+        {
+          "type": "text",
+          "id": "position_video",
+          "label": "Author position"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar_video",
+          "label": "Author avatar"
+        },
+        {
+          "type": "video_url",
+          "id": "video",
+          "label": "Video",
+          "accept": ["youtube", "vimeo"]
+        },
+        {
+          "type": "video",
+          "id": "video_file",
+          "label": "Video"
+        },
+        {
+          "type": "header",
+          "content": "Review without video"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Author name"
+        },
+        {
+          "type": "text",
+          "id": "position",
+          "label": "Author position"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Author avatar"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews Section"
+    }
+  ]
+}
+{% endschema %}
