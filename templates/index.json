@@ -9,43 +9,29 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+    "hero_section_M3fVzX": {
+      "type": "hero-section",
+      "name": "t:sections.hero-section.presets.name",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": false,
-        "color_scheme": "scheme-3",
-        "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
-        "show_text_below": false
+        "description": "Fresh-roasted, flavor-forward, and built for the way real people drink coffee today — from home baristas to everyday sippers.",
+        "title": "<p>Say <em>Hello</em> to Your New Favorite Coffee.</p>",
+        "image": "shopify://shop_images/Frame_173.png",
+        "card_title": "First Time Seeing Us? Perfect.",
+        "card_text": "<p>We’re new — <br/>but our standards aren’t. <br/>Precision-roasted, flavor-obsessed, and built for people who appreciate good coffee without the nonsense.</p>",
+        "card_button_link": "#",
+        "card_button_text": "Shop Our Blends",
+        "collection": "frontpage",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "timer_title": "",
+        "timer_text": "",
+        "timer_end_date": "",
+        "timer_button_link": "",
+        "timer_button_text": ""
       }
     },
     "featured_collection": {
@@ -78,7 +64,7 @@
     }
   },
   "order": [
-    "image_banner",
+    "hero_section_M3fVzX",
     "featured_collection"
   ]
 }
