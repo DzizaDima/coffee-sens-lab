@@ -1,0 +1,74 @@
+{{ 'content-section.css' | asset_url | stylesheet_tag }}
+
+<div class="content-section">
+  <div class="container">
+    <div class="content-section__content">
+      {% if section.settings.title != blank %}
+        <div class="content-section__title">{{ section.settings.title }}</div>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <div class="content-section__description">{{ section.settings.description }}</div>
+      {% endif %}
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a
+          href="{{ section.settings.button_link }}"
+          class="content-section__button"
+          aria-label="{{ section.settings.button_text | strip_html | escape }}"
+        >
+          <span>{{ section.settings.button_text }}</span>
+          <span aria-hidden="true">{% render 'arrow-right' %}</span>
+        </a>
+      {% endif %}
+    </div>
+    {% if section.settings.image != blank %}
+      <div class="content-section__image">
+        {% assign image_alt = section.settings.title | strip_html | default: 'Content image' %}
+        <img
+          src="{{ section.settings.image | image_url: width: 1920 }}"
+          alt="{{ image_alt | escape }}"
+          width="1440"
+          height="976"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Content Section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Content Section"
+    }
+  ]
+}
+{% endschema %}
