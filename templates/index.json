@@ -178,6 +178,18 @@
         "button_link": "#"
       }
     },
+    "carft_section_9eyPeC": {
+      "type": "carft-section",
+      "name": "Craft Section",
+      "settings": {
+        "title": "Where Craft Meets Science.",
+        "subtitle": "At sens we believe great coffee is both art and precision.",
+        "text": "Our roasting approach marries sensory expertise with data-driven profiling, highlighting each bean’s natural sweetness, complexity, and origin character.",
+        "quote": "From farm to cup — every detail matters.",
+        "image": "shopify://shop_images/Frame_94_c3a60e00-9348-44b3-90c9-8bdbda45f46d.png",
+        "image_bg": "shopify://shop_images/image.png"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -212,6 +224,7 @@
     "section_with_icons_Kn7DrM",
     "seasonal_collection_ncxada",
     "choose_flavor_jkJQrg",
+    "carft_section_9eyPeC",
     "featured_collection"
   ]
 }
