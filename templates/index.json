@@ -98,6 +98,86 @@
         "quick_add": "standard"
       }
     },
+    "choose_flavor_jkJQrg": {
+      "type": "choose-flavor",
+      "blocks": {
+        "flavor_rWcypR": {
+          "type": "flavor",
+          "settings": {
+            "title": "Chocolatey",
+            "image": "shopify://shop_images/Clip_path_group_e904ae1f-269a-4f3d-84d5-024a66617985.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        },
+        "flavor_xmhYRz": {
+          "type": "flavor",
+          "settings": {
+            "title": "Fruity",
+            "image": "shopify://shop_images/Group.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        },
+        "flavor_C9J4Wt": {
+          "type": "flavor",
+          "settings": {
+            "title": "Floral",
+            "image": "shopify://shop_images/Group_1.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        },
+        "flavor_WJ9Un6": {
+          "type": "flavor",
+          "settings": {
+            "title": "Balanced",
+            "image": "shopify://shop_images/Group_2.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        },
+        "flavor_WVCkx6": {
+          "type": "flavor",
+          "settings": {
+            "title": "Bright",
+            "image": "shopify://shop_images/Mask_group_3.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        },
+        "flavor_p4ktw8": {
+          "type": "flavor",
+          "settings": {
+            "title": "Nutty",
+            "image": "shopify://shop_images/Mask_group_4.png",
+            "collection": "frontpage",
+            "button_text": "Explore Floral  Blends",
+            "button_link": "#"
+          }
+        }
+      },
+      "block_order": [
+        "flavor_rWcypR",
+        "flavor_xmhYRz",
+        "flavor_C9J4Wt",
+        "flavor_WJ9Un6",
+        "flavor_WVCkx6",
+        "flavor_p4ktw8"
+      ],
+      "name": "Choose Flavor",
+      "settings": {
+        "title": "Crafted For The Way You Drink Coffee.",
+        "subtitle": "Choose your bag by flavor:",
+        "button_text": "Explore All Blends",
+        "button_link": "#"
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -131,6 +211,7 @@
     "hero_section_M3fVzX",
     "section_with_icons_Kn7DrM",
     "seasonal_collection_ncxada",
+    "choose_flavor_jkJQrg",
     "featured_collection"
   ]
 }
