@@ -1,0 +1,183 @@
+{{ 'best-cup-section.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  .best-cup-section__title-wrapper p {
+    background-image: url('{{ 'text-underline-2.png' | asset_url }}');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 100% 100%;
+    padding-bottom: 20px;
+  }
+
+  .best-cup-section__title-wrapper.title-column-direction {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .best-cup-section__title-wrapper.title-column-direction h2 {
+    max-width: 100%;
+  }
+
+  .best-cup-section__title-wrapper.title-column-direction p {
+    margin-top: 0;
+  }
+
+  @media (max-width: 768px) {
+    .best-cup-section__title-wrapper.title-column-direction {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      text-align: start;
+    }
+  }
+{% endstyle %}
+
+<div class="best-cup-section">
+  <div class="container">
+    <div class="best-cup-section__title-wrapper {% if section.settings.title_column_direction %}title-column-direction{% endif %}">
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+      {% if section.settings.subtitle != blank %}
+        <p>{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+    <div class="best-cup-section__inner">
+      <div class="best-cup-section__inner-title">
+        {% if section.settings.title_inner != blank %}
+          <h3>{{ section.settings.title_inner }}</h3>
+        {% endif %}
+        {% if section.settings.percent_img != blank %}
+          {% assign percent_alt = section.settings.title_inner | default: 'Percent' %}
+          {{
+            section.settings.percent_img
+            | image_url: width: 83
+            | image_tag: width: 83, height: 40, class: 'best-cup-section__inner-percent-img', alt: percent_alt
+          }}
+        {% endif %}
+      </div>
+      <div class="best-cup-section__inner-content">
+        <img
+          class="best-cup-section__inner-content-img"
+          src="{{ 'paper.png' | asset_url }}"
+          alt=""
+          width="498"
+          height="453"
+          aria-hidden="true"
+        >
+        {% if section.blocks.size > 0 %}
+          {%- for block in section.blocks -%}
+            <div class="best-cup-section__inner-content-item">
+              <div class="best-cup-section__inner-content-item-icon">
+                {% if block.settings.icon != blank %}
+                  {% assign icon_alt = block.settings.text | strip_html | default: 'Icon' %}
+                  {{ block.settings.icon | image_url: width: 100 | image_tag: width: 100, height: 100, alt: icon_alt }}
+                {% endif %}
+              </div>
+              <div class="best-cup-section__inner-content-item-text">
+                {{ block.settings.text }}
+              </div>
+            </div>
+          {%- endfor -%}
+        {% endif %}
+      </div>
+      {% if section.settings.button_text != blank %}
+        <a
+          href="{{ section.settings.button_link }}"
+          class="best-cup-section__inner-button"
+          aria-label="{{ section.settings.button_text | escape }}"
+        >
+          <span>{{ section.settings.button_text }}</span>
+          <span aria-hidden="true">{%- render 'arrow-right' -%}</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  {% if section.settings.image_bg != blank %}
+    <div class="best-cup-section__bg">
+      {{
+        section.settings.image_bg
+        | image_url: width: 1215, height: 700
+        | image_tag: width: 1215, height: 700, aria-hidden: 'true', alt: '', loading: 'lazy'
+      }}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Best Cup Section",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_bg",
+      "label": "Image Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_column_direction",
+      "label": "Title Direction",
+      "info": "If checked, the title will be displayed in the column direction",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title_inner",
+      "label": "Title Inner"
+    },
+    {
+      "type": "image_picker",
+      "id": "percent_img",
+      "label": "Percent Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Cup Section"
+    }
+  ]
+}
+{% endschema %}
