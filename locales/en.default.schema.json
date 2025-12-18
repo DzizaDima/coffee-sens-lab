@@ -394,7 +394,7 @@
             },
             "padding": {
                 "section_padding_heading": "Padding",
-                "section_padding_heading_mobile": "Padding mobile",
+                "section_mobile_padding_heading": "Padding mobile",
                 "padding_top": "Top",
                 "padding_top_mobile": "Top mobile",
                 "padding_bottom": "Bottom",
