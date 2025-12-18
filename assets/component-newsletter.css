@@ -1,71 +1,74 @@
-.newsletter-form {
+.footer-block__newsletter {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  gap: 16px;
   width: 100%;
-  position: relative;
+  max-width: 680px;
+  width: 100%;
 }
 
-@media screen and (min-width: 750px) {
-  .newsletter-form {
-    align-items: flex-start;
-    margin: 0 auto;
-    max-width: 36rem;
-  }
+.footer-block__heading {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: calc(24 / 20);
+  margin: 0;
+  text-transform: uppercase;
 }
 
-.newsletter-form__field-wrapper {
+.footer-block__heading p,
+.footer-block__heading h1,
+.footer-block__heading h2,
+.footer-block__heading h3,
+.footer-block__heading h4,
+.footer-block__heading h5,
+.footer-block__heading h6 {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  text-transform: inherit;
+}
+
+.footer__newsletter {
   width: 100%;
 }
 
 .newsletter-form__field-wrapper .field__input {
-  padding-right: 5rem;
+  background-color: #F4EBD9;
+  font-size: 18px;
+  line-height: calc(22 / 18);
+  text-transform: uppercase;
+  color: #181818;
 }
 
-.newsletter-form__field-wrapper .field {
-  z-index: 0;
+.newsletter-form__field-wrapper .field__label {
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #181818;
 }
 
-.newsletter-form__message {
-  justify-content: center;
-  margin-bottom: 0;
-}
 
-.newsletter-form__message--success {
-  margin-top: 2rem;
-}
-
-@media screen and (min-width: 750px) {
-  .newsletter-form__message {
-    justify-content: flex-start;
+@media screen and (max-width: 768px) {
+  .footer-block__newsletter {
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+    margin-bottom: 36px;
+    order: 1;
   }
-}
 
-.newsletter-form__button {
-  width: 4.4rem;
-  margin: 0;
-  right: var(--inputs-border-width);
-  top: 0;
-  height: 100%;
-  z-index: 2;
-}
+  .footer-block__heading {
+    font-size: 16px;
+  }
 
-.newsletter-form__button:focus-visible {
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.4rem rgba(var(--color-foreground));
-  background-color: rgb(var(--color-background));
-}
+  .newsletter-form__field-wrapper .field__input {
+    font-size: 16px;
+  }
 
-.newsletter-form__button:focus {
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.4rem rgba(var(--color-foreground));
-  background-color: rgb(var(--color-background));
-}
-
-.newsletter-form__button:not(:focus-visible):not(.focused) {
-  box-shadow: inherit;
-  background-color: inherit;
-}
-
-.newsletter-form__button .icon {
-  width: 1.5rem;
+  .newsletter-form__field-wrapper .field__label {
+    font-size: 16px;
+  }
 }
