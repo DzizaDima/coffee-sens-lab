@@ -993,6 +993,22 @@
         "footer": {
             "name": "Footer",
             "blocks": {
+                "menu_navigation": {
+                    "name": "Menu Navigation",
+                    "settings": {
+                        "menu": {
+                            "label": "Menu Navigation"
+                        }
+                    }
+                },
+                "menu_legacy": {
+                    "name": "Menu Legacy",
+                    "settings": {
+                        "menu": {
+                            "label": "Menu Legacy"
+                        }
+                    }
+                },
                 "link_list": {
                     "name": "Menu",
                     "settings": {
@@ -1032,15 +1048,20 @@
                 }
             },
             "settings": {
+                "logo": {
+                    "label": "Logo"
+                },
+                "logo_enable": {
+                    "label": "Show logo"
+                },
                 "newsletter_enable": {
                     "label": "Email signup"
                 },
                 "newsletter_heading": {
-                    "label": "Heading",
-                    "default": "Subscribe to our emails"
+                    "label": "Newsletter Heading"
                 },
                 "header__1": {
-                    "content": "Email signup",
+                    "content": "Newsletter",
                     "info": "Signups add [customer profiles](https://help.shopify.com/manual/customers/manage-customers)"
                 },
                 "show_social": {
