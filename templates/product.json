@@ -99,10 +99,39 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
+    },
+    "faq_section_WMCw3q": {
+      "type": "faq-section",
+      "blocks": {
+        "faq_rkY4mC": {
+          "type": "faq",
+          "settings": {
+            "question": "<h3>About</h3>",
+            "answer": "<p>The Medium Seasonal Blend delivers a sweet, rounded body, achieved through a carefully crafted combination of washed and naturally processed coffees. Our omni-roast approach brings out the coffee’s full potential, whether you’re brewing a full-bodied filter coffee or a sweet espresso that creates an unforgettable union when it is paired with any milk. This half-and-half mix of Ethiopia and Colombia is a benchmark for consistently sweet cups with a wide flavor spectrum, silky texture, and flavors reminiscent of ripe dried stone fruits, refined cocoa, and cane sugar. The secret ingredient - a naturally processed, decaffeinated coffee from Colombia’s Huila region adds to this bland unique note of brightness and balance.<br/><br/>Brewing a cup of “Medium Seasonal Blend” reveals a symphony of red ripe berries, refined cocoa, the sweetness of cane sugar, juicy red peach, and floral notes, all tied together with a silky body.</p>"
+          }
+        },
+        "faq_76iXxU": {
+          "type": "faq",
+          "settings": {
+            "question": "<h3>ORIGINS OF ETHIOPIA & COLOMBIA INEVERY CUP</h3>",
+            "answer": "<p>The Medium Seasonal Blend delivers a sweet, rounded body, achieved through a carefully crafted combination of washed and naturally processed coffees. Our omni-roast approach brings out the coffee’s full potential, whether you’re brewing a full-bodied filter coffee or a sweet espresso that creates an unforgettable union when it is paired with any milk. This half-and-half mix of Ethiopia and Colombia is a benchmark for consistently sweet cups with a wide flavor spectrum, silky texture, and flavors reminiscent of ripe dried stone fruits, refined cocoa, and cane sugar. The secret ingredient - a naturally processed, decaffeinated coffee from Colombia’s Huila region adds to this bland unique note of brightness and balance.<br/><br/>Brewing a cup of “Medium Seasonal Blend” reveals a symphony of red ripe berries, refined cocoa, the sweetness of cane sugar, juicy red peach, and floral notes, all tied together with a silky body.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_rkY4mC",
+        "faq_76iXxU"
+      ],
+      "name": "FAQ Section",
+      "settings": {
+        "title": "Medium Seasonal Blend",
+        "image": "shopify://shop_images/Frame_94_4296b3cf-61e2-46f8-876f-c0712eefcf5f.png"
+      }
     }
   },
   "order": [
     "main",
-    "related-products"
+    "related-products",
+    "faq_section_WMCw3q"
   ]
 }

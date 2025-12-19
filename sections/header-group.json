@@ -13,10 +13,27 @@
   "sections": {
     "header": {
       "type": "header",
+      "blocks": {
+        "right_menu_3PKbXN": {
+          "type": "right_menu",
+          "settings": {
+            "menu": "header-menu-right"
+          }
+        },
+        "left_menu_xQFn9J": {
+          "type": "left_menu",
+          "settings": {
+            "menu": "main-menu"
+          }
+        }
+      },
+      "block_order": [
+        "right_menu_3PKbXN",
+        "left_menu_xQFn9J"
+      ],
       "settings": {
         "logo_position": "middle-center",
         "mobile_logo_position": "center",
-        "menu": "main-menu",
         "menu_type_desktop": "dropdown",
         "sticky_header_type": "on-scroll-up",
         "show_line_separator": true,
@@ -27,7 +44,9 @@
         "enable_customer_avatar": true,
         "margin_bottom": 0,
         "padding_top": 20,
-        "padding_bottom": 20
+        "padding_bottom": 20,
+        "padding_top_mobile": 12,
+        "padding_bottom_mobile": 12
       }
     }
   },

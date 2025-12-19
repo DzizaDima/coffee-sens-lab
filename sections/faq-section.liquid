@@ -1,0 +1,74 @@
+{{ 'faq-section.css' | asset_url | stylesheet_tag }}
+
+<div class="faq-section">
+  <div class="container">
+    <h2 class="faq-section__title">{{ section.settings.title }}</h2>
+    <div class="faq-section__content">
+      <div class="faq-section__items">
+        {% for block in section.blocks %}
+          <details class="faq-section__item">
+            <summary class="faq-section__item-title-wrapper">
+              <div class="faq-section__item-title">
+                {{ block.settings.question }}
+              </div>
+              <div class="open-status">
+                <span class="open-status__line"></span>
+                <span class="open-status__line"></span>
+              </div>
+            </summary>
+            <div class="faq-section__item-answer">{{ block.settings.answer }}</div>
+          </details>
+        {% endfor %}
+      </div>
+      <div class="faq-section__image">
+        {{ section.settings.image | image_url: width: 465 | image_tag }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.faq-section.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.faq-section.settings.title.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.faq-section.settings.image.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq-section.presets.name"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "t:sections.faq-section.blocks.faq.name",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "question",
+          "label": "t:sections.faq-section.blocks.faq.settings.question.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.faq-section.blocks.faq.settings.answer.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
