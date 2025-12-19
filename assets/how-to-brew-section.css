@@ -1,0 +1,171 @@
+.how-to-brew-section {
+    padding: 88px 0;
+    background-color: #FBF8F4;
+}
+
+.how-to-brew-section__title {
+    font-size: 80px;
+    line-height: calc(84 / 80);
+    font-weight: 600;
+    color: #181818;
+    margin: 0 0 12px 0;
+    font-family: "ClashDisplay";
+}
+
+.how-to-brew-section__description {
+    font-size: 20px;
+    line-height: calc(24 / 20);
+    font-weight: 300;
+    color: #181818;
+    margin: 0 0 60px 0;
+    text-transform: uppercase;
+}
+
+.how-to-brew-section__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+}
+
+.how-to-brew-section__image {
+    position: relative;
+    max-width: 490px;
+    width: 100%;
+    height: 560px;
+}
+
+.how-to-brew-section__image-img {
+    position: absolute;
+    top: 8px;
+    left: 7px;
+    width: 96%;
+    height: 97%;
+    object-fit: cover;
+}
+
+.how-to-brew-section__image-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    z-index: 1;
+}
+
+.how-to-brew-section__list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 355px;
+    width: 100%;
+}
+
+.how-to-brew-section__list.--left-list {
+    justify-content: flex-start;
+}
+
+.how-to-brew-section__list.--right-list {
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.how-to-brew-section__item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.how-to-brew-section__item-number-icon {
+    width: 30px;
+    height: 48px;
+}
+
+.how-to-brew-section__item-number-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.how-to-brew-section__item-title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: calc(36 / 32);
+    color: #181818;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+@media (max-width: 1024px) {
+    .how-to-brew-section {
+        padding: 56px 0;
+    }
+
+    .how-to-brew-section__title {
+        font-size: 60px;
+    }
+
+    .how-to-brew-section__description {
+        font-size: 18px;
+        margin-bottom: 40px;
+    }
+
+    .how-to-brew-section__content {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 24px;
+    }
+
+    .how-to-brew-section__list {
+        max-width: 100%;
+        gap: 12px;
+    }
+
+    .how-to-brew-section__list.--left-list {
+        justify-content: center;
+    }
+
+    .how-to-brew-section__list.--right-list {
+        justify-content: center;
+    }
+
+    .how-to-brew-section__item {
+        justify-content: center;
+    }
+
+    .how-to-brew-section__item-title {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 768px) {
+    .how-to-brew-section__title {
+        font-size: 38px;
+    }
+
+    .how-to-brew-section__description {
+        font-size: 16px;
+        margin-bottom: 24px;
+    }
+
+    .how-to-brew-section__item-title {
+        font-size: 20px;
+    }
+
+    .how-to-brew-section__image {
+        height: 430px;
+    }
+
+    .how-to-brew-section__item-number-icon {
+        width: 17px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .how-to-brew-section__item {
+        justify-content: flex-start;
+    }
+
+}

@@ -3534,6 +3534,47 @@
             "presets": {
                 "name": "FAQ Section"
             }
+        },
+        "how-to-brew-section": {
+            "name": "How to Brew Section",
+            "settings": {
+                "title": {
+                    "label": "Title"
+                },
+                "description": {
+                    "label": "Description"
+                },
+                "image": {
+                    "label": "Image"
+                }
+            },
+            "blocks": {
+                "left_list": {
+                    "name": "Left List",
+                    "settings": {
+                        "number_icon": {
+                            "label": "Number Icon"
+                        },
+                        "title": {
+                            "label": "Title"
+                        }
+                    }
+                },
+                "right_list": {
+                    "name": "Right List",
+                    "settings": {
+                        "number_icon": {
+                            "label": "Number Icon"
+                        },
+                        "title": {
+                            "label": "Title"
+                        }
+                    }
+                }
+            },
+            "presets": {
+                "name": "How to Brew Section"
+            }
         }
     }
 }
