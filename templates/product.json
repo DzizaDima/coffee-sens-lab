@@ -188,12 +188,63 @@
         "description": "The V60 is perfect for those who enjoy light to medium roasts and want to explore the finer details of coffee flavor through careful manual brewing. The V60 is a popular pour-over coffee brewing method designed by the Japanese brand Hario. The name \"V60\" comes from the brewer's V-shaped cone with a 60-degree angle, allowing for precise control of the extraction process.",
         "image": "shopify://shop_images/image_45.png"
       }
+    },
+    "best_cup_section_cWjkbE": {
+      "type": "best-cup-section",
+      "blocks": {
+        "icon_hLNCdM": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_5.png",
+            "text": "<p>Freshness <br/>guaranteed</p>"
+          }
+        },
+        "icon_GANfDW": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_6.png",
+            "text": "<p>Pick Your <br/>Dates</p>"
+          }
+        },
+        "icon_9dKjWJ": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_7.png",
+            "text": "<p>free <br/>shipping</p>"
+          }
+        },
+        "icon_7rRXkB": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Mask_group_8.png",
+            "text": "<p>cancel <br/>anytime</p>"
+          }
+        }
+      },
+      "block_order": [
+        "icon_hLNCdM",
+        "icon_GANfDW",
+        "icon_9dKjWJ",
+        "icon_7rRXkB"
+      ],
+      "name": "Best Cup Section",
+      "settings": {
+        "image_bg": "shopify://shop_images/Frame_199.png",
+        "title_column_direction": true,
+        "title": "Get 10% Off Every Bag",
+        "subtitle": "Never run out of exceptional coffee again.",
+        "title_inner": "Subscribe and Save",
+        "percent_img": "shopify://shop_images/Frame_3.png",
+        "button_text": "Join the Coffee Club",
+        "button_link": "#"
+      }
     }
   },
   "order": [
     "main",
     "related-products",
     "faq_section_WMCw3q",
-    "how_to_brew_section_8pi9VM"
+    "how_to_brew_section_8pi9VM",
+    "best_cup_section_cWjkbE"
   ]
 }
