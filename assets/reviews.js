@@ -11,16 +11,13 @@
       const video = videoContainer.querySelector('video');
       if (!video) return;
 
-      // Добавляем aria-label для видео
       const authorName = videoContainer.querySelector('.reviews_card__author-info strong')?.textContent || 'Review';
       if (!video.getAttribute('aria-label')) {
         video.setAttribute('aria-label', authorName + ' - video review');
       }
 
-      // Инициализация состояния
       updateButtonState(button, video.muted);
 
-      // Обработчик клика
       button.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -37,7 +34,6 @@
         updateButtonState(button, video.muted);
       });
 
-      // Синхронизация состояния при изменении muted
       video.addEventListener('volumechange', function() {
         updateButtonState(button, video.muted);
       });
@@ -56,14 +52,12 @@
     }
   }
 
-  // Инициализация при загрузке DOM
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initVideoUnmute);
   } else {
     initVideoUnmute();
   }
 
-  // Инициализация для динамически добавленного контента
   if (typeof Shopify !== 'undefined' && Shopify.designMode) {
     document.addEventListener('shopify:section:load', initVideoUnmute);
   }
