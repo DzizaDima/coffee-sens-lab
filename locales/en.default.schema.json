@@ -1954,6 +1954,15 @@
                         }
                     }
                 },
+                "divider": {
+                    "name": "Divider"
+                },
+                "metainfo": {
+                    "name": "Meta info"
+                },
+                "short_describing_points": {
+                    "name": "Short describing points"
+                },
                 "title": {
                     "name": "Title"
                 },
@@ -2327,6 +2336,18 @@
                         "heading_3": {
                             "label": "Heading",
                             "default": "Heading"
+                        },
+                        "pairing_4": {
+                            "label": "Pairing 4"
+                        },
+                        "icon_4": {
+                            "label": "Icon"
+                        },
+                        "image_4": {
+                            "label": "Image"
+                        },
+                        "heading_4": {
+                            "label": "Heading"
                         }
                     }
                 }
@@ -3414,7 +3435,7 @@
                 },
                 "description": {
                     "label": "Description"
-                }, 
+                },
                 "title": {
                     "label": "Title"
                 },

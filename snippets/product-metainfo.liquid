@@ -1,0 +1,69 @@
+{{ 'metainfo.css' | asset_url | stylesheet_tag }}
+{% if product.metafields.custom.acidity_level != blank %}
+  {% assign acidity_level = product.metafields.custom.acidity_level | times: 1 %}
+  <div class="meta-row meta-row--acidity">
+    <span class="meta-row__label">{{ 'products.product.metainfo.acidity' | t }}:</span>
+    <div class="meta-row__value">
+      {% for i in (1..5) %}
+        <div class="meta-row__value__item">
+          {% if i <= acidity_level %}
+            <img src="{{ 'coffee-bean-colored.png' | asset_url }}" alt="Coffee Bean Colored">
+          {% else %}
+            <img src="{{ 'coffee-bean.png' | asset_url }}" alt="Coffee Bean">
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.roast_level != blank %}
+  {% assign roast_level = product.metafields.custom.roast_level | times: 1 %}
+  <div class="meta-row meta-row--roast">
+    <span class="meta-row__label">{{ 'products.product.metainfo.roast' | t }}:</span>
+    <div class="meta-row__value">
+      {% for i in (1..3) %}
+        <div class="meta-row__value__item">
+          {% if i <= roast_level %}
+            <img src="{{ 'coffee-bean-colored.png' | asset_url }}" alt="Coffee Bean Colored">
+          {% else %}
+            <img src="{{ 'coffee-bean.png' | asset_url }}" alt="Coffee Bean">
+          {% endif %}
+        </div>
+      {% endfor %}
+      {% if roast_level == 1 %}
+        <span class="meta-row__value__label">({{ 'products.product.metainfo.roast_light' | t }})</span>
+      {% elsif roast_level == 2 %}
+        <span class="meta-row__value__label">({{ 'products.product.metainfo.roast_medium' | t }})</span>
+      {% elsif roast_level == 3 %}
+        <span class="meta-row__value__label">({{ 'products.product.metainfo.roast_dark' | t }})</span>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.process != blank %}
+  <div class="meta-row meta-row--process">
+    <span class="meta-row__label">{{ 'products.product.metainfo.process' | t }}:</span>
+    <span class="meta-row__value">{{ product.metafields.custom.process }}</span>
+  </div>
+{% endif %}
+
+{% if product.metafields.custom.flavor_notes != blank %}
+  {% assign flavor_notes = product.metafields.custom.flavor_notes.value %}
+  <div class="meta-row meta-row--flavor">
+    <span class="meta-row__label">{{ 'products.product.metainfo.flavor_notes' | t }}:</span>
+    <div class="meta-row__value">
+      {% for flavor_note in flavor_notes %}
+        <div class="meta-row__value__item">
+          {{
+            flavor_note.image
+            | image_url: width: 100
+            | image_tag: width: 50, loading: 'lazy', fetchpriority: 'low', alt: flavor_note.name
+          }}
+          <span>{{ flavor_note.name }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

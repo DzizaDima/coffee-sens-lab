@@ -1,0 +1,16 @@
+{% if product.metafields.custom.short_describing_points != blank %}
+  <div class="product__short-describing-points">
+    {% for point in product.metafields.custom.short_describing_points.value %}
+      <div class="product__short-describing-point">
+        {{ point }}
+        <img
+          src="{{ 'badge-border-high.png' | asset_img_url }}"
+          alt="badge-border"
+          class="product__short-describing-point__border"
+          width="30"
+          height="30"
+        >
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
