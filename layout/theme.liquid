@@ -110,7 +110,7 @@
       @font-face {
         font-family: 'ClashDisplay';
         src: url('{{ 'ClashDisplay-Semibold.woff2' | asset_url }}') format('woff2'), url('{{ 'ClashDisplay-Semibold.woff' | asset_url }}') format('woff'), url('{{ 'ClashDisplay-Semibold.ttf' | asset_url }}') format('truetype');
-        font-weight: bold;
+        font-weight: 600;
         font-style: normal;
         font-display: swap;
       }
@@ -118,7 +118,7 @@
       @font-face {
         font-family: 'ClashDisplay';
         src: url('{{ 'ClashDisplay-Bold.woff2' | asset_url }}') format('woff2'), url('{{ 'ClashDisplay-Bold.woff' | asset_url }}') format('woff'), url('{{ 'ClashDisplay-Bold.ttf' | asset_url }}') format('truetype');
-        font-weight: bold;
+        font-weight: 700;
         font-style: normal;
         font-display: swap;
       }
@@ -350,7 +350,7 @@
 
     {% sections 'header-group' %}
 
-    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    <main id="MainContent" class="content-for-layout focus-none template--{{template.name}}" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 

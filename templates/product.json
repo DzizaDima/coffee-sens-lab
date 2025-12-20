@@ -12,74 +12,113 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
-          "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
-          }
-        },
         "title": {
           "type": "title",
           "settings": {}
         },
-        "price": {
-          "type": "price",
+        "short_describing_points_rVmtEi": {
+          "type": "short_describing_points",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "divider_VTEa74": {
+          "type": "divider",
+          "settings": {}
+        },
+        "metainfo_bUNaey": {
+          "type": "metainfo",
+          "settings": {}
+        },
+        "divider_Xe8GqE": {
+          "type": "divider",
           "settings": {}
         },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
-            "swatch_shape": "circle"
+            "swatch_shape": "square"
           }
-        },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true,
+            "show_dynamic_checkout": false,
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
+        "divider_xbj7dB": {
+          "type": "divider",
           "settings": {}
         },
-        "share": {
-          "type": "share",
+        "icon_with_text_6RdGmg": {
+          "type": "icon-with-text",
           "settings": {
-            "share_label": "Share"
+            "layout": "vertical",
+            "icon_1": "heart",
+            "image_1": "shopify://shop_images/Mask_group_2_45e71c4d-8b43-43cf-98aa-6e52241d1c55.png",
+            "heading_1": "100% Specialty Grade",
+            "icon_2": "return",
+            "image_2": "shopify://shop_images/Mask_group_3_2782f6e0-664b-41ad-8e6a-4b8a9461710b.png",
+            "heading_2": "Roasted Fresh to Order",
+            "icon_3": "truck",
+            "image_3": "shopify://shop_images/image_19_456df90a-5933-4b94-b278-e0426d7d5aa0.png",
+            "heading_3": "Free Shipping over $55",
+            "icon_4": "none",
+            "image_4": "shopify://shop_images/Mask_group_4_212bfdeb-197b-456f-bb6b-3b5cbd9cda1f.png",
+            "heading_4": "Satisfaction guaranteed"
+          }
+        },
+        "collapsible_tab_Ppgjjg": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Brew recomendations",
+            "icon": "none",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_mxFnKh": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping",
+            "icon": "none",
+            "content": "",
+            "page": ""
           }
         }
       },
       "block_order": [
-        "vendor",
         "title",
-        "price",
-        "variant_picker",
-        "quantity_selector",
-        "buy_buttons",
+        "short_describing_points_rVmtEi",
         "description",
-        "share"
+        "divider_VTEa74",
+        "metainfo_bUNaey",
+        "divider_Xe8GqE",
+        "variant_picker",
+        "buy_buttons",
+        "divider_xbj7dB",
+        "icon_with_text_6RdGmg",
+        "collapsible_tab_Ppgjjg",
+        "collapsible_tab_mxFnKh"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "color_scheme": "scheme-1",
-        "media_size": "large",
+        "color_scheme": "scheme-4",
+        "media_size": "small",
         "constrain_to_viewport": true,
         "media_fit": "contain",
-        "gallery_layout": "stacked",
+        "gallery_layout": "thumbnail",
         "mobile_thumbnails": "hide",
         "media_position": "left",
         "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
-        "padding_top": 36,
-        "padding_bottom": 12
+        "padding_top": 88,
+        "padding_bottom": 88
       }
     },
     "related-products": {
