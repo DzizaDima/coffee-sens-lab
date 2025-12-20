@@ -1,0 +1,121 @@
+{{ 'how-to-brew-section.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign left_list = section.blocks | where: 'type', 'left_list'
+  assign right_list = section.blocks | where: 'type', 'right_list'
+%}
+
+<div class="how-to-brew-section">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="how-to-brew-section__title">{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <p class="how-to-brew-section__description">{{ section.settings.description }}</p>
+    {% endif %}
+    <div class="how-to-brew-section__content">
+      {% if left_list.size > 0 %}
+        <div class="how-to-brew-section__list --left-list">
+          {% for block in left_list %}
+            <div class="how-to-brew-section__item">
+              <div class="how-to-brew-section__item-number-icon">
+                {{ block.settings.number_icon | image_url: width: 30, height: 48 | image_tag }}
+              </div>
+              <div class="how-to-brew-section__item-title">{{ block.settings.title }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if section.settings.image != blank %}
+        <div class="how-to-brew-section__image">
+          <img
+            class="how-to-brew-section__image-frame"
+            src="{{ 'brew-frame.png' | asset_url }}"
+            alt="{{ section.settings.title }}"
+            width="490"
+            height="auto"
+          >
+          {{
+            section.settings.image
+            | image_url: width: 490
+            | image_tag: alt: section.settings.title, class: 'how-to-brew-section__image-img'
+          }}
+        </div>
+      {% endif %}
+      {% if right_list.size > 0 %}
+        <div class="how-to-brew-section__list --right-list">
+          {% for block in right_list %}
+            <div class="how-to-brew-section__item">
+              <div class="how-to-brew-section__item-number-icon">
+                {{ block.settings.number_icon | image_url: width: 30, height: 48 | image_tag }}
+              </div>
+              <div class="how-to-brew-section__item-title">{{ block.settings.title }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.how-to-brew-section.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.how-to-brew-section.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:sections.how-to-brew-section.settings.description.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.how-to-brew-section.settings.image.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "left_list",
+      "name": "t:sections.how-to-brew-section.blocks.left_list.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "number_icon",
+          "label": "t:sections.how-to-brew-section.blocks.left_list.settings.number_icon.label"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.how-to-brew-section.blocks.left_list.settings.title.label"
+        }
+      ]
+    },
+    {
+      "type": "right_list",
+      "name": "t:sections.how-to-brew-section.blocks.right_list.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "number_icon",
+          "label": "t:sections.how-to-brew-section.blocks.right_list.settings.number_icon.label"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.how-to-brew-section.blocks.right_list.settings.title.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.how-to-brew-section.presets.name"
+    }
+  ]
+}
+{% endschema %}
