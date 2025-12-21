@@ -185,6 +185,13 @@
           "storefront_layout_drawer_position": "left",
           "storefront_layout_as_section_page": ""
         }
+      },
+      "733389323033596483": {
+        "type": "shopify://apps/okendo/blocks/theme-settings/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+        "disabled": false,
+        "settings": {
+          "show_preview_data": true
+        }
       }
     },
     "color_schemes": {

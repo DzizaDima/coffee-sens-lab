@@ -2994,13 +2994,14 @@ details-disclosure>details {
   gap: 4px;
   position: relative;
   width: fit-content;
-  padding: 5px;
+  padding: 8px 12px 8px 30px;
   height: fit-content;
 }
 
 .flavor-badge .flavor-badge__image {
-  margin-top: -4px;
-  position: relative;
+  position: absolute;
+  top: -4px;
+  left: -4px;
   z-index: 1;
 }
 
@@ -3010,12 +3011,12 @@ details-disclosure>details {
   position: absolute;
   top: 0;
   left: 0;
-  object-fit: contain;
+  object-fit: fill;
   z-index: 0;
 }
 
 .flavor-badge .flavor-badge__text {
-  font-size: 12px;
+  font-size: 16px;
   letter-spacing: normal;
   text-transform: uppercase;
 }
@@ -3689,8 +3690,4 @@ details-disclosure>details {
   100% {
     transform: translateX(100%) scaleX(0);
   }
-}
-
-.template--product {
-  background-color: #181818;
 }
