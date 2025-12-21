@@ -1,5 +1,23 @@
 {{ 'seasonal-collection.css' | asset_url | stylesheet_tag }}
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'seasonal-collection.js' | asset_url }}" defer="defer"></script>
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 
 {%- liquid
   assign products = section.settings.collection.products
@@ -13,6 +31,21 @@
     background-position: 100% 100%;
     padding-bottom: 10px;
     margin-top: 10px;
+  }
+
+  .seasonal-collection .card.gradient {
+    background: #3a3a3a;
+    color: #fff;
+  }
+
+  .seasonal-collection .card.gradient .card__heading,
+  .seasonal-collection .price .price-item,
+  .seasonal-collection .flavor-badge__text {
+    color: #fff;
+  }
+
+  .seasonal-collection .price--on-sale .price-item--regular {
+    color: #9c9c9c;
   }
 {% endstyle %}
 

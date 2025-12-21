@@ -806,19 +806,17 @@ class BulkModal extends HTMLElement {
 customElements.define("bulk-modal", BulkModal);
 
 class ModalOpener extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const button = this.querySelector("button");
+    const button = this.querySelector('button');
 
-        if (!button) return;
-        button.addEventListener("click", () => {
-            const modal = document.querySelector(
-                this.getAttribute("data-modal")
-            );
-            if (modal) modal.show(button);
-        });
-    }
+    if (!button) return;
+    button.addEventListener('click', () => {
+      const modal = document.querySelector(this.getAttribute('data-modal'));
+      if (modal && typeof modal.show === 'function') modal.show(button);
+    });
+  }
 }
 customElements.define("modal-opener", ModalOpener);
 
@@ -1269,18 +1267,16 @@ class SlideshowComponent extends SliderComponent {
         }, this.announcerBarAnimationDelay * 2);
     }
 
-    linkToSlide(event) {
-        event.preventDefault();
-        const slideScrollPosition =
-            this.slider.scrollLeft +
-            this.sliderFirstItemNode.clientWidth *
-                (this.sliderControlLinksArray.indexOf(event.currentTarget) +
-                    1 -
-                    this.currentPage);
-        this.slider.scrollTo({
-            left: slideScrollPosition,
-        });
-    }
+  linkToSlide(event) {
+    event.preventDefault();
+    const slideScrollPosition =
+      this.slider.scrollLeft +
+      this.sliderFirstItemNode.clientWidth *
+      (this.sliderControlLinksArray.indexOf(event.currentTarget) + 1 - this.currentPage);
+    this.slider.scrollTo({
+      left: slideScrollPosition,
+    });
+  }
 }
 
 customElements.define("slideshow-component", SlideshowComponent);
