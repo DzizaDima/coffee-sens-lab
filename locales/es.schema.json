@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Encabezado"
         },
+        "tip": {
+          "label": "Consejo"
+        },
         "products_to_show": {
           "label": "Recuento de productos"
         },

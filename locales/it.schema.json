@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Titolo"
         },
+        "tip": {
+          "label": "Suggerimento"
+        },
         "products_to_show": {
           "label": "Conteggio prodotti"
         },

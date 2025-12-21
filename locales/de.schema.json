@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Überschrift"
         },
+        "tip": {
+          "label": "Tipp"
+        },
         "products_to_show": {
           "label": "Produktanzahl"
         },
