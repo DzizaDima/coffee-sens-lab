@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Nadpis"
         },
+        "tip": {
+          "label": "Tip"
+        },
         "products_to_show": {
           "label": "Počet produktů"
         },

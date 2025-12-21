@@ -2847,6 +2847,9 @@
                 "heading": {
                     "label": "Heading"
                 },
+                "tip": {
+                    "label": "Tip"
+                },
                 "products_to_show": {
                     "label": "Product count"
                 },

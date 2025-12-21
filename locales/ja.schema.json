@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "見出し"
         },
+        "tip": {
+          "label": "ヒント"
+        },
         "products_to_show": {
           "label": "商品数"
         },

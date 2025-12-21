@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Overskrift"
         },
+        "tip": {
+          "label": "Tip"
+        },
         "products_to_show": {
           "label": "Produktantal"
         },
