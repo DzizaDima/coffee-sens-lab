@@ -16,6 +16,12 @@
           "type": "title",
           "settings": {}
         },
+        "okendo_star_rating_qDMRP3": {
+          "type": "shopify://apps/okendo/blocks/star-rating/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
         "short_describing_points_rVmtEi": {
           "type": "short_describing_points",
           "settings": {}
@@ -93,6 +99,7 @@
       },
       "block_order": [
         "title",
+        "okendo_star_rating_qDMRP3",
         "short_describing_points_rVmtEi",
         "description",
         "divider_VTEa74",
