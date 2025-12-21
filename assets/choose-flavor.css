@@ -357,10 +357,23 @@
     }
 
     .choose-flavor__bg-left {
-        width: 180px;
+        width: 150px;
     }
 
     .choose-flavor__bg-right {
-        width: 180px;
+        width: 150px;
+    }
+}
+
+@media (max-width: 390px) {
+    .choose-flavor__flavor {
+        padding: 12px;
+    }
+
+    .choose-flavor__flavor-icon {
+        position: absolute;
+        top: -30%;
+        left: -7%;
+        z-index: 1;
     }
 }
