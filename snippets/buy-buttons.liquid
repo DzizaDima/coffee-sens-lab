@@ -10,7 +10,7 @@
   Usage:
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% endcomment %}
-<div {{ block.shopify_attributes }}>
+<div class="product__form-wrapper" {{ block.shopify_attributes }}>
   {%- if product != blank -%}
     {%- liquid
       assign gift_card_recipient_feature_active = false
@@ -93,6 +93,18 @@
               {%- endif -%}
             </span>
             {%- render 'loading-spinner' -%}
+          </button>
+          <button
+            class="swym-button swym-add-to-wishlist unfilled-btn"
+            data-with-epi="true"
+            data-swaction="addToWishlist"
+            data-product-id="{{ product.id }}"
+            data-variant-id="{{ product.variants[0].id }}"
+            data-product-url="{{ shop.url }}{{ product.url }}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.6706 5.4736C17.6806 3.8336 14.7206 4.1236 12.8906 5.9536L12.0006 6.8436L11.1106 5.9536C9.29063 4.1336 6.32064 3.8336 4.33064 5.4736C2.05064 7.3536 1.93063 10.7436 3.97063 12.7836L11.6406 20.4536C11.8406 20.6536 12.1506 20.6536 12.3506 20.4536L20.0206 12.7836C22.0706 10.7436 21.9506 7.3636 19.6706 5.4736Z" stroke="#03000C" stroke-width="1.75px" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
           </button>
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}

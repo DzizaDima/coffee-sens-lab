@@ -41,29 +41,30 @@
           assign stars_empty = stars_empty | minus: 1
         endif
       -%}
+      <div class="okendo-rating-widget__stars-count">
+        <div
+          class="okendo-rating-widget__stars"
+          aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: 5 }}"
+        >
+          {%- for i in (1..stars_full) -%}
+            <span class="okendo-rating-widget__star okendo-rating-widget__star--full">
+              {{- 'icon-star-custom.svg' | inline_asset_content -}}
+            </span>
+          {%- endfor -%}
+          {%- if has_half_star -%}
+            <span class="okendo-rating-widget__star okendo-rating-widget__star--half">
+              {{- 'icon-star-custom.svg' | inline_asset_content -}}
+            </span>
+          {%- endif -%}
+          {%- for i in (1..stars_empty) -%}
+            <span class="okendo-rating-widget__star okendo-rating-widget__star--empty">
+              {{- 'icon-star-custom.svg' | inline_asset_content -}}
+            </span>
+          {%- endfor -%}
+        </div>
 
-      <div
-        class="okendo-rating-widget__stars"
-        aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: 5 }}"
-      >
-        {%- for i in (1..stars_full) -%}
-          <span class="okendo-rating-widget__star okendo-rating-widget__star--full">
-            {{- 'icon-star-custom.svg' | inline_asset_content -}}
-          </span>
-        {%- endfor -%}
-        {%- if has_half_star -%}
-          <span class="okendo-rating-widget__star okendo-rating-widget__star--half">
-            {{- 'icon-star-custom.svg' | inline_asset_content -}}
-          </span>
-        {%- endif -%}
-        {%- for i in (1..stars_empty) -%}
-          <span class="okendo-rating-widget__star okendo-rating-widget__star--empty">
-            {{- 'icon-star-custom.svg' | inline_asset_content -}}
-          </span>
-        {%- endfor -%}
+        <span class="okendo-rating-widget__value">{{ rating_value | round: 1 }}</span>
       </div>
-
-      <span class="okendo-rating-widget__value">{{ rating_value | round: 1 }}</span>
 
       {% if review_count > 0 %}
         <a
@@ -78,6 +79,12 @@
     </div>
 
     <style>
+      .okendo-rating-widget__stars-count {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .okendo-rating-widget {
         display: flex;
         align-items: center;
