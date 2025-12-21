@@ -232,4 +232,12 @@
     .best-cup-section__bg img {
         object-position: 35%;
     }
+
+    .best-cup-section__inner-content {
+        padding: 38px 4px;
+    }
+
+    .best-cup-section__inner-content-item-icon{
+        height: 52px;
+    }
 }

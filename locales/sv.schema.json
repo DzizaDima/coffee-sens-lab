@@ -3194,6 +3194,9 @@
         "heading": {
           "label": "Rubrik"
         },
+        "tip": {
+          "label": "Tips"
+        },
         "products_to_show": {
           "label": "Produkträkning"
         },
