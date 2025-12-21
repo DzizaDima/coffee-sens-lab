@@ -43,10 +43,13 @@
         <div class="choose-flavor__flavors">
           {% for block in section.blocks %}
             <div class="choose-flavor__flavor-wrapper">
-              <button
-                type="button"
+              <a
+                href="#"
                 class="choose-flavor__flavor"
                 data-flavor-index="{{ forloop.index0 }}"
+                {%- if block.settings.button_link != blank -%}
+                  data-flavor-link="{{ block.settings.button_link }}"
+                {%- endif -%}
                 aria-expanded="false"
                 aria-controls="collection-{{ forloop.index0 }}"
                 {%- if block.settings.title != blank -%}
@@ -70,7 +73,7 @@
                     <h3>{{ block.settings.title }}</h3>
                   {%- endif -%}
                 </div>
-              </button>
+              </a>
               <div
                 class="choose-flavor__collections"
                 id="collection-{{ forloop.index0 }}"
