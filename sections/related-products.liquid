@@ -1,57 +1,57 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+{% if recommendations.performed and recommendations.products_count > 0 %}
+  {{ 'component-card.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
-{%- unless section.settings.quick_add == 'none' -%}
-  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-{%- endunless -%}
+  {%- unless section.settings.quick_add == 'none' -%}
+    {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  {%- endunless -%}
 
-{%- if section.settings.quick_add == 'standard' -%}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
+  {%- if section.settings.quick_add == 'standard' -%}
+    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
 
-{%- if section.settings.quick_add == 'bulk' -%}
-  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
+  {%- if section.settings.quick_add == 'bulk' -%}
+    <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
 
-{% style %}
-  .related_products_title p {
-    background-image: url('{{ 'text-underline-3.png' | asset_url }}');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 100% 100%;
-    padding-bottom: 10px;
-    margin-top: 10px;
-  }
-{% endstyle %}
+  {% style %}
+    .related_products_title p {
+      background-image: url('{{ 'text-underline-3.png' | asset_url }}');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: 100% 100%;
+      padding-bottom: 10px;
+      margin-top: 10px;
+    }
+  {% endstyle %}
 
-<section class="related_products ">
-  <div class="container">
-    <div class="related_products_title">
-      {% if section.settings.heading != blank %}
-        <h2>{{ section.settings.heading }}</h2>
-      {% endif %}
-      {% if section.settings.tip != blank %}
-        <p>{{ section.settings.tip }}</p>
-      {% endif %}
-    </div>
-    <div class="related_products_inner">
-      <div class="related_products_swiper-wrapper">
-        <div class="related_products_swiper-buttons">
-          <div class="swiper-button-prev">{% render 'arrow-right' %}</div>
-          <div class="swiper-button-next">{% render 'arrow-right' %}</div>
-        </div>
-        <product-recommendations
-          class="swiper related_products_swiper"
-          data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
-          data-section-id="{{ section.id }}"
-          data-product-id="{{ product.id }}"
-        >
-          {% if recommendations.performed and recommendations.products_count > 0 %}
+  <section class="related_products ">
+    <div class="container">
+      <div class="related_products_title">
+        {% if section.settings.heading != blank %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.tip != blank %}
+          <p>{{ section.settings.tip }}</p>
+        {% endif %}
+      </div>
+      <div class="related_products_inner">
+        <div class="related_products_swiper-wrapper">
+          <div class="related_products_swiper-buttons">
+            <div class="swiper-button-prev">{% render 'arrow-right' %}</div>
+            <div class="swiper-button-next">{% render 'arrow-right' %}</div>
+          </div>
+          <product-recommendations
+            class="swiper related_products_swiper"
+            data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
+            data-section-id="{{ section.id }}"
+            data-product-id="{{ product.id }}"
+          >
             <div class="swiper-wrapper">
               {% assign skip_card_product_styles = false %}
               {% for recommendation in recommendations.products %}
@@ -70,12 +70,12 @@
                 {%- assign skip_card_product_styles = true -%}
               {% endfor %}
             </div>
-          {% endif %}
-        </product-recommendations>
+          </product-recommendations>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{% endif %}
 
 {% schema %}
 {
