@@ -121,6 +121,7 @@
                     price_class: 'price--large'
                   -%}
                 </div>
+                {% render 'okendo-reviews-product-rating-summary', product: product %}
               {%- when 'price' -%}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',

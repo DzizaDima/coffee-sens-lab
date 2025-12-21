@@ -1,0 +1,153 @@
+{%- comment -%}
+  Okendo Reviews Rating Widget
+  Displays star rating based on product.metafields.okendo.summaryData
+{%- endcomment -%}
+
+{% if product != blank %}
+  {%- liquid
+    assign summary_data = product.metafields.okendo.summaryData
+    assign rating_value = 0
+    assign review_count = 0
+
+    if summary_data != blank
+      if summary_data.reviewAverageValue != blank
+        assign rating_value = summary_data.reviewAverageValue | plus: 0
+      endif
+      if summary_data.reviewCount != blank
+        assign review_count = summary_data.reviewCount | plus: 0
+      endif
+    endif
+  -%}
+
+  {% if rating_value > 0 or review_count > 0 %}
+    <div class="okendo-rating-widget" data-oke-reviews-product-id="shopify-{{ product.id }}">
+      {%- liquid
+        assign rating_floor = rating_value | floor
+        assign rating_decimal = rating_value | minus: rating_floor
+
+        if rating_decimal >= 0.75
+          assign stars_full = rating_floor | plus: 1
+          assign has_half_star = false
+        elsif rating_decimal >= 0.25
+          assign stars_full = rating_floor
+          assign has_half_star = true
+        else
+          assign stars_full = rating_floor
+          assign has_half_star = false
+        endif
+
+        assign stars_empty = 5 | minus: stars_full
+        if has_half_star
+          assign stars_empty = stars_empty | minus: 1
+        endif
+      -%}
+
+      <div
+        class="okendo-rating-widget__stars"
+        aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: 5 }}"
+      >
+        {%- for i in (1..stars_full) -%}
+          <span class="okendo-rating-widget__star okendo-rating-widget__star--full">
+            {{- 'icon-star-custom.svg' | inline_asset_content -}}
+          </span>
+        {%- endfor -%}
+        {%- if has_half_star -%}
+          <span class="okendo-rating-widget__star okendo-rating-widget__star--half">
+            {{- 'icon-star-custom.svg' | inline_asset_content -}}
+          </span>
+        {%- endif -%}
+        {%- for i in (1..stars_empty) -%}
+          <span class="okendo-rating-widget__star okendo-rating-widget__star--empty">
+            {{- 'icon-star-custom.svg' | inline_asset_content -}}
+          </span>
+        {%- endfor -%}
+      </div>
+
+      <span class="okendo-rating-widget__value">{{ rating_value | round: 1 }}</span>
+
+      {% if review_count > 0 %}
+        <a
+          href="javascript:void(0)"
+          class="okendo-rating-widget__count"
+          onclick="document.querySelector('.okeReviews.oke-w')?.scrollIntoView({ behavior: 'smooth' })"
+        >
+          ({{ review_count }}
+          {{ 'products.product.reviews' | t }})
+        </a>
+      {% endif %}
+    </div>
+
+    <style>
+      .okendo-rating-widget {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .okendo-rating-widget__stars {
+        display: flex;
+        gap: 0.1rem;
+      }
+
+      .okendo-rating-widget__star {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+      }
+
+      .okendo-rating-widget__star svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .okendo-rating-widget__star--full svg path {
+        fill: #c4541a;
+      }
+
+      .okendo-rating-widget__star--half {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .okendo-rating-widget__star--half svg path {
+        fill: #c4531aa0;
+      }
+
+      .okendo-rating-widget__star--half::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+      }
+
+      .okendo-rating-widget__star--empty svg path {
+        fill: #c4531a1f;
+      }
+
+      .okendo-rating-widget__value {
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: rgb(var(--color-foreground));
+        margin-left: 0.25rem;
+      }
+
+      .okendo-rating-widget__count {
+        font-size: 1.8rem;
+        color: rgb(var(--color-foreground));
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+
+      .okendo-rating-widget__count:hover {
+        opacity: 0.7;
+      }
+    </style>
+  {% endif %}
+{% endif %}

@@ -199,7 +199,8 @@
         "roast_light": "Light",
         "roast_medium": "Medium",
         "roast_dark": "Dark"
-      }
+      },
+      "reviews": "REVIEWS"
     },
     "modal": {
       "label": "Media gallery"

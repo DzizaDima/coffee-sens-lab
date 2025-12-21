@@ -248,6 +248,14 @@
                   alt: featured_media.alt
                 | escape
               }}
+              <img
+                src="{{ 'squared-border.png' | asset_url }}"
+                alt="Square border"
+                class="squared-border"
+                loading="lazy"
+                width="75"
+                height="75"
+              >
             </button>
           </li>
         {%- endif -%}
@@ -310,6 +318,14 @@
                     alt: media.alt
                   | escape
                 }}
+                <img
+                  src="{{ 'squared-border.png' | asset_url }}"
+                  alt="Square border"
+                  class="squared-border"
+                  loading="lazy"
+                  width="75"
+                  height="75"
+                >
               </button>
             </li>
           {%- endunless -%}
