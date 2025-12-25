@@ -3786,6 +3786,11 @@ details-disclosure>details {
   }
 }
 
-.swym-storefront-layout-tab-indicator{
+.swym-storefront-layout-tab-indicator {
   display: none !important;
+}
+
+.swym-storefront-layout-body,
+.swym-storefront-layout-container {
+  overflow: auto !important;
 }
