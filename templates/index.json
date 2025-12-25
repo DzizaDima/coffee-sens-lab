@@ -316,7 +316,7 @@
       "type": "content-section",
       "name": "Content Section",
       "settings": {
-        "title": "<p>Drink Better Coffee.<br/> Every Day.</p>",
+        "title": "<h2>Drink Better Coffee.<br/>Every Day.</h2>",
         "description": "<p>Shop blends crafted for clarity, sweetness,<br/>and unforgettable flavor.<br/><br/></p>",
         "image": "shopify://shop_images/image_25.png",
         "button_text": "Shop All  Coffee",

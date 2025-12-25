@@ -874,6 +874,15 @@
         }
       },
       "settings": {
+        "logo": {
+          "label": "ロゴ"
+        },
+        "logo_mobile": {
+          "label": "モバイルロゴ"
+        },
+        "logo_enable": {
+          "label": "ロゴを表示"
+        },
         "newsletter_enable": {
           "label": "メール登録者"
         },

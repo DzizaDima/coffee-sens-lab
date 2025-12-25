@@ -874,6 +874,15 @@
         }
       },
       "settings": {
+        "logo": {
+          "label": "Logotyp"
+        },
+        "logo_mobile": {
+          "label": "Mobil logotyp"
+        },
+        "logo_enable": {
+          "label": "Visa logotyp"
+        },
         "newsletter_enable": {
           "label": "E-postregistrering"
         },

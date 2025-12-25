@@ -874,6 +874,15 @@
         }
       },
       "settings": {
+        "logo": {
+          "label": "Logo"
+        },
+        "logo_mobile": {
+          "label": "Logo mobile"
+        },
+        "logo_enable": {
+          "label": "Afficher le logo"
+        },
         "newsletter_enable": {
           "label": "Inscription à la liste de diffusion"
         },

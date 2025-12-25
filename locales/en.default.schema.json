@@ -1051,6 +1051,9 @@
                 "logo": {
                     "label": "Logo"
                 },
+                "logo_mobile": {
+                    "label": "Mobile logo"
+                },
                 "logo_enable": {
                     "label": "Show logo"
                 },

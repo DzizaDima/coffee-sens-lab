@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         autoplay: {
             delay: 0,
             disableOnInteraction: false,
+            pauseOnMouseEnter: true,
         },
 
         freeMode: {
