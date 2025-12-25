@@ -192,6 +192,14 @@
     font-family: "ClashDisplay";
 }
 
+.hero-section__slider .swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+.hero-section__slider .swiper-slide {
+    height: auto;
+}
+
 .hero-section__slider {
     height: 915px;
     max-width: 340px;
@@ -233,6 +241,34 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+}
+
+.hero-section__slider-card .card {
+    border: none;
+    background-color: #3A3A3A;
+    color: #FBF8F4;
+    transition: all .3s ease;
+}
+
+.hero-section__slider-card .card .card__heading {
+    color: #FBF8F4;
+    transition: all .3s ease;
+}
+
+.hero-section__slider-card .card .card-information>.price {
+    color: #FBF8F4;
+    transition: all .3s ease;
+}
+
+.hero-section__slider-card .card .badge {
+    color: #FBF8F4;
+    transition: all .3s ease;
+}
+
+.hero-section__slider-card .card:hover {
+    border: 1px solid #CF400B;
+    background: #181818;
+    transition: all .3s ease;
 }
 
 .hero-section__slider-card-frame {
