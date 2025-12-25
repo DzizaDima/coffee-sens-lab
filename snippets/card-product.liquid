@@ -341,6 +341,14 @@
         {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
         {% if quick_add == 'standard' %}
           <div class="quick-add no-js-hidden">
+            {% if show_quick_buy %}
+              <a
+                href="/cart/{{ card_product.selected_or_first_available_variant.id }}:1?"
+                class="button button--full-width button--primary card__quick-buy"
+              >
+                {{- 'products.product.quick_buy' | t -}}
+              </a>
+            {% endif %}
             {%- liquid
               assign qty_rules = false
               if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
