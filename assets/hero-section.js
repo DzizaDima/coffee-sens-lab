@@ -1,34 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    new Swiper(".hero-section__slider", {
-        direction: "vertical",
-        loop: true,
-        slidesPerView: "auto",
-        spaceBetween: 20,
-
-        speed: 6000,
-
-        autoplay: {
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-        },
-
-        freeMode: {
-            enabled: true,
-            momentum: false,
-        },
-
-        allowTouchMove: false,
-    });
-
     const slides = document.querySelectorAll(".hero-section__slide");
     const cards = document.querySelectorAll(".hero-section__slider-card");
+    const sliderTrack = document.querySelector(".hero-section__slider-track");
     let hideTimeout = null;
 
     const showCard = (productIndex) => {
         if (hideTimeout) {
             clearTimeout(hideTimeout);
             hideTimeout = null;
+        }
+        // Pause animation when showing the card
+        if (sliderTrack) {
+            sliderTrack.classList.add("paused");
         }
         cards.forEach((card) => {
             card.classList.remove("active");
@@ -46,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
             cards.forEach((card) => {
                 card.classList.remove("active");
             });
+            // Resume animation
+            if (sliderTrack) {
+                sliderTrack.classList.remove("paused");
+            }
             hideTimeout = null;
         }, 100);
     };
@@ -57,13 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    cards.forEach((card) => {
-        card.addEventListener("mouseenter", () => {
-            const productIndex = card.getAttribute("data-product-index");
-            showCard(productIndex);
-        });
-    });
-
+    // Slider - hide cards when mouse leaves
     const slider = document.querySelector(".hero-section__slider");
     if (slider) {
         slider.addEventListener("mouseleave", () => {
@@ -71,11 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Cards - mouseenter cancels hiding, mouseleave hides
     cards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+                hideTimeout = null;
+            }
+            // Keep animation paused
+            if (sliderTrack) {
+                sliderTrack.classList.add("paused");
+            }
+        });
         card.addEventListener("mouseleave", () => {
             hideAllCards();
         });
     });
+
 
     const countdownElement = document.querySelector(
         ".hero-section__timer-countdown"

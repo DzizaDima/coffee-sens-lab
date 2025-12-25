@@ -192,18 +192,40 @@
     font-family: "ClashDisplay";
 }
 
-.hero-section__slider .swiper-wrapper {
-    transition-timing-function: linear !important;
-}
+/* Keyframes для бесконечной вертикальной прокрутки */
+@keyframes marquee-vertical {
+    0% {
+        transform: translateY(0);
+    }
 
-.hero-section__slider .swiper-slide {
-    height: auto;
+    100% {
+        transform: translateY(-50%);
+    }
 }
 
 .hero-section__slider {
     height: 915px;
     max-width: 340px;
     width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-section__slider-track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: marquee-vertical 30s linear infinite;
+}
+
+/* Пауза при hover на слайдер */
+.hero-section__slider:hover .hero-section__slider-track,
+.hero-section__slider-track.paused {
+    animation-play-state: paused;
+}
+
+.hero-section__slide {
+    flex-shrink: 0;
 }
 
 @media (max-width:1024px) {

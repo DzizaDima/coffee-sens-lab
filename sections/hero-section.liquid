@@ -61,10 +61,22 @@
           {%- endif -%}
         </div>
       </div>
-      <div class="swiper hero-section__slider">
-        <div class="swiper-wrapper">
+      <div class="hero-section__slider">
+        <div class="hero-section__slider-track">
           {% for product in products %}
-            <div class="swiper-slide hero-section__slide" data-product-index="{{ forloop.index0 }}">
+            <div class="hero-section__slide" data-product-index="{{ forloop.index0 }}">
+              <div class="hero-section__slide-image">
+                {{
+                  product.featured_image
+                  | image_url: width: 340
+                  | image_tag: width: 340, height: 340, alt: product.title
+                }}
+              </div>
+            </div>
+          {% endfor %}
+          {%- comment -%} Дублируем слайды для seamless loop {%- endcomment -%}
+          {% for product in products %}
+            <div class="hero-section__slide" data-product-index="{{ forloop.index0 }}">
               <div class="hero-section__slide-image">
                 {{
                   product.featured_image
