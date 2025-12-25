@@ -128,11 +128,14 @@
       {%- if section.settings.logo_enable and section.settings.logo != blank -%}
         <div class="footer_logo">
           {% assign logo_alt = shop.name | default: 'Logo' %}
-          {{
-            section.settings.logo
-            | image_url: width: 1352
-            | image_tag: class: 'footer_logo-image', loading: 'lazy', alt: logo_alt
-          }}
+          <picture>
+            <source srcset="{{ section.settings.logo_mobile | image_url: width: 900 }}" media="(max-width: 480px)">
+            {{
+              section.settings.logo
+              | image_url: width: 1352
+              | image_tag: class: 'footer_logo-image', loading: 'lazy', alt: logo_alt
+            }}
+          </picture>
         </div>
       {%- endif -%}
       {%- if menu_legacy != blank and menu_legacy.links.size > 0 -%}
@@ -166,6 +169,11 @@
       "type": "image_picker",
       "id": "logo",
       "label": "t:sections.footer.settings.logo.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "t:sections.footer.settings.logo_mobile.label"
     },
     {
       "type": "checkbox",
