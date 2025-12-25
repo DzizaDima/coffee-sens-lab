@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // Check if device supports hover
   const hasHover = window.matchMedia('(hover: hover)').matches;
+  
+  // Check if device is mobile/touch device
+  const isMobile = window.matchMedia('(pointer: coarse)').matches || 
+                   ('ontouchstart' in window) || 
+                   (navigator.maxTouchPoints > 0);
+  
+  // Determine if hover interactions should be enabled
+  // Enable hover only on non-mobile devices that support hover
+  const shouldUseHover = hasHover && !isMobile;
   
   const flavors = document.querySelectorAll('.choose-flavor__flavor');
   const collections = document.querySelectorAll('.choose-flavor__collections');
@@ -52,6 +62,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!correspondingCollection) return;
 
+    // Get link URL from data attribute for mobile devices
+    const linkUrl = flavor.getAttribute('data-flavor-link');
+
+    // On hover devices: prevent default link behavior
+    // On touch devices: enable default link behavior and set href
+    if (shouldUseHover) {
+      // Prevent default link behavior on hover devices
+      flavor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const isExpanded = flavor.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          hideCollection(correspondingCollection, flavor);
+        } else {
+          showCollection(flavor, correspondingCollection);
+        }
+      });
+    } else {
+      // On touch devices: set href and allow default link behavior
+      if (linkUrl && linkUrl !== '#' && linkUrl !== '') {
+        flavor.href = linkUrl;
+      }
+    }
+
     flavor.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -64,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    if (hasHover) {
+    if (shouldUseHover) {
       flavor.addEventListener('mouseenter', function() {
         showCollection(flavor, correspondingCollection);
       });
