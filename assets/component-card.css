@@ -668,3 +668,17 @@
   font-weight: 600;
   font-family: var(--font-heading-family);
 }
+
+.card__quick-buy {
+  width: 100%;
+  font-size: 18px;
+  line-height: 22px;
+  font-family: var(--font-heading-family);
+  padding: 16px;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.card__quick-buy:hover {
+  text-decoration: none;
+}

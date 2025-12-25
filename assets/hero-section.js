@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
         loop: true,
         slidesPerView: 2.7,
         speed: 1000,
-        autoplay: {
-            delay: 2000,
-            pauseOnMouseEnter: true,
-        },
+        // autoplay: {
+        //     delay: 2000,
+        //     pauseOnMouseEnter: true,
+        // },
     });
 
     const slides = document.querySelectorAll('.hero-section__slide');
