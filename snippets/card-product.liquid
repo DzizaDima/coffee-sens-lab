@@ -59,6 +59,25 @@
         class="card__inner {% if card_product.featured_media or settings.card_style == 'standard' %} ratio{% endif %}"
         style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
       >
+        <div class="card-hover-bg">
+          <img src="{{ 'card-bg.png' | asset_url }}" loading="lazy" fetchpriority="low" alt="Card background">
+        </div>
+
+        <div class="wishlist-btn">
+          <button
+            class="swym-button swym-add-to-wishlist unfilled-btn"
+            data-with-epi="true"
+            data-swaction="addToWishlist"
+            data-product-id="{{ card_product.id }}"
+            data-variant-id="{{ card_product.variants[0].id }}"
+            data-product-url="{{ shop.url }}{{ card_product.url }}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.6706 5.4736C17.6806 3.8336 14.7206 4.1236 12.8906 5.9536L12.0006 6.8436L11.1106 5.9536C9.29063 4.1336 6.32064 3.8336 4.33064 5.4736C2.05064 7.3536 1.93063 10.7436 3.97063 12.7836L11.6406 20.4536C11.8406 20.6536 12.1506 20.6536 12.3506 20.4536L20.0206 12.7836C22.0706 10.7436 21.9506 7.3636 19.6706 5.4736Z" stroke="#03000C" stroke-width="1.75px" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+
         {%- if card_product.featured_media -%}
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
             <div class="media media--transparent media--hover-effect">
@@ -340,10 +359,10 @@
                   data-product-url="{{ card_product.url }}"
                 >
                   <span>{{ 'products.product.add_to_cart' | t }}</span>
-                  {{ 'icon-cart-trolley.svg' | inline_asset_content }}
+                  <span class="icon-wrap"> {{ 'icon-add-to-cart.svg' | inline_asset_content }}</span>
                   {%- if horizontal_quick_add -%}
                     <span class="icon-wrap">
-                      {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      {{ 'icon-add-to-cart.svg' | inline_asset_content }}
                     </span>
                   {%- endif -%}
                   {%- render 'loading-spinner' -%}

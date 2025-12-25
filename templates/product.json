@@ -108,6 +108,8 @@
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-4",
+        "show_breadcrumbs": true,
+        "breadcrumbs_color": "#f4ebd9",
         "media_size": "small",
         "constrain_to_viewport": true,
         "media_fit": "contain",
@@ -125,18 +127,14 @@
       "type": "related-products",
       "settings": {
         "heading": "You may also like",
-        "heading_size": "h2",
+        "tip": "",
         "products_to_show": 4,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "color_scheme": "scheme-1",
         "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
+        "quick_add": "none",
         "show_vendor": false,
-        "show_rating": false,
-        "padding_top": 36,
-        "padding_bottom": 28
+        "show_rating": false
       }
     },
     "faq_section_WMCw3q": {

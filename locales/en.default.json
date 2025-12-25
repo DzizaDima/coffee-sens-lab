@@ -64,6 +64,13 @@
       "next_slide": "Slide right",
       "previous_slide": "Slide left",
       "name": "Slider"
+    },
+    "breadcrumbs": {
+      "navigation": "Breadcrumbs",
+      "home": "Home",
+      "search": "Search results",
+      "cart": "Cart",
+      "collections": "Collections"
     }
   },
   "newsletter": {

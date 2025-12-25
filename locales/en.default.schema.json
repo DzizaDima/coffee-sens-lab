@@ -2383,6 +2383,12 @@
                 "enable_sticky_info": {
                     "label": "Sticky content"
                 },
+                "show_breadcrumbs": {
+                    "label": "Show breadcrumbs"
+                },
+                "breadcrumbs_color": {
+                    "label": "Breadcrumbs color"
+                },
                 "gallery_layout": {
                     "label": "Layout",
                     "options__1": {

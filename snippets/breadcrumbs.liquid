@@ -1,0 +1,211 @@
+{%- comment -%}
+  Breadcrumbs snippet for Shopify
+  Supports: product, collection, page, article, search
+{%- endcomment -%}
+
+{%- unless template.name == 'index' -%}
+  <nav class="breadcrumbs" aria-label="{{ 'general.breadcrumbs.navigation' | t }}">
+    <ol class="breadcrumbs__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="breadcrumbs__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a class="breadcrumbs__link" href="{{ routes.root_url }}" itemprop="item">
+          <span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span>
+        </a>
+        <meta itemprop="position" content="1">
+        <span class="breadcrumbs__separator" aria-hidden="true">/</span>
+      </li>
+
+      {%- case template.name -%}
+        {%- when 'product' -%}
+          {%- assign main_collection = null -%}
+          {%- for col in product.collections -%}
+            {%- unless col.handle == 'frontpage' or col.title == 'Home page' -%}
+              {%- assign main_collection = col -%}
+              {%- break -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if main_collection -%}
+            <li class="breadcrumbs__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <a class="breadcrumbs__link" href="{{ main_collection.url }}" itemprop="item">
+                <span itemprop="name">{{ main_collection.title }}</span>
+              </a>
+              <meta itemprop="position" content="2">
+              <span class="breadcrumbs__separator" aria-hidden="true">/</span>
+            </li>
+            <li
+              class="breadcrumbs__item breadcrumbs__item--current"
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
+            >
+              <span itemprop="item">
+                <span itemprop="name" aria-current="page">{{ product.title }}</span>
+              </span>
+              <meta itemprop="position" content="3">
+            </li>
+          {%- else -%}
+            <li
+              class="breadcrumbs__item breadcrumbs__item--current"
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
+            >
+              <span itemprop="item">
+                <span itemprop="name" aria-current="page">{{ product.title }}</span>
+              </span>
+              <meta itemprop="position" content="2">
+            </li>
+          {%- endif -%}
+
+        {%- when 'collection' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ collection.title }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'page' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ page.title }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'blog' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ blog.title }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'article' -%}
+          <li class="breadcrumbs__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a class="breadcrumbs__link" href="{{ blog.url }}" itemprop="item">
+              <span itemprop="name">{{ blog.title }}</span>
+            </a>
+            <meta itemprop="position" content="2">
+            <span class="breadcrumbs__separator" aria-hidden="true">/</span>
+          </li>
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ article.title }}</span>
+            </span>
+            <meta itemprop="position" content="3">
+          </li>
+
+        {%- when 'search' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ 'general.breadcrumbs.search' | t }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'cart' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ 'general.breadcrumbs.cart' | t }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+
+        {%- when 'list-collections' -%}
+          <li
+            class="breadcrumbs__item breadcrumbs__item--current"
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+          >
+            <span itemprop="item">
+              <span itemprop="name" aria-current="page">{{ 'general.breadcrumbs.collections' | t }}</span>
+            </span>
+            <meta itemprop="position" content="2">
+          </li>
+      {%- endcase -%}
+    </ol>
+  </nav>
+
+  <style>
+    .breadcrumbs {
+      padding: 1rem 0;
+      font-size: 18px;
+      line-height: 22px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .breadcrumbs__list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      gap: 0.5rem;
+    }
+
+    .breadcrumbs__item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumbs__link {
+      color: {{ color }};
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumbs__link:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs__separator {
+      color: {{ color }};
+    }
+
+    .breadcrumbs__item--current span {
+      color: {{ color }};
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .breadcrumbs {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+  </style>
+{%- endunless -%}
