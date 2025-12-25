@@ -215,7 +215,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    animation: marquee-vertical 30s linear infinite;
+    animation: marquee-vertical 45s linear infinite;
 }
 
 /* Пауза при hover на слайдер */
