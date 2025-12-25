@@ -3794,3 +3794,11 @@ details-disclosure>details {
 .swym-storefront-layout-container {
   overflow: auto !important;
 }
+
+.swym-storefront-layout-header{
+  height: auto !important;
+}
+
+.swym-storefront-layout-tab-button{
+  padding: 16px 10px !important;
+}
