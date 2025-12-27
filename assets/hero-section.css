@@ -85,7 +85,7 @@
     color: #F4EBD9;
     font-size: 100px;
     line-height: 100%;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-weight: 600;
     font-family: "ClashDisplay";
     letter-spacing: -0.01em;

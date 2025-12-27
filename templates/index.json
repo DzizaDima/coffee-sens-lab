@@ -319,6 +319,7 @@
         "title": "<h2>Drink Better Coffee.<br/>Every Day.</h2>",
         "description": "<p>Shop blends crafted for clarity, sweetness,<br/>and unforgettable flavor.<br/><br/></p>",
         "image": "shopify://shop_images/image_25.png",
+        "image_mobile": "shopify://shop_images/Frame_51.png",
         "button_text": "Shop All  Coffee",
         "button_link": "#"
       }
